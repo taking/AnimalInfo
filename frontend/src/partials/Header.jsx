@@ -48,7 +48,7 @@ function Header() {
               </li>
               {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
               <li>
-                <Link to="/data/list" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">목록</Link>
+                <Link to="/list" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">목록</Link>
               </li>
               {/* TODO: 로그인 후 관리자만 표시하도록  */}
               <li>
