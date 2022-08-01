@@ -39,9 +39,6 @@ function Header() {
           {/* Site navigation */}
           <nav className="flex flex-grow">
             <ul className="flex flex-grow justify-end flex-wrap items-center">
-              <li>
-                <Link to="/signin" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">로그인</Link>
-              </li>
               {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
               <li>
                 <Link to="/data" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>

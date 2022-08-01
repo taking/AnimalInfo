@@ -26,54 +26,97 @@ function Home() {
 
   const [dataTypes, setDatatypes] = useState(false);
   const [species, setSpecies] = useState(false);
-  const [selectDogs, setSelectDogs] = useState("")
-  const [selectCats, setSelectCats] = useState("")
+  const [selectDogs, setSelectDogs] = useState("");
+  const [selectSex, setSelectSex] = useState("");
+  const [selectCats, setSelectCats] = useState("");
+  const [selectBcs, setSelectBcs] = useState("");
+  const [selectExercise, setSelectExercise] = useState("");
+  const [selectDefecation, setSelectDefecation] = useState("");
+  const [selectLiving, setSelectLiving] = useState("");
+  const [selectEnvironment, setSelectEnvironment] = useState("");
+  const [selectFoodAmount, setSelectFoodAmount] = useState("");
+  const [selectDisease, setSelectDisease] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const dateReceived = watch("birth");
 
   const selectbox = {
+    dataTypes: [
+      { id: "dataTypes_A", fullname:'A 타입', name: 'A', unavailable: true },
+      { id: "dataTypes_B", fullname:'B 타입', name: 'B', unavailable: true },
+    ],
+    species: [
+      { id: "species_dog", fullname:'반려견', name: 'dog', unavailable: true },
+      { id: "species_cat", fullname:'반려묘', name: 'cat', unavailable: true },
+    ],
     dogs: [
-      { id: 1, name: '불로그', unavailable: true },
-      { id: 2, name: '저먼 셰퍼드', unavailable: true },
-      { id: 3, name: '래브라도 리트리버', unavailable: true },
-      { id: 4, name: '골든 리트리버', unavailable: true },
-      { id: 5, name: '푸들', unavailable: true },
-      { id: 6, name: '시베리안 허스키', unavailable: true },
-      { id: 7, name: '포메라니안', unavailable: true },
-      { id: 8, name: '프렌치 불도그', unavailable: true },
+      { id: "dogBreed_1", name: '불도그', unavailable: true },
+      { id: "dogBreed_2", name: '저먼 셰퍼드', unavailable: true },
+      { id: "dogBreed_3", name: '래브라도 리트리버', unavailable: true },
+      { id: "dogBreed_4", name: '골든 리트리버', unavailable: true },
+      { id: "dogBreed_5", name: '푸들', unavailable: true },
+      { id: "dogBreed_6", name: '시베리안 허스키', unavailable: true },
+      { id: "dogBreed_7", name: '포메라니안', unavailable: true },
+      { id: "dogBreed_8", name: '프렌치 불도그', unavailable: true },
     ],
     cats: [
-      { id: 1, name: '페르시안', unavailable: true },
-      { id: 2, name: '메인쿤', unavailable: true },
-      { id: 3, name: '브리티시 쇼트헤어', unavailable: true },
-      { id: 4, name: '뱅갈 고양이', unavailable: true },
-      { id: 5, name: '샴고양이', unavailable: true },
-      { id: 6, name: '스핑크스', unavailable: true },
-      { id: 7, name: '랙돌', unavailable: true },
+      { id: "catBreed_1", name: '페르시안', unavailable: true },
+      { id: "catBreed_2", name: '메인쿤', unavailable: true },
+      { id: "catBreed_3", name: '브리티시 쇼트헤어', unavailable: true },
+      { id: "catBreed_4", name: '뱅갈 고양이', unavailable: true },
+      { id: "catBreed_5", name: '샴고양이', unavailable: true },
+      { id: "catBreed_6", name: '스핑크스', unavailable: true },
+      { id: "catBreed_7", name: '랙돌', unavailable: true },
     ],
     sex: [
-      { id: 1, fullname: 'IM(수컷)', name: 'IM', unavailable: true },
-      { id: 2, fullname: 'IF(암컷)', name: 'IF', unavailable: true },
-      { id: 3, fullname: 'CM(증성화수컷)', name: 'CM', unavailable: true },
-      { id: 4, fullname: 'SF(중성화암컷)', name: 'SF', unavailable: true },
+      { id: "sex_IM", fullname: 'IM(수컷)', name: 'IM', unavailable: true },
+      { id: "sex_IF", fullname: 'IF(암컷)', name: 'IF', unavailable: true },
+      { id: "sex_CM", fullname: 'CM(증성화수컷)', name: 'CM', unavailable: true },
+      { id: "sex_SF", fullname: 'SF(중성화암컷)', name: 'SF', unavailable: true },
     ],
-    menu: [
-      { type: "number", en: "weight", ko: "체중", subtitle: "text", place: "체중을 입력하세요" },
-      { type: "number", en: "shoulderHeight", ko: "견갑부 높이", subtitle: "text", place: "견갑부 높이를 입력하세요" },
-      { type: "number", en: "neckSize", ko: "목둘레", subtitle: "text", place: "목둘레를 입력하세요" },
-      { type: "number", en: "backLength", ko: "등허리 길이", subtitle: "text", place: "등허리 길이를 입력하세요" },
-      { type: "number", en: "chestSize", ko: "흉곽둘레", subtitle: "text", place: "흉곽둘레를 입력하세요" },      
-      { type: "number", en: "BCS", ko: "신체 충실 지수", subtitle: "text", place: "신체 충실 지수를 입력하세요" },      
-      { type: "number", en: "exercise", ko: "운동강도", subtitle: "text", place: "운동강도를 입력하세요" },
-      { type: "number", en: "foodCount", ko: "생활 환경", subtitle: "text", place: "생활 환경을 입력하세요" },
-      { type: "number", en: "environment", ko: "배변 상태", subtitle: "text", place: "배변상태를 입력하세요" },
-      { type: "number", en: "defecation", ko: "식이 횟수", subtitle: "text", place: "식이 횟수를 입력하세요" },
-      { type: "number", en: "foodAmount", ko: "식사량", subtitle: "text", place: "식사량을 입력하세요" },
-      { type: "number", en: "snackAmount", ko: "식이간식량", subtitle: "text", place: "식이간식량을 입력하세요" },
-      { type: "number", en: "foodKind", ko: "식사 종류", subtitle: "text", place: "식사 종류를 입력하세요" },
-      { type: "text", en: "disease", ko: "질병유무", subtitle: "text", place: "질병유무를 입력하세요" },
-      { type: "text", en: "diseaseName", ko: "질병명", subtitle: "text", place: "질병명을 입력하세요" },
-      { type: "number", en: "foodKind", ko: "식사 종류", subtitle: "text", place: "식사 종류를 입력하세요" },
+    bcs: [
+      { id: "bcs_1", name: '1', unavailable: true },
+      { id: "bcs_2", name: '2', unavailable: true },
+      { id: "bcs_3", name: '3', unavailable: true },
+      { id: "bcs_4", name: '4', unavailable: true },
+      { id: "bcs_5", name: '5', unavailable: true },
+    ],
+    dimensions: [
+      { type: "number", en: "shoulderHeight", ko: "견갑부 높이(cm)", subtitle: "text", place: "견갑부 높이를 입력하세요" },
+      { type: "number", en: "neckSize", ko: "목둘레(cm)", subtitle: "text", place: "목둘레를 입력하세요" },
+      { type: "number", en: "backLength", ko: "등허리 길이(cm)", subtitle: "text", place: "등허리 길이를 입력하세요" },
+      { type: "number", en: "chestSize", ko: "흉곽둘레(cm)", subtitle: "text", place: "흉곽둘레를 입력하세요" },
+    ],
+    exercise: [
+      { id: "exercise_1", fullname:'저(1주일 1시간 이하)', name: 'low', unavailable: true },
+      { id: "exercise_2", fullname:'중(매일 30분 이하)', name: 'middle', unavailable: true },
+      { id: "exercise_3", fullname:'고(매일 1시간 이상)', name: 'high', unavailable: true },
+    ],
+    defecation: [
+      { id: "defecation_1", fullname:'1회', name: '1', unavailable: true },
+      { id: "defecation_2", fullname:'2회', name: '2', unavailable: true },
+      { id: "defecation_3", fullname:'3회', name: '3', unavailable: true },
+      { id: "defecation_free", fullname:'자율급식', name: 'free', unavailable: true },
+    ],
+    living: [
+      { id: "living_indoor", fullname:'실내', name: 'indoor', unavailable: true },
+      { id: "living_outdoor", fullname:'실외', name: 'out-door', unavailable: true },
+    ],
+    environment: [
+      { id: "environment_normal", fullname:'정상', name: 'normal', unavailable: true },
+      { id: "environment_abnormal", fullname:'이상', name: 'abnormal', unavailable: true },
+    ],
+    foodAmount: [
+      { id: "foodamount_1", fullname:'반려동물 전용 사료', name: 'feed', unavailable: true },
+      { id: "foodamount_2", fullname:'전용사료 + 사람 음식(혼용)', name: 'mix', unavailable: true },
+      { id: "foodamount_3", fullname:'사람 음식', name: 'human', unavailable: true },
+    ],
+    food: [
+      { type: "number", en: "foodAmount", ko: "식사량", subtitle: "1회 식사량 (종이컵 기준)", place: "식사량을 입력하세요" },
+      { type: "number", en: "snackAmount", ko: "식이간식량", subtitle: "1회 식사량 대비 간식량 표기 (사료의 X%로 표기)", place: "식이간식량을 입력하세요" },
+    ],
+    disease: [
+      { id: "disease_true", fullname:'Y', name: 'Y', unavailable: true },
+      { id: "disease_false", fullname:'N', name: 'N', unavailable: true },
     ],
     file: [
       { en: "imgAllFront", ko: "전신-전면" },
@@ -98,7 +141,7 @@ function Home() {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
   };
-
+  
   // const handleSubmit = async (event) => {
   //   console.log("event is ", event)
   //   event.preventDefault();
@@ -139,6 +182,54 @@ function Home() {
     setValue("birth", e);
   }
 
+  function onChangeSex(e) {
+    console.log(e);
+    setSelectSex(e);
+    setValue("sex", e);
+  }
+
+  function onChangeBcs(e) {
+    console.log(e);
+    setSelectBcs(e);
+    setValue("bcs", e);
+  }
+
+  function onChangeExercise(e) {
+    console.log(e);
+    setSelectExercise(e);
+    setValue("exercise", e);
+  }
+
+  function onChangeDefecation(e) {
+    console.log(e);
+    setSelectDefecation(e);
+    setValue("defecation", e);
+  }
+
+  function onChangeLiving(e) {
+    console.log(e);
+    setSelectLiving(e);
+    setValue("living", e);
+  }
+
+  function onChangeEnvironment(e) {
+    console.log(e);
+    setSelectEnvironment(e);
+    setValue("environment", e);
+  }
+
+  function onChangeFoodAmount(e) {
+    console.log(e);
+    setSelectFoodAmount(e);
+    setValue("foodAmount", e);
+  }
+
+  function onChangeDisease(e) {
+    console.log(e);
+    setSelectDisease(e);
+    setValue("disease", e);
+  }
+
   return (
     <section className="relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -175,16 +266,18 @@ function Home() {
                         />
                       </div>
                     </fieldset>
+
+                    {/* 데이터 타입 */}
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">데이터 타입</legend>
-                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
                       <div className="mt-4 space-y-4">
+                      {selectbox.dataTypes.map((item) => (
                         <div className="flex items-start">
                           <div className="flex items-center h-5">
                             <input
                               {...register("dataTypes", { required: true })}
-                              id="A"
-                              value="A"
+                              id={item.id}
+                              value={item.name}
                               name="dataTypes"
                               type="radio"
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -192,41 +285,26 @@ function Home() {
                             />
                           </div>
                           <div className="ml-3 text-sm">
-                            <label htmlFor="A" className="font-medium text-gray-700">
-                              A 타입
+                            <label htmlFor={item.name} className="font-medium text-gray-700">
+                              {item.fullname}
                             </label>
                           </div>
                         </div>
-                        <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              {...register("dataTypes", { required: true })}
-                              id="B"
-                              value="B"
-                              name="dataTypes"
-                              type="radio"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="B" className="font-medium text-gray-700">
-                              B 타입
-                            </label>
-                          </div>
-                        </div>
+                          ))}  
                       </div>
                     </fieldset>
+
+                    {/* 종별구분 */}
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">종별구분</legend>
-                      {/* <p className="text-sm text-gray-500">Text</p> */}
-                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
                       <div className="mt-4 space-y-4">
+                      {selectbox.species.map((item) => (
                         <div className="flex items-start">
                           <div className="flex items-center h-5">
                             <input
                               {...register("species", { required: true })}
-                              id="dog"
-                              value="dog"
+                              id={item.id}
+                              value={item.name}
                               name="species"
                               type="radio"
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -234,40 +312,20 @@ function Home() {
                             />
                           </div>
                           <div className="ml-3 text-sm">
-                            <label htmlFor="dog" className="font-medium text-gray-700">
-                              반려견
+                            <label htmlFor={item.name} className="font-medium text-gray-700">
+                              {item.fullname}
                             </label>
                           </div>
                         </div>
-                        <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              {...register("species", { required: true })}
-                              id="cat"
-                              value="cat"
-                              name="species"
-                              type="radio"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="cat" className="font-medium text-gray-700">
-                              반려묘
-                            </label>
-                          </div>
-                        </div>
+                          ))}  
                       </div>
                     </fieldset>
-
-
                     
                     {watch('species') == "dog" && (
                       <>
                       <fieldset>
                           <legend className="contents text-base font-medium text-gray-900">반려견 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
-
-                            {/* <RadioGroup value={selectDogs} onChange={onChangeDogBreed} className="mt-4"> */}
 
                             <RadioGroup value={selectDogs} onChange={onChangeDogBreed} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
@@ -328,7 +386,7 @@ function Home() {
                     {watch('species') == "cat" && (
                       <>
                       <fieldset>
-                          <legend className="contents text-base font-medium text-gray-900">반려묘 품종</legend>
+                          <legend className="contents text-base font-bold text-gray-900">반려묘 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
 
                             {/* <RadioGroup value={selectDogs} onChange={onChangeDogBreed} className="mt-4"> */}
@@ -389,9 +447,8 @@ function Home() {
                     )}
 
 
-                    {watch('dataTypes') == "A" && (
+                    {watch('dataTypes') != null && (
                       <>
-
                         <fieldset>
                           <legend className="contents text-base font-bold text-gray-900">생년월일</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
@@ -413,73 +470,590 @@ function Home() {
                                     />
                                 )}
                               />
-                                {/* <ReactDatePicker
-                                  control={control}
-                                  rules={{ required: true }}
-                                  name="birth"
-                                  dateFormat="yyyy/MM/dd"
-                                  selected={startDate}
-                                  onChange={date => setStartDate(date)}
-                                  monthsShown={2}
-                                /> */}
                               </div>
                             </div>
                           </div>
                         </fieldset>
+                        
+                        {watch('dataTypes') == "B" && (
+                          <>
+                          <fieldset>
+                            <legend className="contents text-base font-bold text-gray-900">데이터타입이 'B'가 선택될 때 추가되는 메뉴</legend>
+                            {/* <p className="text-sm text-gray-500">Text</p> */}
+                            <div className="mt-4 space-y-4">
+                              <div className="flex items-start">
+                                <div className="flex items-center h-5">
+                                  <input
+                                    {...register("test", { required: true })}
+                                    id="cat"
+                                    value="cat"
+                                    name="test"
+                                    type="text"
+                                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                          </>
+                        )}
 
-                        {/* 성별 */}
+                        {/* 성별 */}                        
                         <fieldset>
                           <legend className="contents text-base font-bold text-gray-900">성별</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
-                          {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                          <div className="mt-4 space-y-4">
-                                {selectbox.sex.map((items) => (
-                            <div className="flex items-start">
-                              <div className="flex items-center h-5">
-                                <input
-                                  {...register("sex", { required: true })}
-                                  id={items.id}
-                                  value={items.name}
-                                  name="sex"
-                                  type="radio"
-                                  className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                  required
-                                />
-                                <div className="ml-3 text-sm">
-                                  <label htmlFor={items.name} className="font-medium text-gray-700">
-                                  {items.fullname}
-                                  </label>
-                                </div>
-                              </div>
-                              </div>
+
+                          <RadioGroup value={selectSex} onChange={onChangeSex} className="mt-4">
+                              {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                              <div className="grid grid-cols-2 gap-4">
+                                {selectbox.sex.map((item) => (
+                                  <RadioGroup.Option
+                                    key={item.id}
+                                    value={item.name}
+                                    disabled={!item.unavailable}
+                                    className={({ active }) =>
+                                      classNames(
+                                        item.unavailable
+                                          ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                          : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                        active ? 'ring-2 ring-indigo-500' : '',
+                                        'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                      )
+                                    }
+                                  >
+                                    {({ active, checked }) => (
+                                      <>
+                                        <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                        {item.unavailable ? (
+                                          <span
+                                            className={classNames(
+                                              active ? 'border' : 'border-2',
+                                              checked ? 'border-indigo-500' : 'border-transparent',
+                                              'absolute -inset-px rounded-md pointer-events-none'
+                                            )}
+                                            aria-hidden="true"
+                                          />
+                                        ) : (
+                                          <span
+                                            aria-hidden="true"
+                                            className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                          >
+                                            <svg
+                                              className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                              viewBox="0 0 100 100"
+                                              preserveAspectRatio="none"
+                                              stroke="currentColor"
+                                            >
+                                              <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                            </svg>
+                                          </span>
+                                        )}
+                                      </>
+                                    )}
+                                  </RadioGroup.Option>
                                 ))}
+                              </div>
+                            </RadioGroup>
+                        </fieldset>
+
+
+                        {/* 체중 */}
+                        <fieldset>
+                          <legend className="contents text-base font-bold text-gray-900">체중(kg)</legend>
+                          {/* <p className="text-sm text-gray-500">test</p> */}
+                          <div className="mt-1">
+                            <input
+                              type="number"
+                              {...register( "weight", { required: true })}
+                              id="weight"
+                              name="weight"
+                              rows={1}
+                              className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                              placeholder="체중을 입력하세요"
+                              defaultValue={''}
+                              required
+                            />
                           </div>
                         </fieldset>
 
-                        {/* 테스트 */}
-                        {selectbox.menu.map((item) => (
+                        {/* 신체 충실 지수(BCS) */}
+                        <fieldset>
+                          <legend className="contents text-base font-bold text-gray-900">신체 충실 지수(BCS)</legend>
+                          <p className="text-sm text-gray-500">신체 충실 지수 또는 비만 판정 지표로 불리우며, 1에 가까울수록 마름에 해당하고 5에 가까울수록 비만에 해당합니다.</p>
+                          
+                          <RadioGroup value={selectBcs} onChange={onChangeBcs} className="mt-4">
+                              {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                              <div className="grid grid-cols-2 gap-5">
+                                {selectbox.bcs.map((item) => (
+                                  <RadioGroup.Option
+                                    key={item.id}
+                                    value={item.name}
+                                    disabled={!item.unavailable}
+                                    className={({ active }) =>
+                                      classNames(
+                                        item.unavailable
+                                          ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                          : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                        active ? 'ring-2 ring-indigo-500' : '',
+                                        'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                      )
+                                    }
+                                  >
+                                    {({ active, checked }) => (
+                                      <>
+                                        <RadioGroup.Label as="span">{item.name}</RadioGroup.Label>
+                                        {item.unavailable ? (
+                                          <span
+                                            className={classNames(
+                                              active ? 'border' : 'border-2',
+                                              checked ? 'border-indigo-500' : 'border-transparent',
+                                              'absolute -inset-px rounded-md pointer-events-none'
+                                            )}
+                                            aria-hidden="true"
+                                          />
+                                        ) : (
+                                          <span
+                                            aria-hidden="true"
+                                            className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                          >
+                                            <svg
+                                              className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                              viewBox="0 0 100 100"
+                                              preserveAspectRatio="none"
+                                              stroke="currentColor"
+                                            >
+                                              <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                            </svg>
+                                          </span>
+                                        )}
+                                      </>
+                                    )}
+                                  </RadioGroup.Option>
+                                ))}
+                              </div>
+                            </RadioGroup>
+                        </fieldset>
+
+
+                        {/* 운동량 */}
+                        <fieldset>
+                          <legend className="contents text-base font-bold text-gray-900">운동량</legend>
+                          {/* <p className="text-sm text-gray-500">text</p> */}
+                          
+                          <RadioGroup value={selectExercise} onChange={onChangeExercise} className="mt-4">
+                              {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                              <div className="grid grid-cols-1 gap-5">
+                                {selectbox.exercise.map((item) => (
+                                  <RadioGroup.Option
+                                    key={item.id}
+                                    value={item.name}
+                                    disabled={!item.unavailable}
+                                    className={({ active }) =>
+                                      classNames(
+                                        item.unavailable
+                                          ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                          : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                        active ? 'ring-2 ring-indigo-500' : '',
+                                        'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                      )
+                                    }
+                                  >
+                                    {({ active, checked }) => (
+                                      <>
+                                        <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                        {item.unavailable ? (
+                                          <span
+                                            className={classNames(
+                                              active ? 'border' : 'border-2',
+                                              checked ? 'border-indigo-500' : 'border-transparent',
+                                              'absolute -inset-px rounded-md pointer-events-none'
+                                            )}
+                                            aria-hidden="true"
+                                          />
+                                        ) : (
+                                          <span
+                                            aria-hidden="true"
+                                            className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                          >
+                                            <svg
+                                              className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                              viewBox="0 0 100 100"
+                                              preserveAspectRatio="none"
+                                              stroke="currentColor"
+                                            >
+                                              <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                            </svg>
+                                          </span>
+                                        )}
+                                      </>
+                                    )}
+                                  </RadioGroup.Option>
+                                ))}
+                              </div>
+                            </RadioGroup>
+                        </fieldset>
+
+                        {/* 식이 횟수 */}
+                        <fieldset>
+                          <legend className="contents text-base font-bold text-gray-900">식이 횟수</legend>
+                          {/* <p className="text-sm text-gray-500">text</p> */}
+                          
+                          <RadioGroup value={selectDefecation} onChange={onChangeDefecation} className="mt-4">
+                              {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                              <div className="grid grid-cols-2 gap-5 flex-row">
+                                {selectbox.defecation.map((item) => (
+                                  <RadioGroup.Option
+                                    key={item.id}
+                                    value={item.name}
+                                    disabled={!item.unavailable}
+                                    className={({ active }) =>
+                                      classNames(
+                                        item.unavailable
+                                          ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                          : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                        active ? 'ring-2 ring-indigo-500' : '',
+                                        'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                      )
+                                    }
+                                  >
+                                    {({ active, checked }) => (
+                                      <>
+                                        <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                        {item.unavailable ? (
+                                          <span
+                                            className={classNames(
+                                              active ? 'border' : 'border-2',
+                                              checked ? 'border-indigo-500' : 'border-transparent',
+                                              'absolute -inset-px rounded-md pointer-events-none'
+                                            )}
+                                            aria-hidden="true"
+                                          />
+                                        ) : (
+                                          <span
+                                            aria-hidden="true"
+                                            className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                          >
+                                            <svg
+                                              className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                              viewBox="0 0 100 100"
+                                              preserveAspectRatio="none"
+                                              stroke="currentColor"
+                                            >
+                                              <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                            </svg>
+                                          </span>
+                                        )}
+                                      </>
+                                    )}
+                                  </RadioGroup.Option>
+                                ))}
+                              </div>
+                            </RadioGroup>
+                        </fieldset>
+
+
+                    {/* 생활 환경 */}
+                    <fieldset>
+                      <legend className="contents text-base font-bold text-gray-900">생활 환경</legend>
+                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
+                      <RadioGroup value={selectLiving} onChange={onChangeLiving} className="mt-4">
+                        {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                        <div className="grid grid-cols-2 gap-5 flex-row">
+                          {selectbox.living.map((item) => (
+                            <RadioGroup.Option
+                              key={item.id}
+                              value={item.name}
+                              disabled={!item.unavailable}
+                              className={({ active }) =>
+                                classNames(
+                                  item.unavailable
+                                    ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                    : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                  active ? 'ring-2 ring-indigo-500' : '',
+                                  'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                  {item.unavailable ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'border' : 'border-2',
+                                        checked ? 'border-indigo-500' : 'border-transparent',
+                                        'absolute -inset-px rounded-md pointer-events-none'
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                    >
+                                      <svg
+                                        className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                        viewBox="0 0 100 100"
+                                        preserveAspectRatio="none"
+                                        stroke="currentColor"
+                                      >
+                                        <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </fieldset>
+
+
+                    {/* 배변 상태 */}
+                    <fieldset>
+                      <legend className="contents text-base font-bold text-gray-900">배변 상태</legend>
+                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
+                      <RadioGroup value={selectEnvironment} onChange={onChangeEnvironment} className="mt-4">
+                        {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                        <div className="grid grid-cols-2 gap-5 flex-row">
+                          {selectbox.environment.map((item) => (
+                            <RadioGroup.Option
+                              key={item.id}
+                              value={item.name}
+                              disabled={!item.unavailable}
+                              className={({ active }) =>
+                                classNames(
+                                  item.unavailable
+                                    ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                    : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                  active ? 'ring-2 ring-indigo-500' : '',
+                                  'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                  {item.unavailable ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'border' : 'border-2',
+                                        checked ? 'border-indigo-500' : 'border-transparent',
+                                        'absolute -inset-px rounded-md pointer-events-none'
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                    >
+                                      <svg
+                                        className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                        viewBox="0 0 100 100"
+                                        preserveAspectRatio="none"
+                                        stroke="currentColor"
+                                      >
+                                        <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </fieldset>
+
+                    {/* 식사 종류 */}
+                    <fieldset>
+                      <legend className="contents text-base font-bold text-gray-900">삭사 종류</legend>
+                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
+                      <RadioGroup value={selectFoodAmount} onChange={onChangeFoodAmount} className="mt-4">
+                        {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                        <div className="grid grid-cols-1 gap-5 flex-row">
+                          {selectbox.foodAmount.map((item) => (
+                            <RadioGroup.Option
+                              key={item.id}
+                              value={item.name}
+                              disabled={!item.unavailable}
+                              className={({ active }) =>
+                                classNames(
+                                  item.unavailable
+                                    ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                    : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                  active ? 'ring-2 ring-indigo-500' : '',
+                                  'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                  {item.unavailable ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'border' : 'border-2',
+                                        checked ? 'border-indigo-500' : 'border-transparent',
+                                        'absolute -inset-px rounded-md pointer-events-none'
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                    >
+                                      <svg
+                                        className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                        viewBox="0 0 100 100"
+                                        preserveAspectRatio="none"
+                                        stroke="currentColor"
+                                      >
+                                        <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </fieldset>
+
+                    {/* 식사 메뉴 */}
+                    {selectbox.food.map((item) => (
+                      <fieldset>
+                        <legend className="contents text-base font-bold text-gray-900">{item.ko}</legend>
+                        <p className="text-sm text-gray-500">{item.subtitle}</p>
+                        {/* <div className="mt-1" onChange={handleChange}> */}
+                        <div className="mt-1">
+                          <input
+                            type={item.type}
+                            {...register( item.en, { required: true })}
+                            id={item.en}
+                            name={item.en}
+                            rows={1}
+                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                            placeholder={item.place}
+                            defaultValue={''}
+                            required
+                          />
+                        </div>
+                      </fieldset>
+                    ))}
+
+
+                    {/* 질병 유무 */}
+                    <fieldset>
+                      <legend className="contents text-base font-bold text-gray-900">질병 유무</legend>
+                      {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
+                      <RadioGroup value={selectDisease} onChange={onChangeDisease} className="mt-4">
+                        {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+                        <div className="grid grid-cols-2 gap-5 flex-row">
+                          {selectbox.disease.map((item) => (
+                            <RadioGroup.Option
+                              key={item.id}
+                              value={item.name}
+                              disabled={!item.unavailable}
+                              className={({ active }) =>
+                                classNames(
+                                  item.unavailable
+                                    ? 'bg-white shadow-sm text-gray-900 cursor-pointer'
+                                    : 'bg-gray-50 text-gray-200 cursor-not-allowed',
+                                  active ? 'ring-2 ring-indigo-500' : '',
+                                  'group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1'
+                                )
+                              }
+                            >
+                              {({ active, checked }) => (
+                                <>
+                                  <RadioGroup.Label as="span">{item.fullname}</RadioGroup.Label>
+                                  {item.unavailable ? (
+                                    <span
+                                      className={classNames(
+                                        active ? 'border' : 'border-2',
+                                        checked ? 'border-indigo-500' : 'border-transparent',
+                                        'absolute -inset-px rounded-md pointer-events-none'
+                                      )}
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <span
+                                      aria-hidden="true"
+                                      className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                    >
+                                      <svg
+                                        className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                        viewBox="0 0 100 100"
+                                        preserveAspectRatio="none"
+                                        stroke="currentColor"
+                                      >
+                                        <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                      </svg>
+                                    </span>
+                                  )}
+                                </>
+                              )}
+                            </RadioGroup.Option>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </fieldset>
+
+                    {watch('disease') == "Y" && (
+                          <>
                           <fieldset>
-                            <legend className="contents text-base font-bold text-gray-900">{item.ko}</legend>
-                            <p className="text-sm text-gray-500">{item.subtitle}</p>
+                            <legend className="contents text-base font-bold text-gray-900">질병코드</legend>
                             {/* <div className="mt-1" onChange={handleChange}> */}
                             <div className="mt-1">
-                              <input
-                                type={item.type}
-                                {...register( item.en, { required: true })}
-                                id={item.en}
-                                name={item.en}
+                              <textarea
+                                {...register("diseaseName", { required: true })}
+                                id="diseaseName"
+                                name="diseaseName"
                                 rows={1}
+                                type="text"
                                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                placeholder={item.place}
+                                placeholder="질병 코드를 입력하세요"
                                 defaultValue={''}
                                 required
                               />
                             </div>
                           </fieldset>
-                        ))}
+                          </>
+                        )}
+
+
+                    {/* 신체 치수 */}
+                    <fieldset>
+                      <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                          {selectbox.dimensions.map((item) => (
+                        <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                            <legend className="contents text-base font-bold text-gray-900">{item.ko}</legend>
+                            {/* <p className="text-sm text-gray-500">{item.subtitle}</p> */}
+                              <div className="mt-1">
+                                <input
+                                  type={item.type}
+                                  {...register( item.en, { required: true })}
+                                  id={item.en}
+                                  name={item.en}
+                                  rows={1}
+                                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                  placeholder={item.place}
+                                  defaultValue={''}
+                                  required
+                                />
+                        </div>
+                              </div>
+                          ))}             
+                      </div>
+                    </fieldset>                        
+
 
                         {/* 파일 업로드 */}
-
                         {selectbox.file.map((item) => (
                         <fieldset>
                           <legend className="block text-sm font-medium text-gray-700">{item.ko}</legend>
