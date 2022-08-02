@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 import { render } from "react-dom";
-import { useForm, Controller } from "react-hook-form";
-import { Listbox, RadioGroup, Combobox } from '@headlessui/react'
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+import { useForm } from "react-hook-form";
+import { RadioGroup } from '@headlessui/react'
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-import Modal from '../utils/Modal';
-
-import HeroImage from '../images/hero-image.png';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 function Home() {
-  // const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const { register, handleSubmit, watch, setValue, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   // const onSubmit = (data, e) => console.log(data, e);
   const onSubmit = data => {
     alert(JSON.stringify(data, undefined, 2));
@@ -24,20 +18,17 @@ function Home() {
   }
   const onError = (errors, e) => console.log(errors, e);
 
-  const [dataTypes, setDatatypes] = useState(false);
-  const [species, setSpecies] = useState(false);
   const [selectDogs, setSelectDogs] = useState("");
   const [selectSex, setSelectSex] = useState("");
   const [selectCats, setSelectCats] = useState("");
   const [selectBcs, setSelectBcs] = useState("");
   const [selectExercise, setSelectExercise] = useState("");
   const [selectDefecation, setSelectDefecation] = useState("");
-  const [selectLiving, setSelectLiving] = useState("");
   const [selectEnvironment, setSelectEnvironment] = useState("");
-  const [selectFoodAmount, setSelectFoodAmount] = useState("");
   const [selectDisease, setSelectDisease] = useState("");
+  const [selectFoodKind, setSelectFoodKind] = useState("");
+  const [selectFoodCount, setSelectFoodCount] = useState("");
   const [startDate, setStartDate] = useState(new Date());
-  const dateReceived = watch("birth");
 
   const selectbox = {
     dataTypes: [
@@ -91,24 +82,24 @@ function Home() {
       { id: "exercise_2", fullname:'중(매일 30분 이하)', name: 'middle', unavailable: true },
       { id: "exercise_3", fullname:'고(매일 1시간 이상)', name: 'high', unavailable: true },
     ],
-    defecation: [
-      { id: "defecation_1", fullname:'1회', name: '1', unavailable: true },
-      { id: "defecation_2", fullname:'2회', name: '2', unavailable: true },
-      { id: "defecation_3", fullname:'3회', name: '3', unavailable: true },
-      { id: "defecation_free", fullname:'자율급식', name: 'free', unavailable: true },
-    ],
-    living: [
-      { id: "living_indoor", fullname:'실내', name: 'indoor', unavailable: true },
-      { id: "living_outdoor", fullname:'실외', name: 'out-door', unavailable: true },
+    foodCount: [
+      { id: "foodcount_1", fullname:'1회', name: '1', unavailable: true },
+      { id: "foodcount_2", fullname:'2회', name: '2', unavailable: true },
+      { id: "foodcount_3", fullname:'3회', name: '3', unavailable: true },
+      { id: "foodcount_free", fullname:'자율급식', name: 'free', unavailable: true },
     ],
     environment: [
+      { id: "environment_indoor", fullname:'실내', name: 'indoor', unavailable: true },
+      { id: "environment_outdoor", fullname:'실외', name: 'out-door', unavailable: true },
+    ],
+    defecation: [
       { id: "environment_normal", fullname:'정상', name: 'normal', unavailable: true },
       { id: "environment_abnormal", fullname:'이상', name: 'abnormal', unavailable: true },
     ],
-    foodAmount: [
-      { id: "foodamount_1", fullname:'반려동물 전용 사료', name: 'feed', unavailable: true },
-      { id: "foodamount_2", fullname:'전용사료 + 사람 음식(혼용)', name: 'mix', unavailable: true },
-      { id: "foodamount_3", fullname:'사람 음식', name: 'human', unavailable: true },
+    foodKind: [
+      { id: "foodkind_1", fullname:'반려동물 전용 사료', name: 'feed', unavailable: true },
+      { id: "foodkind_2", fullname:'전용사료 + 사람 음식(혼용)', name: 'mix', unavailable: true },
+      { id: "foodkind_3", fullname:'사람 음식', name: 'human', unavailable: true },
     ],
     food: [
       { type: "number", en: "foodAmount", ko: "식사량", subtitle: "1회 식사량 (종이컵 기준)", place: "식사량을 입력하세요" },
@@ -132,7 +123,6 @@ function Home() {
       { en: "imgNoseFront", ko: "비문-전면" },
     ]
   }
-
   
   const [values, setValues] = useState({ refer: "", dataTypes: "", species: "" }); 
 
@@ -206,22 +196,22 @@ function Home() {
     setValue("defecation", e);
   }
 
-  function onChangeLiving(e) {
-    console.log(e);
-    setSelectLiving(e);
-    setValue("living", e);
-  }
-
   function onChangeEnvironment(e) {
     console.log(e);
     setSelectEnvironment(e);
     setValue("environment", e);
   }
 
-  function onChangeFoodAmount(e) {
+  function onChangeFoodCount(e) {
     console.log(e);
-    setSelectFoodAmount(e);
-    setValue("foodAmount", e);
+    setSelectFoodCount(e);
+    setValue("FoodCount", e);
+  }
+
+  function onChangeFoodKind(e) {
+    console.log(e);
+    setSelectFoodKind(e);
+    setValue("foodKind", e);
   }
 
   function onChangeDisease(e) {
@@ -254,8 +244,9 @@ function Home() {
                       <legend className="contents text-base font-bold text-gray-900">제공처</legend>
                       {/* <div className="mt-1" onChange={handleChange}> */}
                       <div className="mt-1">
-                        <textarea
+                        <input
                           {...register("refer", { required: true })}
+                          type="text"
                           id="refer"
                           name="refer"
                           rows={1}
@@ -456,20 +447,13 @@ function Home() {
                           <div className="mt-4 space-y-4">
                             <div className="flex items-start">
                               <div className="flex items-center h-5">
-                              <Controller
-                                name="birth"
-                                control={control}
-                                // rules={{ required: true }}
-                                render={({ onChange, value, test }) => (
-                                    <ReactDatePicker
-                                        dateFormat="yyyy/MM/dd"
-                                        selected={startDate}
-                                        onChange={date => onChangeBirth(date)}
-                                        monthsShown={2}
-                                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                    />
-                                )}
-                              />
+                                <ReactDatePicker
+                                    dateFormat="yyyy/MM/dd"
+                                    selected={startDate}
+                                    onChange={date => onChangeBirth(date)}
+                                    monthsShown={2}
+                                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                />
                               </div>
                             </div>
                           </div>
@@ -698,10 +682,10 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">식이 횟수</legend>
                           {/* <p className="text-sm text-gray-500">text</p> */}
                           
-                          <RadioGroup value={selectDefecation} onChange={onChangeDefecation} className="mt-4">
+                          <RadioGroup value={selectFoodCount} onChange={onChangeFoodCount} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-2 gap-5 flex-row">
-                                {selectbox.defecation.map((item) => (
+                                {selectbox.foodCount.map((item) => (
                                   <RadioGroup.Option
                                     key={item.id}
                                     value={item.name}
@@ -756,10 +740,10 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">생활 환경</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectLiving} onChange={onChangeLiving} className="mt-4">
+                      <RadioGroup value={selectEnvironment} onChange={onChangeEnvironment} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-2 gap-5 flex-row">
-                          {selectbox.living.map((item) => (
+                          {selectbox.environment.map((item) => (
                             <RadioGroup.Option
                               key={item.id}
                               value={item.name}
@@ -814,10 +798,10 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">배변 상태</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectEnvironment} onChange={onChangeEnvironment} className="mt-4">
+                      <RadioGroup value={selectDefecation} onChange={onChangeDefecation} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-2 gap-5 flex-row">
-                          {selectbox.environment.map((item) => (
+                          {selectbox.defecation.map((item) => (
                             <RadioGroup.Option
                               key={item.id}
                               value={item.name}
@@ -871,10 +855,10 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">삭사 종류</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectFoodAmount} onChange={onChangeFoodAmount} className="mt-4">
+                      <RadioGroup value={selectFoodKind} onChange={onChangeFoodKind} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-1 gap-5 flex-row">
-                          {selectbox.foodAmount.map((item) => (
+                          {selectbox.foodKind.map((item) => (
                             <RadioGroup.Option
                               key={item.id}
                               value={item.name}
@@ -1094,75 +1078,8 @@ function Home() {
                   </div>
                 </div>
               </form>
-
-
-              {/* TODO: 버튼 기능 가져다 쓰기 */}
-              {/* <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center" data-aos="zoom-y-out" data-aos-delay="300">
-                <div>
-                  <a className="btn text-white bg-blue-600 hover:bg-blue-700 w-full mb-4 sm:w-auto sm:mb-0" href="#0">Start free trial</a>
-                </div>
-                <div>
-                  <a className="btn text-white bg-gray-900 hover:bg-gray-800 w-full sm:w-auto sm:ml-4" href="#0">Learn more</a>
-                </div>
-              </div> */}
             </div>
           </div>
-
-          {/* Hero image */}
-          <div>
-            <div className="relative flex justify-center mb-8" data-aos="zoom-y-out" data-aos-delay="450">
-              {/* <div className="flex flex-col justify-center">
-                <img className="mx-auto" src={HeroImage} width="768" height="432" alt="Hero" />
-                <svg className="absolute inset-0 max-w-full mx-auto md:max-w-none h-auto" width="768" height="432" viewBox="0 0 768 432" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                  <defs>
-                    <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="hero-ill-a">
-                      <stop stopColor="#FFF" offset="0%" />
-                      <stop stopColor="#EAEAEA" offset="77.402%" />
-                      <stop stopColor="#DFDFDF" offset="100%" />
-                    </linearGradient>
-                    <linearGradient x1="50%" y1="0%" x2="50%" y2="99.24%" id="hero-ill-b">
-                      <stop stopColor="#FFF" offset="0%" />
-                      <stop stopColor="#EAEAEA" offset="48.57%" />
-                      <stop stopColor="#DFDFDF" stopOpacity="0" offset="100%" />
-                    </linearGradient>
-                    <radialGradient cx="21.152%" cy="86.063%" fx="21.152%" fy="86.063%" r="79.941%" id="hero-ill-e">
-                      <stop stopColor="#4FD1C5" offset="0%" />
-                      <stop stopColor="#81E6D9" offset="25.871%" />
-                      <stop stopColor="#338CF5" offset="100%" />
-                    </radialGradient>
-                    <circle id="hero-ill-d" cx="384" cy="216" r="64" />
-                  </defs>
-                  <g fill="none" fillRule="evenodd">
-                    <circle fillOpacity=".04" fill="url(#hero-ill-a)" cx="384" cy="216" r="128" />
-                    <circle fillOpacity=".16" fill="url(#hero-ill-b)" cx="384" cy="216" r="96" />
-                    <g fillRule="nonzero">
-                      <use fill="#000" xlinkHref="#hero-ill-d" />
-                      <use fill="url(#hero-ill-e)" xlinkHref="#hero-ill-d" />
-                    </g>
-                  </g>
-                </svg>
-              </div> */}
-
-
-              {/* TODO: modal 가져다 쓰기 (팝업) */}
-              {/* <button className="absolute top-full flex items-center transform -translate-y-1/2 bg-white rounded-full font-medium group p-4 shadow-lg" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setVideoModalOpen(true); }} aria-controls="modal">
-                <svg className="w-6 h-6 fill-current text-gray-400 group-hover:text-blue-600 flex-shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm0 2C5.373 24 0 18.627 0 12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12z" />
-                  <path d="M10 17l6-5-6-5z" />
-                </svg>
-                <span className="ml-3">Watch the full video (2 min)</span>
-              </button> */}
-            </div>
-
-            {/* Modal */}
-            {/* <Modal id="modal" ariaLabel="modal-headline" show={videoModalOpen} handleClose={() => setVideoModalOpen(false)}>
-              <div className="relative pb-9/16">
-                <iframe className="absolute w-full h-full" src="https://player.vimeo.com/video/174002812" title="Video" allowFullScreen></iframe>
-              </div>
-            </Modal> */}
-
-          </div>
-
         </div>
 
       </div>
