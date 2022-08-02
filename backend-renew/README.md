@@ -41,10 +41,14 @@ API Endpoint : http://127.0.0.1:3000
 - history (working)
 
 
+Login
 ---
 #### /gmcapi/v1/users/login
 * `GET` : Login with Get JWT Token
 
+
+Users
+---
 #### /gmcapi/v1/users
 * `GET` : Get all Users
 * `POST` : Create a new User
@@ -63,6 +67,22 @@ API Endpoint : http://127.0.0.1:3000
 #### /api/v1/users/id/status/:{id}
 * `PATCH` : Change User Account Status
 
+
+Data
+---
+#### /gmcapi/v1/data
+* `GET` : Get all Data
+* `POST` : Create a new data
+
+#### /api/v1/data/id/:{id}
+* `GET` : Get a Data [Id]
+* `PATCH` : Update a Data
+* `DELETE` : Delete a Data
+
+#### /api/v1/users/refer/:{refer}
+* `GET` : Get a Data [Refer]
+
+
 ---
 
 ### To do ✓
@@ -71,7 +91,7 @@ API Endpoint : http://127.0.0.1:3000
 
 
 ### In Progress
-- [x] files
+- [x] data
 - [x] history
 
 ### Done ✓

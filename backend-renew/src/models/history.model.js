@@ -24,7 +24,7 @@ class HistoryModel {
 
         const result = await query(sql, [...values]);
 
-        // return back the first row (user)
+        // return back the first row (history)
         return result[0];
     }
 

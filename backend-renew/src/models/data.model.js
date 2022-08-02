@@ -1,6 +1,6 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
-class UserModel {
+class DataModel {
     tableName = 'DATA';
 
     find = async (params = {}) => {
@@ -24,19 +24,19 @@ class UserModel {
 
         const result = await query(sql, [...values]);
 
-        // return back the first row (user)
+        // return back the first row (data)
         return result[0];
     }
 
-    create = async ({ username, password, first_name, last_name, email, role = Role.SuperUser, age = 0 }) => {
-        const sql = `INSERT INTO ${this.tableName}
-        (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
+    // create = async ({ username, password, first_name, last_name, email, role = Role.SuperUser, age = 0 }) => {
+    //     const sql = `INSERT INTO ${this.tableName}
+    //     (username, password, first_name, last_name, email, role, age) VALUES (?,?,?,?,?,?,?)`;
 
-        const result = await query(sql, [username, password, first_name, last_name, email, role, age]);
-        const affectedRows = result ? result.affectedRows : 0;
+    //     const result = await query(sql, [username, password, first_name, last_name, email, role, age]);
+    //     const affectedRows = result ? result.affectedRows : 0;
 
-        return affectedRows;
-    }
+    //     return affectedRows;
+    // }
 
     update = async (params, id) => {
         const { columnSet, values } = multipleColumnSet(params)
@@ -58,4 +58,4 @@ class UserModel {
     }
 }
 
-module.exports = new UserModel;
+module.exports = new DataModel;
