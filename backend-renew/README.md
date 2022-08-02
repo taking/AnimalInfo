@@ -72,8 +72,8 @@ API Endpoint : http://127.0.0.1:3000
 
 ### In Progress
 - [x] files
-- [x] price
 - [x] history
 
 ### Done ✓
 - [x] users
+- [x] price
