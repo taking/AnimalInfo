@@ -4,8 +4,12 @@ A RESTful API for Animalinfo Database with Node Express
 
 ## Installation & Run
 ```bash
-# Download this project
 git clone {project URL}
+cd animalinfo/backend
+yarn install
+yarn run dev
+
+API Endpoint : http://127.0.0.1:3000
 ```
 
 
@@ -22,16 +26,6 @@ DB_DATABASE=db_name
 PORT=3000
 SECRET_JWT=supersecret
 ```
-
-```bash
-# Build and Run
-cd animalinfo/backend
-yarn install
-yarn run dev
-
-API Endpoint : http://127.0.0.1:3000
-```
-
 
 ## API
 
@@ -79,8 +73,34 @@ Data
 * `PATCH` : Update a Data
 * `DELETE` : Delete a Data
 
-#### /api/v1/users/refer/:{refer}
+#### /api/v1/data/refer/:{refer}
 * `GET` : Get a Data [Refer]
+
+
+Price
+---
+#### /gmcapi/v1/price/init
+* `GET` : Init Database (Create Column)
+
+#### /gmcapi/v1/price
+* `GET` : Get Price
+
+#### /gmcapi/v1/price/:price
+* `PATCH` : Update a price
+
+
+History
+---
+#### /gmcapi/v1/history
+* `GET` : Get all Histories
+* `POST` : Create a new History
+
+#### /api/v1/history/id/:{id}
+* `GET` : Get a History [Id]
+* `DELETE` : Delete a History
+
+#### /api/v1/history/name/:{name}
+* `GET` : Get a History [Name]
 
 
 ---
