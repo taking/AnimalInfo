@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { render } from "react-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { RadioGroup } from '@headlessui/react'
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,7 +10,7 @@ function classNames(...classes) {
 }
 
 function Home() {
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
+  const { register, handleSubmit, watch, setValue, controller, formState: { errors } } = useForm();
   // const onSubmit = (data, e) => console.log(data, e);
   const onSubmit = data => {
     alert(JSON.stringify(data, undefined, 2));
@@ -1040,8 +1040,33 @@ function Home() {
                         {/* 파일 업로드 */}
                         {selectbox.file.map((item) => (
                         <fieldset>
+                          <label class="block">
                           <legend className="block text-sm font-medium text-gray-700">{item.ko}</legend>
-                          <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                          <span class="sr-only">Upload a file</span>
+                                  <input
+                                    {...register(item.en)}
+                                    id={item.en}
+                                    name={item.en}
+                                    type="file"
+                                    className="form-control
+                                    block
+                                    w-full
+                                    px-3
+                                    py-1.5
+                                    text-base
+                                    font-normal
+                                    text-gray-700
+                                    bg-white bg-clip-padding
+                                    border border-solid border-gray-300
+                                    rounded
+                                    transition
+                                    ease-in-out
+                                    m-0
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                    multiple>    
+                                  </input>
+                          </label>
+                          {/* <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                             <div className="space-y-1 text-center">
                               <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1062,7 +1087,7 @@ function Home() {
                               </div>
                               <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                             </div>
-                          </div>
+                          </div> */}
                         </fieldset>
                         ))}
                       </>
