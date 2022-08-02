@@ -1,1 +1,1 @@
-# animalinfo
+# animalinfo - frontend
