@@ -4,7 +4,7 @@ const cors = require("cors");
 const HttpException = require('./utils/HttpException.utils');
 const errorMiddleware = require('./middleware/error.middleware');
 const userRouter = require('./routes/user.route');
-const fileRouter = require('./routes/file.route');
+const fileRouter = require('./routes/data.route');
 const historyRouter = require('./routes/history.route');
 const priceRouter = require('./routes/price.route');
 
