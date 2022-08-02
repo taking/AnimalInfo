@@ -21,6 +21,7 @@ function Index() {
       {/* TODO: Tab 기능 가져다쓰기 */}
         {/* <FeaturesHome /> */}
 
+
       </main>
 
       {/*  Site footer */}
