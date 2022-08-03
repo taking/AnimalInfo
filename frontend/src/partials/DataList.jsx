@@ -110,6 +110,16 @@ function DataList() {
       updated_at: "-",
       button: true
     },
+    {
+      name: "김승한",
+      refer: "건국대학교 동물병원",
+      email: "consine2c@innogrid.com",
+      dataNum: Math.floor(Math.random() * 30),
+      money: Math.floor(Math.random() * 3000) + " 원",
+      created_at: "2022-08-01 14:00",
+      updated_at: "2022-08-01 15:00",
+      button: true
+    },
   ]
 
 	// const onButtonClick = (e) => {
