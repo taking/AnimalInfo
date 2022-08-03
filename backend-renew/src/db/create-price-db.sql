@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS PRICE;
 
 CREATE TABLE IF NOT EXISTS PRICE 
   ( 
-     name         varchar(45) PRIMARY KEY, 
+     id           INT PRIMARY KEY auto_increment, 
      price        int(11) NOT NULL DEFAULT 0,
      updated_at   timestamp NOT NULL DEFAULT current_timestamp()
   );

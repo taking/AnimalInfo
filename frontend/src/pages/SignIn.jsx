@@ -1,9 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 import Header from '../partials/Header';
 
 function SignIn() {
+  const { register, handleSubmit } = useForm();  
+  const onSubmit = data => {
+    alert(JSON.stringify(data, undefined, 2));
+    console.log(data);
+  }
+  const onError = (errors, e) => console.log(errors, e);
+
+  
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
 
@@ -24,11 +33,13 @@ function SignIn() {
 
               {/* Form */}
               <div className="max-w-sm mx-auto">
-                <form>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="email">이메일</label>
-                      <input id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력하세요" required />
+                      <input
+                        {...register("email", { required: true })}
+                        id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력하세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
@@ -37,7 +48,10 @@ function SignIn() {
                         <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="password">비밀번호</label>
                         {/* <Link to="/reset-password" className="text-sm font-medium text-blue-600 hover:underline">Having trouble signing in?</Link> */}
                       </div>
-                      <input id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력하세요" required />
+                      <input
+                        {...register("password", { required: true })}
+
+                        id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력하세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">

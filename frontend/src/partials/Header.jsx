@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 function Header() {
-
   const [top, setTop] = useState(true);
 
   // detect whether user has scrolled the page down by 10px 
@@ -41,7 +40,7 @@ function Header() {
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
               <li>
-                <Link to="/data" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>
+                <Link to="/" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>
               </li>
               {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
               <li>
