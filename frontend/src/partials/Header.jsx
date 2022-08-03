@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import AuthService from "../auth/authService";
 
 function Header() {
   const [top, setTop] = useState(true);
