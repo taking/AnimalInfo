@@ -1,9 +1,36 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import AuthService from "../auth/authService";
 
 import Header from '../partials/Header';
 
 function SignUp() {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();  
+  const onSubmit = (e) => {
+    alert(JSON.stringify(e, undefined, 2));
+    console.log(e);
+    AuthService.register(e.name, e.email, e.password, e.password, e.contact, e.refer).then(
+      () => {
+        alert("회원가입 완료")
+        navigate("/signin")
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        this.setState({
+          loading: false,
+          message: resMessage
+        });
+      }
+    )}
+  const onError = (errors, e) => console.log(errors, e);
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
 
@@ -24,23 +51,45 @@ function SignUp() {
 
               {/* Form */}
               <div className="max-w-sm mx-auto">
-                <form>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="name">이름 <span className="text-red-600">*</span></label>
-                      <input id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" required />
+                      <input 
+                        {...register("name", { required: true })}
+                        id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="email">이메일 <span className="text-red-600">*</span></label>
-                      <input id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력해주세요" required />
+                      <input 
+                        {...register("email", { required: true })}
+                        id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력해주세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="password">비밀번호 <span className="text-red-600">*</span></label>
-                      <input id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" required />
+                      <input 
+                        {...register("password", { required: true })}
+                        id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" required />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                      <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="contact">연락처 <span className="text-red-600">*</span></label>
+                      <input 
+                        {...register("contact", { required: true })}
+                        id="contact" type="text" className="form-input w-full text-gray-800" placeholder="연락처를 입력해주세요" required />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                      <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="refer">데이터 제공처<span className="text-red-600">*</span></label>
+                      <input 
+                        {...register("refer", { required: true })}
+                        id="refer" type="text" className="form-input w-full text-gray-800" placeholder="제공처를 입력해주세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mt-6">
@@ -48,9 +97,6 @@ function SignUp() {
                       <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full">회원가입</button>
                     </div>
                   </div>
-                  {/* <div className="text-sm text-gray-500 text-center mt-3">
-                    By creating an account, you agree to the <a className="underline" href="#0">terms & conditions</a>, and our <a className="underline" href="#0">privacy policy</a>.
-                                </div> */}
                 </form>
                 <div className="flex items-center my-6">
                   <div className="border-t border-gray-300 flex-grow mr-3" aria-hidden="true"></div>

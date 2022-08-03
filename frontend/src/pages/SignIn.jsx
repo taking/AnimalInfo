@@ -1,17 +1,36 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import AuthService from "../auth/authService";
 
 import Header from '../partials/Header';
 
 function SignIn() {
-  const { register, handleSubmit } = useForm();  
-  const onSubmit = data => {
-    alert(JSON.stringify(data, undefined, 2));
-    console.log(data);
-  }
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm();
+  
+  const onSubmit = (e) => {
+    alert(JSON.stringify(e, undefined, 2));
+    console.log(e);
+    AuthService.login(e.email, e.password).then(
+      () => {        
+        alert("로그인 완료")
+        navigate("/")
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        this.setState({
+          loading: false,
+          message: resMessage
+        });
+      }
+    )}
   const onError = (errors, e) => console.log(errors, e);
-
   
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
