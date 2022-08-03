@@ -28,8 +28,15 @@ function DataList() {
 
 
 
-  const onEditModalAlert = () => {
-    setOpenEditModal(!openEditModal);
+  // const onEditModalAlert = () => {
+  //   setOpenEditModal(!openEditModal);
+  // }
+
+  
+  const onEditModalAlert = (e = SelectionChangedEvent) => {
+    const selectedData = gridApi.getSelectedRows();
+    console.log('Selection updated');
+    alert(JSON.stringify(selectedData));
   }
   const onDeleteModalAlert = () => {
     setOpenDeleteModal(!openDeleteModal);
@@ -48,6 +55,7 @@ function DataList() {
 	};
 
 	const columnDefs = [
+    {headerName: 'check', checkboxSelection: true, width: 70},
 		{
 			headerName: '회원 정보',
 			children: [
@@ -68,10 +76,10 @@ function DataList() {
           field: "button",
           cellRendererFramework:(params)=>
             <div>
-              {/* <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); }}
                 aria-controls="EditModal">수정</a>
-              <a> | </a> */}
+              <a> | </a>
               <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true); }}
                 aria-controls="DeleteModal">삭제</a>
@@ -104,14 +112,25 @@ function DataList() {
     },
   ]
 
-	const onButtonClick = (e) => {
-		const selectedNodes = gridApi.getSelectedNodes();
-		const selectedData = selectedNodes.map((node) => node.data);
-		const selectedDataStringPresentation = selectedData
-			.map((node) => node.firstName + ' ' + node.lastName)
-			.join(', ');
-		alert(`Selected nodes: ${selectedDataStringPresentation}`);
-	};
+	// const onButtonClick = (e) => {
+	// 	const selectedNodes = gridApi.getSelectedNodes();
+	// 	const selectedData = selectedNodes.map((node) => node.data);
+	// 	const selectedDataStringPresentation = selectedData
+	// 		.map((node) => node.firstName + ' ' + node.lastName)
+	// 		.join(', ');
+	// 	alert(`Selected nodes: ${selectedDataStringPresentation}`);
+	// };
+
+  const getAllRows = (e) => {
+    let rowData = [];
+    gridApi.forEachNode(node => rowData.push(node.data));
+    alert(JSON.stringify(rowData));
+  }
+
+  const getSelectedRowData = (e) => {
+    const selectedData = gridApi.getSelectedRows();
+    alert(JSON.stringify(selectedData));
+  }
 
 	const onGridReady = useCallback((params) => {
 		console.log(params);
@@ -161,9 +180,9 @@ function DataList() {
                   </fieldset>
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
-                      {/* <button onClick={onButtonClick} style={{ marginBottom: '5px' }}>
+                      <button onClick={getSelectedRowData} style={{ marginBottom: '5px' }}>
                         Get selected rows
-                      </button> */}
+                      </button>
                       <AgGridReact
                         rowData={rowData}
                         columnDefs={columnDefs}
@@ -255,6 +274,7 @@ function DataList() {
                   </div>
                       </Modal> */}
 
+                  <Modal id="EditModal" ariaLabel="modal-headline" show={openEditModal} handleClose={() => onEditModalAlert(false)} ></Modal>
                   <Modal id="DeleteModal" ariaLabel="modal-headline" show={openDeleteModal} handleClose={() => onDeleteModalAlert(false)}>
 
                   <div className="fade h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-70 text-center w-full h-full outline-none overflow-x-hidden overflow-y-auto inline-block align-middle">
