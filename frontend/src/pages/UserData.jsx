@@ -1,13 +1,11 @@
 import React from 'react';
 
 import Header from '../partials/Header';
-import Home from '../partials/Home';
+import UserDataList from '../partials/UserDataList';
 import Footer from '../partials/Footer';
 
-import AuthService from "../api/authService";
+function UserData() {
 
-
-function Index() {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
 
@@ -18,7 +16,7 @@ function Index() {
       <main className="flex-grow">
 
         {/*  Page sections */}
-        <Home />
+        <UserDataList />
         
       {/* TODO: Tab 기능 가져다쓰기 */}
         {/* <FeaturesHome /> */}
@@ -32,4 +30,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default UserData;

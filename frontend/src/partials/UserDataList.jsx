@@ -10,14 +10,18 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 // Modal
 import Modal from '../utils/Modal';
 
+//css
+import "../css/style.css";
 
-function DataList() {
+
+function UserDataList() {
 	const [rowData, setRowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
   const [openModal, setOpenModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [updateData, setupdateData] = useState();
 
   const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
   const onSubmit = data => {
@@ -28,7 +32,18 @@ function DataList() {
 
 
 
+  // const onEditModalAlert = () => {
+  //   setOpenEditModal(!openEditModal);
+  // }
+
+  
   const onEditModalAlert = () => {
+    const selectedData = gridApi.getSelectedRows();
+    console.log("[#Update Data] is " + JSON.stringify(selectedData));
+    const jsonselectedData = JSON.stringify(selectedData)
+    setupdateData(jsonselectedData)
+  }
+  const closeEditModalAlert = () => {
     setOpenEditModal(!openEditModal);
   }
   const onDeleteModalAlert = () => {
@@ -48,6 +63,7 @@ function DataList() {
 	};
 
 	const columnDefs = [
+    {headerName: 'check', checkboxSelection: true, width: 70, cellClass: 'checkCell'},
 		{
 			headerName: '회원 정보',
 			children: [
@@ -69,9 +85,9 @@ function DataList() {
           cellRendererFramework:(params)=>
             <div>
               {/* <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); }}
-                aria-controls="EditModal">수정</a>
-              <a> | </a> */}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}}
+                aria-controls="EditModal">수정</a> */}
+              {/* <a> | </a> */}
               <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true); }}
                 aria-controls="DeleteModal">삭제</a>
@@ -102,16 +118,50 @@ function DataList() {
       updated_at: "-",
       button: true
     },
+    {
+      name: "김승한",
+      refer: "건국대학교 동물병원",
+      email: "consine2c@innogrid.com",
+      dataNum: Math.floor(Math.random() * 30),
+      money: Math.floor(Math.random() * 3000) + " 원",
+      created_at: "2022-08-01 14:00",
+      updated_at: "2022-08-01 15:00",
+      button: true
+    },
   ]
 
-	const onButtonClick = (e) => {
-		const selectedNodes = gridApi.getSelectedNodes();
-		const selectedData = selectedNodes.map((node) => node.data);
-		const selectedDataStringPresentation = selectedData
-			.map((node) => node.firstName + ' ' + node.lastName)
-			.join(', ');
-		alert(`Selected nodes: ${selectedDataStringPresentation}`);
-	};
+  // const handleSubmit = async (event) => {
+  //   console.log("event is ", event)
+  //   event.preventDefault();
+  //   // return fetch('http://localhost:8000/api/Data/', {
+  //   //   method: 'POST',
+  //   //   headers: {
+  //   //   'Accept': 'application/json',
+  //   //   'Content-Type': 'application/json'
+  //   //   },
+  //   await new Promise((r) => setTimeout(r, 1000));
+  //   body: JSON.stringify({
+  //       title: this.state.itemtitle,
+  //       tag:[
+  //         {name:this.state.tagtitle,
+  //         taglevel:this.state.taglevel}
+  //        ],
+  //       info:[]
+  //    })
+  //   console.log("event is ", event.state.refer)
+  //   alert(JSON.stringify(body, null, 2));
+  // };
+
+  const getAllRows = (e) => {
+    let rowData = [];
+    gridApi.forEachNode(node => rowData.push(node.data));
+    alert(JSON.stringify(rowData));
+  }
+
+  const getSelectedRowData = (e) => {
+    const selectedData = gridApi.getSelectedRows();
+    alert(JSON.stringify(selectedData));
+  }
 
 	const onGridReady = useCallback((params) => {
 		console.log(params);
@@ -161,9 +211,10 @@ function DataList() {
                   </fieldset>
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
-                      {/* <button onClick={onButtonClick} style={{ marginBottom: '5px' }}>
-                        Get selected rows
-                      </button> */}
+                      <div className="frame">
+                        <button className="custom-btn btn-9" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
+                        </button>
+                      </div>
                       <AgGridReact
                         rowData={rowData}
                         columnDefs={columnDefs}
@@ -178,82 +229,29 @@ function DataList() {
                     </div>
 
                   </fieldset>
-{/*                     
-                  <Modal id="EditModal" ariaLabel="modal-headline" show={openEditModal} handleClose={() => onEditModalAlert(false)} >
+                    
+                  <Modal id="EditModal" ariaLabel="modal-headline" show={openEditModal} handleClose={() => onEditModalAlert(false)}>
                       <div className="fade h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-70 text-center w-full h-full outline-none overflow-x-hidden overflow-y-auto">
                       <div className="modal-content bg-white rounded w-10/12 md:w-1/3">
                           <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
                               <h5 className="text-xl font-medium leading-normal text-gray-800">
-                                  데이터 수정
+                                  수정된 데이터를 확인하세요
                               </h5>
-                              <button type="button" onClick={onEditModalAlert} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                              <button type="button" onClick={closeEditModalAlert} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                                   <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                   <span className="sr-only">Close modal</span>
                               </button>
-                          </div>
-                          <div className="modal-body relative p-4">
-
-                          <form onSubmit={handleSubmit(onSubmit, onError)}>  
-                          <fieldset>
-                              <div className="grid gap-6 mb-6 md:grid-cols-2">
-                                <div>
-                                <legend className="contents mb-2 text-base font-medium text-gray-900">제공처</legend>
-                                  <div className="mt-1">
-                                    <input
-                                      {...register("refer", { required: true })}
-                                      type="text"
-                                      id="refer"
-                                      name="refer"
-                                      rows={1}
-                                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                      placeholder="제공처를 입력하세요"
-                                      defaultValue={''}
-                                      required
-                                    />
-                                  </div>
-                                </div>
-                                <div>
-                                <legend className="contents text-base font-medium text-gray-900">제공처</legend>
-                                  <div className="mt-1">
-                                    <input
-                                      {...register("refer", { required: true })}
-                                      type="text"
-                                      id="refer"
-                                      name="refer"
-                                      rows={1}
-                                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                      placeholder="제공처를 입력하세요"
-                                      defaultValue={''}
-                                      required
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                          </fieldset>
-                              <div className="mb-6">
-                                  <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email address</label>
-                                  <input type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required="">
-                                  </input>
-                              </div> 
-                              <div className="mb-6">
-                                  <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Password</label>
-                                  <input type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required="">
-                                  </input>
-                              </div> 
-                              <div className="mb-6">
-                                  <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Confirm password</label>
-                                  <input type="password" id="confirm_password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required="">
-                                  </input>
-                              </div>
-                          </form>
+                          </div>                          
+                          <div className="updateData">
+                                {updateData}
                           </div>
                           <div className="modal-footer flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
-                              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">수정</button>
-                              <button type="button" onClick={onEditModalAlert} className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">취소</button>
+                              <button type="submit" onClick={onEditModalAlert} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">수정</button>
+                              <button type="button" onClick={closeEditModalAlert} className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">취소</button>
                           </div>
                       </div>
                   </div>
-                      </Modal> */}
+                      </Modal>
 
                   <Modal id="DeleteModal" ariaLabel="modal-headline" show={openDeleteModal} handleClose={() => onDeleteModalAlert(false)}>
 
@@ -287,4 +285,4 @@ function DataList() {
   );
 }
 
-export default DataList;
+export default UserDataList;

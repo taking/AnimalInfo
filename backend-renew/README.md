@@ -37,13 +37,13 @@ SECRET_JWT=supersecret
 
 Login
 ---
-#### /gmcapi/v1/users/login
+#### /api/v1/users/login
 * `GET` : Login with Get JWT Token
 
 
 Users
 ---
-#### /gmcapi/v1/users
+#### /api/v1/users
 * `GET` : Get all Users
 * `POST` : Create a new User
 
@@ -64,7 +64,7 @@ Users
 
 Data
 ---
-#### /gmcapi/v1/data
+#### /api/v1/data
 * `GET` : Get all Data
 * `POST` : Create a new data
 
@@ -79,19 +79,19 @@ Data
 
 Price
 ---
-#### /gmcapi/v1/price/init
+#### /api/v1/price/init
 * `GET` : Init Database (Create Column)
 
-#### /gmcapi/v1/price
+#### /api/v1/price
 * `GET` : Get Price
 
-#### /gmcapi/v1/price/:price
+#### /api/v1/price/:price
 * `PATCH` : Update a price
 
 
 History
 ---
-#### /gmcapi/v1/history
+#### /api/v1/history
 * `GET` : Get all Histories
 * `POST` : Create a new History
 
