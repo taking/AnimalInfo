@@ -1,4 +1,5 @@
 import axios from "axios";
+import authHeader from "../api/authHeader";
 
 
 const API_URL = "http://192.168.160.230:8888/api/v1/users";
@@ -14,7 +15,7 @@ class AuthService {
       .then(response => {
         if (response.data.token) {
           localStorage.setItem("user", JSON.stringify(response.data));
-          console.log("[#1] res data is : ", response.data);
+          console.log("[AuthService] response.data : ", response.data);
         }
         return response.data;
       });
@@ -22,22 +23,11 @@ class AuthService {
   logout() {
     localStorage.removeItem("user");
   }
-  register(name, email, password, confirm_password, contact, refer) {
-    return axios.post(API_URL, {
-      name,
-      email,
-      password,
-      confirm_password,
-      contact,
-      refer
-    })
-    .then(response => {
-      console.log("[#1] res data is : ", response);
-      return response;
-    });
-  }
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
+  }
+  getAccessToken() {
+    return authHeader();
   }
 }
 export default new AuthService();

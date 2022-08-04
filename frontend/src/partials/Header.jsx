@@ -1,9 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import AuthService from "../auth/authService";
+import { Link, useNavigate } from 'react-router-dom';
+import AuthService from "../api/authService";
 
 function Header() {
+  const navigate = useNavigate();
   const [top, setTop] = useState(true);
+  const [role, setRole] = useState();
+
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    if (!user) {
+        navigate("/signin");
+    }
+    if (user) {
+      if (user.role) {
+        // Admin
+        setRole(true);
+        // setRole(true);
+      } else {
+        // User
+        setRole(false);
+      }
+    }
+  },[]);   
 
   // detect whether user has scrolled the page down by 10px 
   useEffect(() => {
@@ -13,6 +32,7 @@ function Header() {
     window.addEventListener('scroll', scrollHandler);
     return () => window.removeEventListener('scroll', scrollHandler);
   }, [top]);  
+
 
   return (
     <header className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top && 'bg-white backdrop-blur-sm shadow-lg'}`}>
@@ -39,23 +59,28 @@ function Header() {
           {/* Site navigation */}
           <nav className="flex flex-grow">
             <ul className="flex flex-grow justify-end flex-wrap items-center">
-              {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
-              <li>
-                <Link to="/" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>
-              </li>
-              {/* TODO: 로그인 후 메뉴 표시하도록 변경 */}
-              <li>
-                <Link to="/list" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">목록</Link>
-              </li>
-              {/* TODO: 로그인 후 관리자만 표시하도록  */}
-              <li>
-                <Link to="/adm/users" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3">
-                  <span>관리자</span>
-                  <svg className="w-3 h-3 fill-current text-gray-400 flex-shrink-0 ml-2 -mr-1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z" fillRule="nonzero" />
-                  </svg>                  
-                </Link>
-              </li>
+              
+              {/* TODO: 로그인한 경우 표시 */}
+              {role && (
+                <>
+                <li>
+                  <Link to="/" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>
+                </li>
+                <li>
+                  <Link to="/list" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">목록</Link>
+                </li>
+                </>
+              )}
+              { role == 1 && (
+                <li>
+                  <Link to="/adm/users" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3">
+                    <span>관리자</span>
+                    <svg className="w-3 h-3 fill-current text-gray-400 flex-shrink-0 ml-2 -mr-1" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z" fillRule="nonzero" />
+                    </svg>                  
+                  </Link>
+                </li>
+              )}
             </ul>
 
           </nav>

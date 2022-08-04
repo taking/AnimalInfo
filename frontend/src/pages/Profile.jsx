@@ -1,11 +1,10 @@
 import React from 'react';
 
 import Header from '../partials/Header';
-import DataList from '../partials/DataList';
-import FeaturesHome from '../partials/Features';
+import ProfilePage from '../partials/Profile';
 import Footer from '../partials/Footer';
 
-function userDataList() {
+function Profile() {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
 
@@ -16,7 +15,7 @@ function userDataList() {
       <main className="flex-grow">
 
         {/*  Page sections */}
-        <DataList />
+        <ProfilePage />
         
       {/* TODO: Tab 기능 가져다쓰기 */}
         {/* <FeaturesHome /> */}
@@ -30,4 +29,4 @@ function userDataList() {
   );
 }
 
-export default userDataList;
+export default Profile;
