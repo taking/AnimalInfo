@@ -104,7 +104,6 @@ dotenv.config();
             throw new HttpException(400, 'Validation faild', errors);
         }
     }
-
 }
 
 
