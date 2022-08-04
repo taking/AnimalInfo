@@ -14,7 +14,9 @@ import Index from './pages/Index';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ResetPassword from './pages/ResetPassword';
-import DataList from './pages/DataList';
+import UserData from './pages/UserData';
+import Profile from './pages/Profile';
+import AdminUser from './pages/AdminUser';
 
 function App() {
 
@@ -39,11 +41,12 @@ function App() {
     <>
       <Routes>
         <Route exact path="/" element={<Index />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/data" element={<Index />} />
-        <Route path="/list" element={<DataList />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/list" element={<UserData />} />
+        <Route path="/adm/users" element={<AdminUser />} />
+        {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
       </Routes>
     </>
   );

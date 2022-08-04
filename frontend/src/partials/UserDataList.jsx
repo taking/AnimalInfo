@@ -14,7 +14,7 @@ import Modal from '../utils/Modal';
 import "../css/style.css";
 
 
-function DataList() {
+function UserDataList() {
 	const [rowData, setRowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
@@ -285,4 +285,4 @@ function DataList() {
   );
 }
 
-export default DataList;
+export default UserDataList;

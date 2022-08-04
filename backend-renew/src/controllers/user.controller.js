@@ -11,6 +11,7 @@ dotenv.config();
  ******************************************************************************/
 class UserController {
     getAllUsers = async (req, res, next) => {
+        console.log(req.body);
         let userList = await UserModel.find();
         if (!userList.length) {
             throw new HttpException(404, 'Users not found');
@@ -88,7 +89,6 @@ class UserController {
 
         res.send({ message, info });
     };
-
 
     updateStatus = async (req, res, next) => {
         const result = await UserModel.status(req.params.id);
