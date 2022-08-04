@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vite --host --port 8080 --mode production",
-    "dev": "vite --host --port 8889 --mode development",
+    "dev": "vite --host --port 8899 --mode development",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -30,6 +30,7 @@
     "ag-grid-community": "^28.0.2",
     "ag-grid-react": "^28.0.0",
     "autoprefixer": "^10.4.7",
+    "faker": "^6.6.6",
     "postcss": "^8.4.14",
     "react-data-grid": "^7.0.0-beta.14",
     "react-datepicker": "^4.8.0",
