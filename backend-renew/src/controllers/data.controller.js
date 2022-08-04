@@ -29,10 +29,8 @@ dotenv.config();
     if (!data) {
         throw new HttpException(404, 'User not found');
     }
-
-
     res.send(data);
-  };
+   };
 
 
     createData = async (req, res) => {
@@ -62,6 +60,7 @@ dotenv.config();
         console.log("field",field)
 
        const missionId = await DataModel.missionId(req.body.species);
+       var defaultMission = 000000;
        var cnt = missionId[0]['count'] +1;
        const result = await DataModel.create(cnt,req.body,img);
         
