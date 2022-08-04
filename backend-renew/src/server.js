@@ -24,7 +24,7 @@ app.options("*", cors());
 const port = Number(process.env.PORT || 3331);
 
 app.use(`/api/v1/users`, userRouter);
-app.use(`/api/v1/files`, fileRouter);
+app.use(`/api/v1/data`, fileRouter);
 app.use(`/api/v1/history`, historyRouter);
 app.use(`/api/v1/price`, priceRouter);
 

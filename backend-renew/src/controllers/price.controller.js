@@ -42,7 +42,7 @@ class PriceController {
         }
 
 
-        const result2 = await HistoryModel.update("default", req.params.price);
+        // const result2 = await HistoryModel.update("default", req.params.price);
 
         res.send('Price Changed');
     };
