@@ -11,7 +11,7 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import Modal from '../utils/Modal';
 
 
-function DataList() {
+function UserDataList() {
 	const [rowData, setRowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
@@ -287,4 +287,4 @@ function DataList() {
   );
 }
 
-export default DataList;
+export default UserDataList;
