@@ -1,49 +1,72 @@
 const DataModel = require('../models/data.model');
 const HttpException = require('../utils/HttpException.utils');
+const crypto = require('crypto');
 const { validationResult } = require('express-validator');
+var bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const { fileUpload } = require('../models/data.model');
 dotenv.config();
+// route.use(bodyParser.urlencoded({ extended: false }))
+// router.use(express.urlencoded({extended : false}));
+// // parse application/json
+// router.use(bodyParser.json())
 
 /******************************************************************************
  *                              Data Controller
  ******************************************************************************/
-class DataController {
-    getAllData = async (req, res, next) => {
-        let dataList = await DataModel.find();
-        if (!dataList.length) {
-            throw new HttpException(404, 'Data not found');
+ class DataController { 
+
+    getAllData = async (req,res,next) => {
+    let dataList = await DataModel.find();
+    if (!dataList.length) {
+        throw new HttpException(404, 'Data not found');
+    }
+    res.send(dataList);
+   };
+
+   getDataById = async (req, res, next) => {
+    const data = await DataModel.findOne({ id: req.params.id });
+    if (!data) {
+        throw new HttpException(404, 'User not found');
+    }
+    res.send(data);
+   };
+
+
+    createData = async (req, res) => {
+        // this.checkValidation(req)
+        // var array = ['imgAllFront','imgAllTop','imgAllLeft','imgAllRight','imgAllBack'
+        // ,'imgHeadFront','imgHeadTop','imgHeadLeft','imgHeadRight','imgHeadBottom','imgNoseFront'];
+        
+        var array = ['imgHeadBottom','imgNoseFront'];
+        
+        var img = new Array();
+
+        for(var i=0; i<array.length; i++){
+            var field = new Array();
+            for(var j=0; j<req.files[`${array[i]}`].length; j++){
+                const hash = crypto.createHash('sha256'); 
+                hash.update('secret' + j);
+                var imgInfo = {
+                    name: req.files[`${array[i]}`][j].filename,
+                    hash: `${hash.digest('hex')}`
+                }   
+                field.push(imgInfo)             
+            }
+             img.push(field)
         }
+        
+        console.log("img",img);
+        console.log("field",field)
 
-        res.send(dataList);
-    };
-
-    getDataById = async (req, res, next) => {
-        const data = await DataModel.findOne({ id: req.params.id });
-        if (!data) {
-            throw new HttpException(404, 'Data not found');
-        }
-
-        res.send(data);
-    };
-
-    getDataByRefer = async (req, res, next) => {
-        const data = await DataModel.findOne({ refer: req.params.refer });
-        if (!data) {
-            throw new HttpException(404, 'Data not found');
-        }
-
-        res.send(data);
-    };
-
-    createData = async (req, res, next) => {
-        this.checkValidation(req);
-
-        const result = await DataModel.create(req.body);
-
+       const missionId = await DataModel.missionId(req.body.species);
+       var defaultMission = 000000;
+       var cnt = missionId[0]['count'] +1;
+       const result = await DataModel.create(cnt,req.body,img);
+        
         if (!result) {
             throw new HttpException(500, 'Something went wrong');
         }
-
         res.status(201).send('Data was created!');
     };
 
@@ -81,10 +104,7 @@ class DataController {
             throw new HttpException(400, 'Validation faild', errors);
         }
     }
-
 }
-
-
 
 /******************************************************************************
  *                               Export
