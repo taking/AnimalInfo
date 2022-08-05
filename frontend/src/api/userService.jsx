@@ -32,8 +32,8 @@ class UserService {
 
   enabled(userId) {
     return axios
-      .patch(API_URL + '/id/' + userId, {
-        Headers: authHeader()
+      .patch(API_URL + '/id/status/' + userId, "",{
+        headers: authHeader()
       })
       .then(response => {
         console.log("[userService-enabled] response : ", response);
@@ -44,16 +44,13 @@ class UserService {
   delete(userId) {
     return axios
       .delete(API_URL + '/id/' + userId, {
-        Headers: authHeader()
+        headers: authHeader()
       })
       .then(response => {
         console.log("[userService-delete] response : ", response);
         return response;
       });
   }
-
-
-
 
 }
 export default new UserService();
