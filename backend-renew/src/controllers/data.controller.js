@@ -44,29 +44,53 @@ dotenv.config();
         
     //     var array = ['imgHeadBottom','imgNoseFront'];
         
-    //     var img = new Array();
-
-    //     for(var i=0; i<array.length; i++){
-    //         var field = new Array();
-    //         for(var j=0; j<req.files[`${array[i]}`].length; j++){
-    //             const hash = crypto.createHash('sha256'); 
-    //             hash.update('secret' + j);
-    //             var imgInfo = {
-    //                 name: req.files[`${array[i]}`][j].filename,
-    //                 hash: `${hash.digest('hex')}`
-    //             }   
-    //             field.push(imgInfo)             
-    //         }
-    //          img.push(field)
-    //     }
         
-    //     console.log("img",img);
-    //     console.log("field",field)
+        var img = [];
+        
+        for(var i=0; i<array.length; i++){
+            const field = [];
+            for(var j=0; j<req.files[`${array[i]}`].length; j++){
+                // file hash
+                const hash = crypto.createHash('sha256'); 
+                hash.update('secret' + j);
+                var imgInfo = {
+                    name: req.files[`${array[i]}`][j].filename,
+                    hash: `${hash.digest('hex')}`
+                }              
+                field.push(imgInfo)    
+            }
+            img.push(field)
+        }
+        
 
-    //    const missionId = await DataModel.missionId(req.body.species);
-    // //    var defaultMission = 000000;
-    //    var cnt = missionId[0]['count'] +1;
-    //    const result = await DataModel.create(cnt,req.body,img);
+        var imglist = [];
+        var imgName = [];
+        for (var i=0; i<array.length; i++){
+            var url = [];
+            // imgName[i] = 'http://192.168.160.237:8888/file/' + img[i].map((x) => x.name);
+            imglist[i] = img[i].map((x) => x.name);
+            for(var j=0; j<imglist[i].length; j++){
+                
+                url[j] =  'http://192.168.160.237:8888/file/' + imglist[i][j];
+            }
+            imgName.push(url);
+        }
+
+        console.log(imgName)
+       // mission id
+       const speciesCnt = await DataModel.getMissionId(req.body.species);
+       var cnt = speciesCnt[0]['count'] +1;
+       var cntString = String(cnt);
+       var num= cntString.padStart(6,'0');
+       let missionId =0;
+
+       if(req.body.species == "dog"){
+            missionId = '10_' + num; 
+       }else if(req.body.species == "cat"){
+            missionId = '20_' + num; 
+       }
+
+       const result = await DataModel.create(missionId,req.body,imgName);
         
     //     if (!result) {
     //         throw new HttpException(500, 'Something went wrong');

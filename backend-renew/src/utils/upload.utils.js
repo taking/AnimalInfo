@@ -1,15 +1,22 @@
 const path = require('path');
 var multer = require('multer');
-const res33 = path.resolve('src', 'file');
+var fs = require('fs');
+const path = require('path')
+
+const dir = path.join(__dirname,'../file')
+
+
+
 
 storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, res33)
+      cb(null, dir)
     },
     filename(req, file, cb) { // 파일명을 어떤 이름으로 올릴지
         cb( null, `${req.body.dataTypes}_${req.body.species}_${file.originalname}` );
   }
   });
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
   
 // upload = multer({ storage: storage }).array('imgNoseFront');
 upload = multer({ storage: storage })

@@ -27,7 +27,7 @@ app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/data`, fileRouter);
 app.use(`/api/v1/history`, historyRouter);
 app.use(`/api/v1/price`, priceRouter);
-
+app.use(express.static('/animal/animalinfo-develop/backend-renew/src'));
 // 404 error
 app.all('*', (req, res, next) => {
     const err = new HttpException(404, 'Endpoint Not Found');

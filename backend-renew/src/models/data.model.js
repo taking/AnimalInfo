@@ -28,35 +28,30 @@ class DataModel {
         return result[0];
     }
 
-    //  create = async ({ refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
+    //  create = async (missionId,{refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
     //     exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
-    //     heartRate, breatingRate, bodyHeat, stress, imgAllFront, imgAllTop, imgAllLeft, imgAllRight, imgAllBack, imgHeadFront, imgHeadTop, 
-    //     imgHeadLeft, imgHeadRight, imgHeadBottom, imgNoseFront }) => {
-    //      const sql = `INSERT INTO ${this.tableName}
-    //      (refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
+    //     heartRate, breatingRate, bodyHeat, stress},imgName) => {
+
+    //      (id,userId,refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
     //     exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
     //     heartRate, breatingRate, bodyHeat, stress, imgAllFront, imgAllTop, imgAllLeft, imgAllRight, imgAllBack, imgHeadFront, imgHeadTop, 
     //     imgHeadLeft, imgHeadRight, imgHeadBottom, imgNoseFront ) 
-    //      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    //      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
         //  const result = await query(sql, 
-        //     [refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
+        //     [id,userId,refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
         //     exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
-        //     heartRate, breatingRate, bodyHeat, stress, imgAllFront, imgAllTop, imgAllLeft, imgAllRight, imgAllBack, imgHeadFront, imgHeadTop, 
-        //     imgHeadLeft, imgHeadRight, imgHeadBottom, imgNoseFront]);
+        //     heartRate, breatingRate, bodyHeat, stress,imgName[0].join(),imgName[1].join(),imgName[3].join(),imgName[4].join(),imgName[5].join(),
+        //     imgName[6].join(),imgName[7].join(),imgName[8].join(),imgName[9].join(),imgName[10].join(),imgName[11].join()]);
 
 
-    create = async (cnt,{ refer, data_type, species},img) => {
+    create = async (missionId,{userId, refer, data_type, species},imgName) => {
+    
         const sql = `INSERT INTO ${this.tableName}
-        (id,refer, data_type, species,imgNoseFront,imgHeadBottom) VALUES (?,?,?,?,?,?)`;
-        
-        // function createRandNum(min,max){
-        //     var ntemp = Math.floor(Math.random() * (max -min + 1)) + min;
-        //     return ntemp
-        // }
-        // var rand = createRandNum(100,300);
+        (id,userId,refer, data_type, species,imgNoseFront,imgHeadBottom) VALUES (?,?,?,?,?,?,?)`;
 
-        const result = await query(sql,[cnt,refer, data_type,species,img[0],img[1]]);
+
+        const result = await query(sql,[missionId,userId,refer, data_type,species,imgName[0].join(),imgName[1].join()]);
         const affectedRows = result ? result.affectedRows : 0;
         return affectedRows;
      }
@@ -80,7 +75,7 @@ class DataModel {
         return affectedRows;
     }
 
-    missionId = async (species) =>{
+    getMissionId = async (species) =>{
         const sql = `SELECT COUNT(*)  AS count FROM DATA WHERE species =? `
         const result = await query(sql,[species]);
 
