@@ -11,6 +11,7 @@ dotenv.config();
 // // parse application/json
 // router.use(bodyParser.json())
 
+
 /******************************************************************************
  *                              Data Controller
  ******************************************************************************/
@@ -34,39 +35,43 @@ dotenv.config();
 
 
     createData = async (req, res) => {
+        console.log("data : ", req.body);
+        console.log("files : ", req.files);
+        console.log("file : ", req.file);
         // this.checkValidation(req)
         // var array = ['imgAllFront','imgAllTop','imgAllLeft','imgAllRight','imgAllBack'
         // ,'imgHeadFront','imgHeadTop','imgHeadLeft','imgHeadRight','imgHeadBottom','imgNoseFront'];
         
-        var array = ['imgHeadBottom','imgNoseFront'];
+    //     var array = ['imgHeadBottom','imgNoseFront'];
         
-        var img = new Array();
+    //     var img = new Array();
 
-        for(var i=0; i<array.length; i++){
-            var field = new Array();
-            for(var j=0; j<req.files[`${array[i]}`].length; j++){
-                const hash = crypto.createHash('sha256'); 
-                hash.update('secret' + j);
-                var imgInfo = {
-                    name: req.files[`${array[i]}`][j].filename,
-                    hash: `${hash.digest('hex')}`
-                }   
-                field.push(imgInfo)             
-            }
-             img.push(field)
-        }
+    //     for(var i=0; i<array.length; i++){
+    //         var field = new Array();
+    //         for(var j=0; j<req.files[`${array[i]}`].length; j++){
+    //             const hash = crypto.createHash('sha256'); 
+    //             hash.update('secret' + j);
+    //             var imgInfo = {
+    //                 name: req.files[`${array[i]}`][j].filename,
+    //                 hash: `${hash.digest('hex')}`
+    //             }   
+    //             field.push(imgInfo)             
+    //         }
+    //          img.push(field)
+    //     }
         
-        console.log("img",img);
-        console.log("field",field)
+    //     console.log("img",img);
+    //     console.log("field",field)
 
-       const missionId = await DataModel.missionId(req.body.species);
-       var defaultMission = 000000;
-       var cnt = missionId[0]['count'] +1;
-       const result = await DataModel.create(cnt,req.body,img);
+    //    const missionId = await DataModel.missionId(req.body.species);
+    // //    var defaultMission = 000000;
+    //    var cnt = missionId[0]['count'] +1;
+    //    const result = await DataModel.create(cnt,req.body,img);
         
-        if (!result) {
-            throw new HttpException(500, 'Something went wrong');
-        }
+    //     if (!result) {
+    //         throw new HttpException(500, 'Something went wrong');
+    //     }
+    //     res.status(201).send('Data was created!');
         res.status(201).send('Data was created!');
     };
 
