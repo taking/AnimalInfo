@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "vite --host --port 8080 --mode production",
-    "dev": "vite --host --port 8899 --mode development",
+    "dev": "vite --host --port 8889 --mode development",
     "build": "vite build",
     "preview": "vite preview"
   },

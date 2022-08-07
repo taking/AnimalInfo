@@ -17,9 +17,6 @@ function UserData() {
 
         {/*  Page sections */}
         <UserDataList />
-        
-      {/* TODO: Tab 기능 가져다쓰기 */}
-        {/* <FeaturesHome /> */}
 
       </main>
 

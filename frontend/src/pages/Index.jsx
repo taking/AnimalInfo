@@ -4,9 +4,6 @@ import Header from '../partials/Header';
 import Home from '../partials/Home';
 import Footer from '../partials/Footer';
 
-import AuthService from "../api/authService";
-
-
 function Index() {
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
@@ -19,9 +16,6 @@ function Index() {
 
         {/*  Page sections */}
         <Home />
-        
-      {/* TODO: Tab 기능 가져다쓰기 */}
-        {/* <FeaturesHome /> */}
 
       </main>
 

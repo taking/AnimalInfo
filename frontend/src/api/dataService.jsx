@@ -1,35 +1,43 @@
 import axios from "axios";
-import authHeader from "./authHeader";
+import authHeader from "../api/authHeader";
 
 
-const API_URL = "http://192.168.160.230:8888/api/v1/";
+const API_URL = "http://210.207.104.188:8888/api/v1/data";
 
 class DataService {
-  userList() {
+  list() {
     return axios
-      .get(API_URL + 'users', { headers: authHeader() })
+      .get(API_URL, { headers: authHeader() })
       .then(response => {
-        console.log("[#1] user lists is : ", response.data);
+        console.log("[dataService] list : ", response.data);
         return response.data;
       });
   }
 
-  register(name, email, password, confirm_password, contact, refer) {
+  create(data) {
+    console.log("data list : ", data);
     return axios
-      .post(API_URL + 'users', {
-        name,
-        email,
-        password,
-        confirm_password,
-        contact,
-        refer
+      .post(API_URL, data, {
+        headers: authHeader(),
+        'Content-Type': 'multipart/form-data'
       })
       .then(response => {
-          console.log("[userService] response : ", response);
-          console.log("[userService] response.data : ", response.data);
+          console.log("[dataService-create] response : ", response);
         return response;
       });
   }
 
+  delete(dataId) {
+    return axios
+      .delete(API_URL + '/id/' + dataId, {
+        headers: authHeader()
+      })
+      .then(response => {
+        console.log("[dataService-delete] response : ", response);
+        return response;
+      });
+  }
+
+
 }
-export default new UserService();
+export default new DataService();
