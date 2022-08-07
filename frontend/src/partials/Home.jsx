@@ -1,37 +1,84 @@
-import React, { useState } from 'react';
-import { render } from "react-dom";
-import { useForm, Controller } from "react-hook-form";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 import { RadioGroup } from '@headlessui/react'
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import moment from 'moment';
+
+import AuthService from "../api/authService";
+import DataService from "../api/dataService";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 function Home() {
-  const { register, handleSubmit, watch, setValue, controller, formState: { errors } } = useForm();
-  // const onSubmit = (data, e) => console.log(data, e);
-  const onSubmit = data => {
-    alert(JSON.stringify(data, undefined, 2));
-    console.log(data);
-  }
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm();
   const onError = (errors, e) => console.log(errors, e);
 
-  const [selectDogs, setSelectDogs] = useState("");
-  const [selectSex, setSelectSex] = useState("");
-  const [selectCats, setSelectCats] = useState("");
-  const [selectBcs, setSelectBcs] = useState("");
-  const [selectExercise, setSelectExercise] = useState("");
-  const [selectDefecation, setSelectDefecation] = useState("");
-  const [selectEnvironment, setSelectEnvironment] = useState("");
-  const [selectDisease, setSelectDisease] = useState("");
-  const [selectFoodKind, setSelectFoodKind] = useState("");
-  const [selectFoodCount, setSelectFoodCount] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
+  // const [refer, setRefer] = useState("");
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('user')) == null) {
+      console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
+      navigate("/signin");
+    } else {
+      const user = AuthService.getCurrentUser();
+      setValue("refer", user.refer);
+    }
+  },[]);   
+
+  const listUp = {
+    data : [
+      "refer",
+      // "price",
+      "data_type",
+      "species",
+      "dogRace",
+      "catRace",
+      "birth",
+      "sex",
+      "weight",
+      "shoulderHeight",
+      "neckSize",
+      "backLength",
+      "chestSize",
+      "BCS",
+      "exercise",
+      "environment",
+      "defecation",
+      "foodCount",
+      "foodAmount",
+      "snackAmount",
+      "foodKind",
+      "disease",
+      "diseaseName",
+      "CPR",
+      "lgG",
+      "IL6",
+      "AFP",
+      "heartRate",
+      "breatingRate",
+      "bodyHeat",
+      "stress"
+    ],
+    file : [
+      "imgAllFront",
+      "imgAllTop",
+      "imgAllLeft",
+      "imgAllRight",
+      "imgAllBack",
+      "imgHeadFront",
+      "imgHeadTop",
+      "imgHeadLeft",
+      "imgHeadRight",
+      "imgHeadBottom",
+      "imgNoseFront"
+    ]
+  }
 
   const selectbox = {
-    dataTypes: [
+    data_type: [
       { id: "dataTypes_A", fullname:'A 타입', name: 'A', unavailable: true },
       { id: "dataTypes_B", fullname:'B 타입', name: 'B', unavailable: true },
     ],
@@ -40,23 +87,23 @@ function Home() {
       { id: "species_cat", fullname:'반려묘', name: 'cat', unavailable: true },
     ],
     dogs: [
-      { id: "dogBreed_1", name: '불도그', unavailable: true },
-      { id: "dogBreed_2", name: '저먼 셰퍼드', unavailable: true },
-      { id: "dogBreed_3", name: '래브라도 리트리버', unavailable: true },
-      { id: "dogBreed_4", name: '골든 리트리버', unavailable: true },
-      { id: "dogBreed_5", name: '푸들', unavailable: true },
-      { id: "dogBreed_6", name: '시베리안 허스키', unavailable: true },
-      { id: "dogBreed_7", name: '포메라니안', unavailable: true },
-      { id: "dogBreed_8", name: '프렌치 불도그', unavailable: true },
+      { id: "dogBreed_1", name: '말티즈', unavailable: true },
+      { id: "dogBreed_2", name: '푸들', unavailable: true },
+      { id: "dogBreed_3", name: '포메라니안', unavailable: true },
+      { id: "dogBreed_4", name: '치와와', unavailable: true },
+      { id: "dogBreed_5", name: '시추', unavailable: true },
+      { id: "dogBreed_6", name: '골든리트리버', unavailable: true },
+      { id: "dogBreed_7", name: '진돗개', unavailable: true },
+      { id: "dogBreed_8", name: '믹스견', unavailable: true },
     ],
     cats: [
-      { id: "catBreed_1", name: '페르시안', unavailable: true },
-      { id: "catBreed_2", name: '메인쿤', unavailable: true },
-      { id: "catBreed_3", name: '브리티시 쇼트헤어', unavailable: true },
-      { id: "catBreed_4", name: '뱅갈 고양이', unavailable: true },
-      { id: "catBreed_5", name: '샴고양이', unavailable: true },
-      { id: "catBreed_6", name: '스핑크스', unavailable: true },
-      { id: "catBreed_7", name: '랙돌', unavailable: true },
+      { id: "catBreed_1", name: '코리안숏헤어', unavailable: true },
+      { id: "catBreed_2", name: '러시아블루', unavailable: true },
+      { id: "catBreed_3", name: '페르시안', unavailable: true },
+      { id: "catBreed_4", name: '샴', unavailable: true },
+      { id: "catBreed_5", name: '터키시앙고라', unavailable: true },
+      // { id: "catBreed_6", name: '스핑크스', unavailable: true },
+      // { id: "catBreed_7", name: '랙돌', unavailable: true },
     ],
     sex: [
       { id: "sex_IM", fullname: 'IM(수컷)', name: 'IM', unavailable: true },
@@ -124,102 +171,44 @@ function Home() {
     ]
   }
   
-  const [values, setValues] = useState({ refer: "", dataTypes: "", species: "" }); 
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    // data.preventDefault();
+    console.log("data is :", data);
+    
+    for (let i = 0; i < listUp.data.length; i++) {
+      console.log("value is :", getValues(listUp.data[i]));
+      formData.append(listUp.data[i], getValues(listUp.data[i]))
+    }
+    
+    for (let i = 0; i < listUp.file.length; i++) {
+      console.log("value is :", getValues(listUp.file[i]));
+      formData.append('file', getValues(listUp.file[i]))
+    }
+    
+    DataService.create(formData).then(
+      () => {
+        alert("Upload Success!");
+        navigate("/");
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        alert(resMessage);
+      }
+    )}
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
+const handleChangeForm = (name, data) => {
+    console.log("name : ", name);
+    console.log("data : ", data);
+    setValue(name, data);
   };
+
   
-  // const handleSubmit = async (event) => {
-  //   console.log("event is ", event)
-  //   event.preventDefault();
-  //   // return fetch('http://localhost:8000/api/Data/', {
-  //   //   method: 'POST',
-  //   //   headers: {
-  //   //   'Accept': 'application/json',
-  //   //   'Content-Type': 'application/json'
-  //   //   },
-  //   await new Promise((r) => setTimeout(r, 1000));
-  //   body: JSON.stringify({
-  //       title: this.state.itemtitle,
-  //       tag:[
-  //         {name:this.state.tagtitle,
-  //         taglevel:this.state.taglevel}
-  //        ],
-  //       info:[]
-  //    })
-  //   console.log("event is ", event.state.refer)
-  //   alert(JSON.stringify(body, null, 2));
-  // };
-
-  function onChangeDogBreed(e) {
-    console.log(e);
-    setSelectDogs(e);
-    setValue("breed", e);
-  }
-
-  function onChangeCatBreed(e) {
-    console.log(e);
-    setSelectCats(e);
-    setValue("breed", e);
-  }
-
-  function onChangeBirth(e) {
-    console.log(e);
-    setStartDate(e);
-    setValue("birth", e);
-  }
-
-  function onChangeSex(e) {
-    console.log(e);
-    setSelectSex(e);
-    setValue("sex", e);
-  }
-
-  function onChangeBcs(e) {
-    console.log(e);
-    setSelectBcs(e);
-    setValue("bcs", e);
-  }
-
-  function onChangeExercise(e) {
-    console.log(e);
-    setSelectExercise(e);
-    setValue("exercise", e);
-  }
-
-  function onChangeDefecation(e) {
-    console.log(e);
-    setSelectDefecation(e);
-    setValue("defecation", e);
-  }
-
-  function onChangeEnvironment(e) {
-    console.log(e);
-    setSelectEnvironment(e);
-    setValue("environment", e);
-  }
-
-  function onChangeFoodCount(e) {
-    console.log(e);
-    setSelectFoodCount(e);
-    setValue("FoodCount", e);
-  }
-
-  function onChangeFoodKind(e) {
-    console.log(e);
-    setSelectFoodKind(e);
-    setValue("foodKind", e);
-  }
-
-  function onChangeDisease(e) {
-    console.log(e);
-    setSelectDisease(e);
-    setValue("disease", e);
-  }
-
   return (
     <section className="relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -236,40 +225,40 @@ function Home() {
 
           <div className="mt-10 sm:mt-0">
             <div className="mt-5 md:mt-0 md:col-span-2">
-              {/* <form onSubmit={handleSubmit(onSubmit, onError)}> */}
+              {/* <form onSubmit={handleSubmit(onSubmit, onError)} encType="multipart/form-data"> */}
               <form onSubmit={handleSubmit(onSubmit, onError)}>
                 <div className="shadow sm:rounded-md sm:overflow-hidden">
                   <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                    <fieldset>
+                    {/* <fieldset> */}
                       <legend className="contents text-base font-bold text-gray-900">제공처</legend>
                       {/* <div className="mt-1" onChange={handleChange}> */}
                       <div className="mt-1">
                         <input
-                          {...register("refer", { required: true })}
                           type="text"
                           id="refer"
                           name="refer"
+                          defaultValue={watch('refer')}
+                          onChange={(e) => handleChangeForm('refer', e)}
                           rows={1}
                           className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                           placeholder="제공처를 입력하세요"
-                          defaultValue={''}
                           required
                         />
                       </div>
-                    </fieldset>
+                    {/* </fieldset> */}
 
                     {/* 데이터 타입 */}
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">데이터 타입</legend>
                       <div className="mt-4 space-y-4">
-                      {selectbox.dataTypes.map((item) => (
+                      {selectbox.data_type.map((item) => (
                         <div className="flex items-start">
                           <div className="flex items-center h-5">
                             <input
-                              {...register("dataTypes", { required: true })}
+                              {...register("data_type", { required: true })}
                               id={item.id}
                               value={item.name}
-                              name="dataTypes"
+                              name="data_type"
                               type="radio"
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                               required
@@ -317,8 +306,7 @@ function Home() {
                       <fieldset>
                           <legend className="contents text-base font-medium text-gray-900">반려견 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
-
-                            <RadioGroup value={selectDogs} onChange={onChangeDogBreed} className="mt-4">
+                            <RadioGroup value={watch('dogRace')} onChange={(e) => handleChangeForm('dogRace', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-4 gap-4">
                                 {selectbox.dogs.map((breed) => (
@@ -380,9 +368,7 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">반려묘 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
 
-                            {/* <RadioGroup value={selectDogs} onChange={onChangeDogBreed} className="mt-4"> */}
-
-                            <RadioGroup value={selectCats} onChange={onChangeCatBreed} className="mt-4">
+                            <RadioGroup value={watch('catRace')} onChange={(e) => handleChangeForm('catRace', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-4 gap-4">
                                 {selectbox.cats.map((breed) => (
@@ -438,7 +424,7 @@ function Home() {
                     )}
 
 
-                    {watch('dataTypes') != null && (
+                    {watch('data_type') != null && (
                       <>
                         <fieldset>
                           <legend className="contents text-base font-bold text-gray-900">생년월일</legend>
@@ -447,19 +433,22 @@ function Home() {
                           <div className="mt-4 space-y-4">
                             <div className="flex items-start">
                               <div className="flex items-center h-5">
-                                <ReactDatePicker
-                                    dateFormat="yyyy/MM/dd"
-                                    selected={startDate}
-                                    onChange={date => onChangeBirth(date)}
-                                    monthsShown={2}
-                                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                <input
+                                  {...register("birth", { required: true })}
+                                  id="birth"
+                                  name="birth"
+                                  type="number"
+                                  placeholder="YYYYMMDD"
+                                  min="20000101"
+                                  max="21001230"
+                                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 />
                               </div>
                             </div>
                           </div>
                         </fieldset>
                         
-                        {watch('dataTypes') == "B" && (
+                        {watch('data_type') == "B" && (
                           <>
                           <fieldset>
                             <legend className="contents text-base font-bold text-gray-900">데이터타입이 'B'가 선택될 때 추가되는 메뉴</legend>
@@ -487,7 +476,7 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">성별</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
 
-                          <RadioGroup value={selectSex} onChange={onChangeSex} className="mt-4">
+                          <RadioGroup value={watch('sex')} onChange={(e) => handleChangeForm('sex', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-2 gap-4">
                                 {selectbox.sex.map((item) => (
@@ -555,6 +544,8 @@ function Home() {
                               className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                               placeholder="체중을 입력하세요"
                               defaultValue={''}
+                              min="1"
+                              max="100"
                               required
                             />
                           </div>
@@ -565,7 +556,7 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">신체 충실 지수(BCS)</legend>
                           <p className="text-sm text-gray-500">신체 충실 지수 또는 비만 판정 지표로 불리우며, 1에 가까울수록 마름에 해당하고 5에 가까울수록 비만에 해당합니다.</p>
                           
-                          <RadioGroup value={selectBcs} onChange={onChangeBcs} className="mt-4">
+                          <RadioGroup value={watch('BCS')} onChange={(e) => handleChangeForm('BCS', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-2 gap-5">
                                 {selectbox.bcs.map((item) => (
@@ -624,7 +615,7 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">운동량</legend>
                           {/* <p className="text-sm text-gray-500">text</p> */}
                           
-                          <RadioGroup value={selectExercise} onChange={onChangeExercise} className="mt-4">
+                          <RadioGroup value={watch('exercise')} onChange={(e) => handleChangeForm('exercise', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-1 gap-5">
                                 {selectbox.exercise.map((item) => (
@@ -682,7 +673,7 @@ function Home() {
                           <legend className="contents text-base font-bold text-gray-900">식이 횟수</legend>
                           {/* <p className="text-sm text-gray-500">text</p> */}
                           
-                          <RadioGroup value={selectFoodCount} onChange={onChangeFoodCount} className="mt-4">
+                          <RadioGroup value={watch('foodCount')} onChange={(e) => handleChangeForm('foodCount', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-2 gap-5 flex-row">
                                 {selectbox.foodCount.map((item) => (
@@ -740,7 +731,7 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">생활 환경</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectEnvironment} onChange={onChangeEnvironment} className="mt-4">
+                      <RadioGroup value={watch('environment')} onChange={(e) => handleChangeForm('environment', e)} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-2 gap-5 flex-row">
                           {selectbox.environment.map((item) => (
@@ -798,7 +789,7 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">배변 상태</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectDefecation} onChange={onChangeDefecation} className="mt-4">
+                      <RadioGroup value={watch('defecation')} onChange={(e) => handleChangeForm('defecation', e)} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-2 gap-5 flex-row">
                           {selectbox.defecation.map((item) => (
@@ -855,7 +846,7 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">삭사 종류</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectFoodKind} onChange={onChangeFoodKind} className="mt-4">
+                      <RadioGroup value={watch('foodKind')} onChange={(e) => handleChangeForm('foodKind', e)} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-1 gap-5 flex-row">
                           {selectbox.foodKind.map((item) => (
@@ -924,6 +915,8 @@ function Home() {
                             className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                             placeholder={item.place}
                             defaultValue={''}
+                            min="1"
+                            max="20"
                             required
                           />
                         </div>
@@ -935,7 +928,7 @@ function Home() {
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">질병 유무</legend>
                       {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                      <RadioGroup value={selectDisease} onChange={onChangeDisease} className="mt-4">
+                      <RadioGroup value={watch('disease')} onChange={(e) => handleChangeForm('disease', e)} className="mt-4">
                         {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                         <div className="grid grid-cols-2 gap-5 flex-row">
                           {selectbox.disease.map((item) => (
@@ -1028,6 +1021,8 @@ function Home() {
                                   className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                   placeholder={item.place}
                                   defaultValue={''}
+                                  min="1"
+                                  max="100"
                                   required
                                 />
                         </div>
@@ -1037,58 +1032,39 @@ function Home() {
                     </fieldset>                        
 
 
-                        {/* 파일 업로드 */}
-                        {selectbox.file.map((item) => (
-                        <fieldset>
-                          <label class="block">
-                          <legend className="block text-sm font-medium text-gray-700">{item.ko}</legend>
-                          <span class="sr-only">Upload a file</span>
-                                  <input
-                                    {...register(item.en)}
-                                    id={item.en}
-                                    name={item.en}
-                                    type="file"
-                                    className="form-control
-                                    block
-                                    w-full
-                                    px-3
-                                    py-1.5
-                                    text-base
-                                    font-normal
-                                    text-gray-700
-                                    bg-white bg-clip-padding
-                                    border border-solid border-gray-300
-                                    rounded
-                                    transition
-                                    ease-in-out
-                                    m-0
-                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                    multiple>    
-                                  </input>
-                          </label>
-                          {/* <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                            <div className="space-y-1 text-center">
-                              <svg className="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                              <div className="flex text-sm text-gray-600">
-                                <label htmlFor={item.en} className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                  <span>Upload a file</span>
-                                  <input
-                                    {...register(item.en)}
-                                    id={item.en}
-                                    name={item.en}
-                                    type="file"
-                                    className="sr-only"
-                                    multiple>    
-                                  </input>
-                                </label>
-                                <p className="pl-1">or drag and drop</p>
-                              </div>
-                              <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                            </div>
-                          </div> */}
-                        </fieldset>
+                    {/* 파일 업로드 */}
+                    {selectbox.file.map((item) => (
+                    <fieldset>
+                      <label className="block">
+                      <legend className="block text-sm font-medium text-gray-700">{item.ko}</legend>
+                      <span className="sr-only">Upload a file</span>
+                        <input
+                          {...register(item.en)}
+                          id={item.en}
+                          name={item.en}
+                          type="file"
+                          // onChange={handleFileChange}
+                          className="form-control
+                          block
+                          w-full
+                          px-3
+                          py-1.5
+                          text-base
+                          font-normal
+                          text-gray-700
+                          bg-white bg-clip-padding
+                          border border-solid border-gray-300
+                          rounded
+                          transition
+                          ease-in-out
+                          m-0
+                          focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                          accept="image/*"
+                          multiple
+                          >    
+                        </input>
+                      </label>
+                    </fieldset>
                         ))}
                       </>
                     )}

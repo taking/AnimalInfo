@@ -11,6 +11,7 @@ dotenv.config();
 // // parse application/json
 // router.use(bodyParser.json())
 
+
 /******************************************************************************
  *                              Data Controller
  ******************************************************************************/
@@ -34,12 +35,14 @@ dotenv.config();
 
 
     createData = async (req, res) => {
-
+        console.log("data : ", req.body);
+        console.log("files : ", req.files);
+        console.log("file : ", req.file);
         // this.checkValidation(req)
         // var array = ['imgAllFront','imgAllTop','imgAllLeft','imgAllRight','imgAllBack'
         // ,'imgHeadFront','imgHeadTop','imgHeadLeft','imgHeadRight','imgHeadBottom','imgNoseFront'];
         
-        var array = ['imgHeadBottom','imgNoseFront'];
+    //     var array = ['imgHeadBottom','imgNoseFront'];
         
         
         var img = [];
@@ -89,9 +92,10 @@ dotenv.config();
 
        const result = await DataModel.create(missionId,req.body,imgName);
         
-        if (!result) {
-            throw new HttpException(500, 'Something went wrong');
-        }
+    //     if (!result) {
+    //         throw new HttpException(500, 'Something went wrong');
+    //     }
+    //     res.status(201).send('Data was created!');
         res.status(201).send('Data was created!');
     };
 

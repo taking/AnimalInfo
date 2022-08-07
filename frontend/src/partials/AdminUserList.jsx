@@ -16,47 +16,44 @@ import UserService from "../api/userService";
 
 function AdminUserList() {
 	const [rowData, setRowData] = useState();
-	const [rowData2, setRowData2] = useState({});
+	const [rowData2, setRowData2] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
-  const [openModal, setOpenModal] = useState(false)
-  const [openEditModal, setOpenEditModal] = useState(false)
-  const [openDeleteModal, setOpenDeleteModal] = useState(false)
-
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-  const onSubmit = data => {
-    alert(JSON.stringify(data, undefined, 2));
-    console.log(data);
-  }
-  const onError = (errors, e) => console.log(errors, e);
+  // const [openEnabledModal, setOpenEnabledModal] = useState(false)
+  const [reRender, setreRender] = useState(0);
 
   const importData = () => {
-    setRowData2(UserService.userList());
-    // const rowData2 = UserService.userList();
-    // setMyProfile({
-    //   name: myData.name,
-    //   email: myData.email,
-    //   contact: myData.contact,
-    //   refer: myData.refer,
-    //   created_at: myData.created_at
-    // });
+    UserService.userList().then(res => {
+      setRowData2(res)
+   })
   }
 
   useEffect(() => {
     importData();
-    // if (UserService.userList() != null) {
-    // } else {
-    //   console.log("user not found")
-    // }
-  },[]);
+  },[reRender]);
 
 
-  const onEditModalAlert = () => {
-    setOpenEditModal(!openEditModal);
+  const userenable = () => {
+    const selectedData = gridApi.getSelectedRows();
+    console.log(selectedData)
+    
+    UserService.enabled(selectedData[0].id)
+
+    setreRender(curr => curr + 1);
   }
-  const onDeleteModalAlert = () => {
-    setOpenDeleteModal(!openDeleteModal);
-  }
+
+  // 활성화/비활성화 팝업
+  // const onEnabledModalAlert = () => {
+  //   const selectedData = gridApi.getSelectedRows();
+  //   document.querySelector('#selectedRowsId').innerHTML =
+  //   selectedData.length === 1 ? selectedData[0].id : '';
+  //   document.querySelector('#selectedRowsName').innerHTML =
+  //   selectedData.length === 1 ? selectedData[0].name : '';
+  //   setOpenEnabledModal(!openEnabledModal);
+  // }
+  // const closeEnabledModalAlert = () => {
+  //   setOpenEnabledModal(!openEnabledModal);
+  // }
 
 	const defaultColumnDef = {
 		sortable: true,
@@ -71,6 +68,7 @@ function AdminUserList() {
 	};
 
 	const columnDefs = [
+    {headerName: 'check', checkboxSelection: true, width: 70, cellClass: 'checkCell'},
 		{
 			headerName: '회원 정보',
 			children: [
@@ -86,48 +84,13 @@ function AdminUserList() {
 		}
 	];
 
-	const onButtonClick = (e) => {
-		const selectedNodes = gridApi.getSelectedNodes();
-		const selectedData = selectedNodes.map((node) => node.data);
-		const selectedDataStringPresentation = selectedData
-			.map((node) => node.firstName + ' ' + node.lastName)
-			.join(', ');
-		alert(`Selected nodes: ${selectedDataStringPresentation}`);
-	};
-
 	const onGridReady = useCallback((params) => {
 		console.log(params);
 		setGridApi(params.api);
 		setGridColumnApi(params.columnApi);
 		params.api.setDomLayout('autoHeight'); //set full height
 		params.api.sizeColumnsToFit();
-
-    console.log("######### : ", rowData2);
-    // setRowData2(UserService.userList());
-    alert(JSON.stringify(rowData2));
-    // const test = UserService.userList();
-    // alert(JSON.stringify(UserService.userList()));
-    // setRowData(JSON.stringify(UserService.userList()));
-
-
-
-
-    // fetch('http://local:8888/api/accounts')
-    // .then((result) => result.json())
-    // .then((data) => setRowData(data));
-
-		// Array.from(document.querySelectorAll('.ag-floating-filter-input input[type=text]')).forEach(
-		// 	(obj) => {
-		// 		if (obj.attributes['disabled']) {
-		// 			// skip columns with disabled filter
-		// 			return;
-		// 		}
-		// 		obj.setAttribute('placeholder', 'Search..');
-		// 	}
-		// );
 	}, []);
-
-
 
   return (
     <section className="relative">
@@ -149,14 +112,15 @@ function AdminUserList() {
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
                     <legend className="contents text-base font-bold text-gray-900">데이터 목록</legend>
-                  </fieldset>
+                  </fieldset>                                   
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
-                      {/* <button onClick={onButtonClick} style={{ marginBottom: '5px' }}>
-                        Get selected rows
-                      </button> */}
+                    <div className="frame">
+                        <button className="user-btn btn" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); userenable();}}>활성화 / 비활성화
+                        </button>
+                      </div>
                       <AgGridReact
-                        rowData={rowData}
+                        rowData={rowData2}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}
@@ -169,6 +133,34 @@ function AdminUserList() {
                     </div>
 
                   </fieldset>
+                  {/* <Modal id="UserModal" ariaLabel="modal-headline" show={openEnabledModal} handleClose={() => onEnabledModalAlert(false)}>
+                      <div className="fade h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-70 text-center w-full h-full outline-none overflow-x-hidden overflow-y-auto">
+                      <div className="modal-content bg-white rounded w-10/12 md:w-1/3">
+                          <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
+                              <h5 className="userModal">
+                                선택한 회원의 ID는 "
+                                  <span id="selectedRowsId">
+                                  </span>
+                                "이며,<br/> 회원명은 "
+                                <span id="selectedRowsName">
+                                  </span>
+                                " 입니다.
+                              </h5>
+                              <button type="button" onClick={closeEnabledModalAlert} className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                                  <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                                  <span className="sr-only">Close modal</span>
+                              </button>
+                          </div>                          
+                          <div className="updateData"> */}
+                                {/* {updateData} */}
+                          {/* </div>
+                          <div className="modal-footer flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                              <button type="submit" onClick={onEnabledModalAlert} className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">수정</button>
+                              <button type="button" onClick={closeEnabledModalAlert} className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">취소</button>
+                          </div>
+                      </div>
+                  </div>
+                      </Modal> */}
                 </div>
               </div>
             </div>

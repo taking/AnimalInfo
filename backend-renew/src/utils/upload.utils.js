@@ -1,3 +1,4 @@
+const path = require('path');
 var multer = require('multer');
 var fs = require('fs');
 const path = require('path')
@@ -12,7 +13,7 @@ storage = multer.diskStorage({
       cb(null, dir)
     },
     filename(req, file, cb) { // 파일명을 어떤 이름으로 올릴지
-        cb( null, `${req.body.data_type}_${req.body.species}_${file.originalname}` );
+        cb( null, `${req.body.dataTypes}_${req.body.species}_${file.originalname}` );
   }
   });
   if (!fs.existsSync(dir)) fs.mkdirSync(dir);

@@ -13,8 +13,12 @@ function SignIn() {
     console.log("[Form Value]: ", e);
     AuthService.login(e.email, e.password).then(
       () => {
-        alert("Login Success!");
-        navigate("/");
+        if (AuthService.getCurrentUser().enabled === 0) {
+          alert("비활성 계정입니다. 관리자에게 문의하세요.");
+        } else {
+          alert("Login Success!");
+          navigate("/");
+        }
       },
       error => {
         const resMessage =
