@@ -29,7 +29,7 @@ function Home() {
   },[]);   
 
   const listUp = {
-    data : [
+    dataA : [
       "refer",
       // "price",
       "data_type",
@@ -53,6 +53,9 @@ function Home() {
       "foodKind",
       "disease",
       "diseaseName",
+      "upload_at"
+    ],
+    dataB : [
       "CPR",
       "lgG",
       "IL6",
@@ -60,7 +63,7 @@ function Home() {
       "heartRate",
       "breatingRate",
       "bodyHeat",
-      "stress"
+      "stress",
     ],
     file : [
       "imgAllFront",
@@ -79,31 +82,31 @@ function Home() {
 
   const selectbox = {
     data_type: [
-      { id: "dataTypes_A", fullname:'A 타입', name: 'A', unavailable: true },
-      { id: "dataTypes_B", fullname:'B 타입', name: 'B', unavailable: true },
+      { id: "dataTypes_A", fullname:'A 타입', name: 'A', value: 'A', unavailable: true },
+      { id: "dataTypes_B", fullname:'B 타입', name: 'B', value: 'B', unavailable: true },
     ],
     species: [
-      { id: "species_dog", fullname:'반려견', name: 'dog', unavailable: true },
-      { id: "species_cat", fullname:'반려묘', name: 'cat', unavailable: true },
+      { id: "species_dog", fullname:'반려견', name: 'dog', value: '10', unavailable: true },
+      { id: "species_cat", fullname:'반려묘', name: 'cat', value: '20', unavailable: true },
     ],
     dogs: [
-      { id: "dogBreed_1", name: '말티즈', unavailable: true },
-      { id: "dogBreed_2", name: '푸들', unavailable: true },
-      { id: "dogBreed_3", name: '포메라니안', unavailable: true },
-      { id: "dogBreed_4", name: '치와와', unavailable: true },
-      { id: "dogBreed_5", name: '시추', unavailable: true },
-      { id: "dogBreed_6", name: '골든리트리버', unavailable: true },
-      { id: "dogBreed_7", name: '진돗개', unavailable: true },
-      { id: "dogBreed_8", name: '믹스견', unavailable: true },
+      { id: "dogBreed_1", name: '몰티즈', value: '01',  unavailable: true },
+      { id: "dogBreed_2", name: '푸들', value: '02', unavailable: true },
+      { id: "dogBreed_3", name: '포메라니안', value: '03', unavailable: true },
+      { id: "dogBreed_4", name: '치와와', value: '04', unavailable: true },
+      { id: "dogBreed_5", name: '시추', value: '05', unavailable: true },
+      { id: "dogBreed_6", name: '골든리트리버', value: '06', unavailable: true },
+      { id: "dogBreed_7", name: '진돗개', value: '07', unavailable: true },
+      { id: "dogBreed_8", name: '믹스견', value: '08', unavailable: true },
     ],
     cats: [
-      { id: "catBreed_1", name: '코리안숏헤어', unavailable: true },
-      { id: "catBreed_2", name: '러시아블루', unavailable: true },
-      { id: "catBreed_3", name: '페르시안', unavailable: true },
-      { id: "catBreed_4", name: '샴', unavailable: true },
-      { id: "catBreed_5", name: '터키시앙고라', unavailable: true },
-      // { id: "catBreed_6", name: '스핑크스', unavailable: true },
-      // { id: "catBreed_7", name: '랙돌', unavailable: true },
+      { id: "catBreed_1", name: '코리안숏헤어', value: '01', unavailable: true },
+      { id: "catBreed_2", name: '러시아블루', value: '02', unavailable: true },
+      { id: "catBreed_3", name: '페르시안', value: '03', unavailable: true },
+      { id: "catBreed_4", name: '샴', value: '04', unavailable: true },
+      { id: "catBreed_5", name: '터키시앙고라', value: '05', unavailable: true },
+      { id: "catBreed_6", name: '스핑크스', value: '06', unavailable: true },
+      { id: "catBreed_7", name: '랙돌', value: '07', unavailable: true },
     ],
     sex: [
       { id: "sex_IM", fullname: 'IM(수컷)', name: 'IM', unavailable: true },
@@ -176,9 +179,16 @@ function Home() {
     // data.preventDefault();
     console.log("data is :", data);
     
-    for (let i = 0; i < listUp.data.length; i++) {
-      console.log("value is :", getValues(listUp.data[i]));
-      formData.append(listUp.data[i], getValues(listUp.data[i]))
+    for (let i = 0; i < listUp.dataA.length; i++) {
+      console.log("value is :", getValues(listUp.dataA[i]));
+      formData.append(listUp.dataA[i], getValues(listUp.dataA[i]))
+    }
+
+    if(getValues('data_type') === 'B') {
+      for (let i = 0; i < listUp.dataB.length; i++) {
+        console.log("value is :", getValues(listUp.dataB[i]));
+        formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
+      }
     }
     
     for (let i = 0; i < listUp.file.length; i++) {
@@ -257,7 +267,7 @@ const handleChangeForm = (name, data) => {
                             <input
                               {...register("data_type", { required: true })}
                               id={item.id}
-                              value={item.name}
+                              value={item.value}
                               name="data_type"
                               type="radio"
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -284,7 +294,7 @@ const handleChangeForm = (name, data) => {
                             <input
                               {...register("species", { required: true })}
                               id={item.id}
-                              value={item.name}
+                              value={item.value}
                               name="species"
                               type="radio"
                               className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
@@ -301,7 +311,8 @@ const handleChangeForm = (name, data) => {
                       </div>
                     </fieldset>
                     
-                    {watch('species') == "dog" && (
+                    {/* 10 == 'dog' */}
+                    {watch('species') == "10" && (
                       <>
                       <fieldset>
                           <legend className="contents text-base font-medium text-gray-900">반려견 품종</legend>
@@ -312,7 +323,7 @@ const handleChangeForm = (name, data) => {
                                 {selectbox.dogs.map((breed) => (
                                   <RadioGroup.Option
                                     key={breed.id}
-                                    value={breed.name}
+                                    value={breed.value}
                                     disabled={!breed.unavailable}
                                     className={({ active }) =>
                                       classNames(
@@ -361,8 +372,8 @@ const handleChangeForm = (name, data) => {
                       </>
                     )}
 
-                    
-                    {watch('species') == "cat" && (
+                    {/* 20 == 'cat' */}
+                    {watch('species') == "20" && (
                       <>
                       <fieldset>
                           <legend className="contents text-base font-bold text-gray-900">반려묘 품종</legend>
@@ -374,7 +385,7 @@ const handleChangeForm = (name, data) => {
                                 {selectbox.cats.map((breed) => (
                                   <RadioGroup.Option
                                     key={breed.id}
-                                    value={breed.name}
+                                    value={breed.value}
                                     disabled={!breed.unavailable}
                                     className={({ active }) =>
                                       classNames(
@@ -430,21 +441,21 @@ const handleChangeForm = (name, data) => {
                           <legend className="contents text-base font-bold text-gray-900">생년월일</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
                           {/* <div className="mt-4 space-y-4" onChange={handleChange}> */}
-                          <div className="mt-4 space-y-4">
-                            <div className="flex items-start">
-                              <div className="flex items-center h-5">
+                          <div className="mt-1">
+                            {/* <div className="flex items-start">
+                              <div className="flex items-center h-5"> */}
                                 <input
                                   {...register("birth", { required: true })}
                                   id="birth"
                                   name="birth"
                                   type="number"
                                   placeholder="YYYYMMDD"
-                                  min="20000101"
+                                  min="10000000"
                                   max="21001230"
                                   className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 />
-                              </div>
-                            </div>
+                              {/* </div>
+                            </div> */}
                           </div>
                         </fieldset>
                         
@@ -1068,6 +1079,16 @@ const handleChangeForm = (name, data) => {
                         ))}
                       </>
                     )}
+
+                    <fieldset>
+                      <input
+                        {...register("upload_at")}
+                        type="hidden"
+                        value={moment(new Date()).format("YYYYMMDD")}
+                        >    
+                      </input>
+                    </fieldset>
+
                   </div>
                   <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button

@@ -1,8 +1,8 @@
 import axios from "axios";
 import authHeader from "../api/authHeader";
+import { BACKEND_API } from "../config";
 
-
-const API_URL = "http://210.207.104.188:8888/api/v1/users";
+const API_URL = BACKEND_API + "/api/v1/users";
 
 class UserService {
   userList() {
