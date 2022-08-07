@@ -10,6 +10,7 @@ function Header() {
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (!user) {
+        console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
         navigate("/signin");
     }
     if (user) {

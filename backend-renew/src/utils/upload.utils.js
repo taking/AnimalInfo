@@ -1,11 +1,13 @@
+const path = require('path');
 var multer = require('multer');
+const res33 = path.resolve('src', 'file');
 
 storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/animal/animalinfo-develop/backend-renew/src/file')
+      cb(null, res33)
     },
     filename(req, file, cb) { // 파일명을 어떤 이름으로 올릴지
-        cb( null, `${req.body.data_type}_${req.body.species}_${file.originalname}` );
+        cb( null, `${req.body.dataTypes}_${req.body.species}_${file.originalname}` );
   }
   });
   
