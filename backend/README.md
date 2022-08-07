@@ -2,6 +2,11 @@
 A RESTful API for Animalinfo Database with Node Express
 ---
 
+## First
+```bash
+echo fs.inotify.max_user_watches=582222 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+```
+
 ## Installation & Run
 ```bash
 git clone {project URL}

@@ -48,7 +48,7 @@ class DataModel {
     create = async (missionId, params, img) => {
         // console.log("#############")
         // console.log("params : ", params);
-        // // console.log("img : ", img);
+        console.log("img : ", img);
         // console.log("#############")
         // console.log(missionId, params.userId, params.refer, params.data_type, params.species, img[0].link, img[1].link, img[2].link);
     
