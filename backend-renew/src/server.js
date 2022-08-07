@@ -22,13 +22,15 @@ app.use(cors());
 app.options("*", cors());
 
 const port = Number(process.env.PORT || 3331);
+const rootPath = process.env.PWD;
 
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/data`, fileRouter);
 app.use(`/api/v1/history`, historyRouter);
 app.use(`/api/v1/price`, priceRouter);
-app.use(express.static('/animal/animalinfo-develop/backend-renew/src'));
+app.use(`/file`,express.static(rootPath + '/file'));
 // 404 error
+
 app.all('*', (req, res, next) => {
     const err = new HttpException(404, 'Endpoint Not Found');
     next(err);

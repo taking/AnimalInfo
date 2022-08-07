@@ -45,13 +45,18 @@ class DataModel {
         //     imgName[6].join(),imgName[7].join(),imgName[8].join(),imgName[9].join(),imgName[10].join(),imgName[11].join()]);
 
 
-    create = async (missionId,{userId, refer, data_type, species},imgName) => {
+    create = async (missionId, params, img) => {
+        // console.log("#############")
+        // console.log("params : ", params);
+        // // console.log("img : ", img);
+        // console.log("#############")
+        // console.log(missionId, params.userId, params.refer, params.data_type, params.species, img[0].link, img[1].link, img[2].link);
     
         const sql = `INSERT INTO ${this.tableName}
-        (id,userId,refer, data_type, species,imgNoseFront,imgHeadBottom) VALUES (?,?,?,?,?,?,?)`;
+        (id, userId, refer, data_type, species,imgAllFront,imgAllTop, imgAllLeft) VALUES (?,?,?,?,?,?,?,?)`;
 
 
-        const result = await query(sql,[missionId,userId,refer, data_type,species,imgName[0].join(),imgName[1].join()]);
+        const result = await query(sql,[missionId, params.userId, params.refer, params.data_type, params.species, img[0].link, img[1].link, img[2].link]);
         const affectedRows = result ? result.affectedRows : 0;
         return affectedRows;
      }
@@ -76,7 +81,7 @@ class DataModel {
     }
 
     getMissionId = async (species) =>{
-        const sql = `SELECT COUNT(*)  AS count FROM DATA WHERE species =? `
+        const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
         const result = await query(sql,[species]);
 
         return result;
