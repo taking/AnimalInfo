@@ -14,7 +14,7 @@ cd animalinfo/backend
 yarn install
 yarn run dev
 
-API Endpoint : http://127.0.0.1:3000
+API Endpoint : http://127.0.0.1:8081
 ```
 
 
@@ -28,7 +28,7 @@ DB_PASS=db_password
 DB_DATABASE=db_name
 
 # local runtime configs
-PORT=3000
+PORT=8081
 SECRET_JWT=supersecret
 ```
 
@@ -111,14 +111,15 @@ History
 ---
 
 ### To do ✓
-- [x] login/logout
-- [x] session
-
+- [] stabilize
+- [] bug fix
 
 ### In Progress
-- [x] data
 - [x] history
 
 ### Done ✓
 - [x] users
 - [x] price
+- [x] login/logout
+- [x] session
+- [x] data
