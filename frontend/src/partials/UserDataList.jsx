@@ -1,6 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { render } from "react-dom";
-import { useForm } from "react-hook-form";
+import React, { useCallback, useState, useEffect } from 'react';
 
 // AgGrid
 import { AgGridReact } from 'ag-grid-react';
@@ -22,14 +20,6 @@ function UserDataList() {
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [updateData, setupdateData] = useState();
-
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-  const onSubmit = data => {
-    alert(JSON.stringify(data, undefined, 2));
-    console.log(data);
-  }
-  const onError = (errors, e) => console.log(errors, e);
-
 
 
   // const onEditModalAlert = () => {
@@ -212,7 +202,7 @@ function UserDataList() {
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
                       <div className="frame">
-                        <button className="data-btn databtn" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
+                        <button className="data-btn btn" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
                         </button>
                       </div>
                       <AgGridReact

@@ -1,22 +1,16 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { render } from "react-dom";
-import { useForm } from "react-hook-form";
 
 // AgGrid
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
 
-// Modal
-import Modal from '../utils/Modal';
-
 // Service
 import UserService from "../api/userService";
 
 
 function AdminUserList() {
-	const [rowData, setRowData] = useState();
-	const [rowData2, setRowData2] = useState();
+	const [rowData, setrowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
   // const [openEnabledModal, setOpenEnabledModal] = useState(false)
@@ -24,7 +18,7 @@ function AdminUserList() {
 
   const importData = () => {
     UserService.userList().then(res => {
-      setRowData2(res)
+      setrowData(res)
    })
   }
 
@@ -100,7 +94,7 @@ function AdminUserList() {
 
           {/* Section header */}
           <div className="text-center pb-12 md:pb-16">
-            <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">데이터 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">목록</span></h1>
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">사용자 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">목록</span></h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">사용자 관리 페이지입니다.</p>
             </div>
@@ -111,7 +105,7 @@ function AdminUserList() {
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
-                    <legend className="contents text-base font-bold text-gray-900">데이터 목록</legend>
+                    <legend className="contents text-base font-bold text-gray-900">사용자 목록</legend>
                   </fieldset>                                   
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
@@ -120,7 +114,7 @@ function AdminUserList() {
                         </button>
                       </div>
                       <AgGridReact
-                        rowData={rowData2}
+                        rowData={rowData}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}
