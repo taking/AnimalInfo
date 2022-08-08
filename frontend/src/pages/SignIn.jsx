@@ -10,7 +10,7 @@ function SignIn() {
   
   function onSubmit(e) {
     // alert(JSON.stringify(e, undefined, 2));
-    console.log("[Form Value]: ", e);
+    // console.log("[Form Value]: ", e);
     AuthService.login(e.email, e.password).then(
       () => {
         if (AuthService.getCurrentUser().enabled === 0) {

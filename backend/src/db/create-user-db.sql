@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS USERS
      refer        VARCHAR(45) NOT NULL, 
      enabled      tinyint(4) NOT NULL DEFAULT 0, 
      role         tinyint(4) NOT NULL DEFAULT 0, 
+     token        VARCHAR(500) NOT NULL DEFAULT 0, 
      created_at   timestamp NOT NULL DEFAULT current_timestamp(),
      timestamp    timestamp NOT NULL DEFAULT current_timestamp()
   );

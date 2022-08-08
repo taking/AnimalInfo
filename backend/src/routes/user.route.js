@@ -16,7 +16,8 @@ router.post('/', createUserSchema, awaitHandlerFactory(userController.createUser
 router.patch('/id/:id', auth(Role.Admin), updateUserSchema, awaitHandlerFactory(userController.updateUser)); // localhost:3000/api/v1/users/id/1 , using patch for partial update
 router.delete('/id/:id', auth(Role.Admin), awaitHandlerFactory(userController.deleteUser)); // localhost:3000/api/v1/users/id/1
 router.patch('/id/status/:id', auth(Role.Admin), awaitHandlerFactory(userController.updateStatus)); // localhost:3000/api/v1/users/id/status/1
-
+router.get('/id/token/:id', auth(), awaitHandlerFactory(userController.getToken)); // localhost:3000/api/v1/users/id/token/1
+router.patch('/id/token/:id', auth(), awaitHandlerFactory(userController.updateToken)); // localhost:3000/api/v1/users/id/token/1
 
 router.post('/login', validateLogin, awaitHandlerFactory(userController.userLogin)); // localhost:3000/api/v1/users/login
 
