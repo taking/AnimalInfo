@@ -9,40 +9,18 @@ dotenv.config();
 const rootPath = process.env.PWD;
 const backendDomain = process.env.ADDR;
 
+// 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
     Data : [
-        "refer",
-        // "price",
-        "data_type",
-        "species",
-        "dogRace",
-        "catRace",
-        "birth",
-        "sex",
-        "weight",
-        "shoulderHeight",
-        "neckSize",
-        "backLength",
-        "chestSize",
-        "BCS",
-        "exercise",
-        "environment",
-        "defecation",
-        "foodCount",
-        "foodAmount",
-        "snackAmount",
-        "foodKind",
-        "disease",
-        "diseaseName",
-        "CPR",
-        "lgG",
-        "IL6",
-        "AFP",
-        "heartRate",
-        "breatingRate",
-        "bodyHeat",
-        "stress",
-        "upload_at"
+        "data_type",  // 데이터타입
+        "species",    // 종
+        "dogRace",    // 품종
+        "catRace",    // 품종
+        "sex",        // 성별
+        "birth",      // 생년월일
+        "refer",      // 제공처코드
+        "upload_at",  // 촬영날짜
+
     ],
     File: [
         "imgAllFront",
@@ -63,21 +41,23 @@ const list = {
 const copyGkes = (missionId, req) => {
     console.log("copyGkes body is : ", req.body);
     console.log("copyGkes files is : ", req.files);
+    console.log("missionId",missionId)
 
-    var filename = missionId + "_"
+    var filename = "";
+
 
     for (var i = 0; i < list.Data.length; i++) {
-          if (req.body[list.Data[i]] != undefined) {
-            if (i>0) {
-              filename += "_";
-            }
-            filename += req.body[list.Data[i]];
+        if (req.body[list.Data[i]] != undefined) {
+          if (i>0) {
+            filename += "_";
           }
-    }
+          filename += req.body[list.Data[i]];
+        }
+  }
+//   filename += "_"+missionId;
 
-    console.log("### filename. : ", filename);
 
-    
+  console.log("### filename. : ", filename);
     const _file = path.join(rootPath + '/file')
     // gkes 저장용 폴더 생성
     const _gkes = path.join(rootPath + '/gkes')
@@ -87,7 +67,8 @@ const copyGkes = (missionId, req) => {
       fs.mkdirSync(_gkes);
     }
 
-    for (var i = 0; i < list.File.length; i++) {
+    // for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < list.File.length; i++) {
         const fileListArr = (req.files[list.File[i]] || []).length;
         var _source = [];
         var _destination = _gkes;
@@ -97,19 +78,29 @@ const copyGkes = (missionId, req) => {
         }
 
         for (var j = 0; j < fileListArr; j++) {
+            var fieldname = missionId + "_" + req.files[list.File[i]][j].fieldname + "_" + j;
             var fileNameTxt = req.files[list.File[i]][j].filename;
             var extentionTxt = "." + req.files[list.File[i]][j].filename.split('.').pop();
             var sourceTxt = _file + "/" + fileNameTxt;
-            var destinationTxt = _gkes + "/" + filename + extentionTxt;
+
+            // switch(fieldname) {
+            //     case: "imgAllFront" {
+            //         var fieldnameTxt = "_" + "10";
+            //     }
+            // }
+            var fieldnameTxt = "_" + fieldname;
+            // var destinationTxt = _gkes + "/" + filename + extentionTxt;
+            var destinationTxt = _gkes + "/" + filename + fieldnameTxt + extentionTxt;
+  
 
             console.log("file extention : ", extentionTxt);
             console.log("source path : ", sourceTxt);
             console.log("destination path : ", destinationTxt);
 
-            // fs.copyFile('source.txt', 'destination.txt', (err) => {
-            //     if (err) throw err;
-            //     console.log('source.txt was copied to destination.txt');
-            // });
+            fs.copyFile(sourceTxt, destinationTxt, (err) => {
+                if (err) throw err;
+                console.log('sourceFile was copied to destinationFile');
+            });
         }
     }
 }
@@ -137,14 +128,11 @@ class DataController {
     };
 
     createData = async (req, res) => {
-        console.log("############");
-        // console.log("data : ", req.body);
-        console.log("files : ", req.files);
-        copyGkes("100000", req);
-        console.log("############");
         
         var img = [];
         var img2 = [];
+
+        console.log("------data------",req.body)
 
         for (var i = 0; i < list.File.length; i++) {
             const fileListArr = (req.files[list.File[i]] || []).length;
@@ -197,8 +185,6 @@ class DataController {
             missionId = '20_' + num; 
        }
 
-       console.log("missionId is : ", missionId);
-    //    console.log("img2 is : ", img2);
 
        const result = await DataModel.create(missionId, req.body, img2);
         
@@ -206,11 +192,15 @@ class DataController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        // copyGkes(missionId, req);
+        copyGkes(missionId, req);
         res.status(201).send('Data was created!');
     };
 
     updateData = async (req, res, next) => {
+        console.log("req.field~~~~~~~~~~", req.field)
+        console.log("req.fields~~~~~~~~~~", req.fields)
+        console.log("req.body~~~~~~~~~~", req.body)
+        console.log("update id~~~~~~~~~~", req.params.id)
 
         const { ...restOfUpdates } = req.body;
 
@@ -232,6 +222,7 @@ class DataController {
 
     deleteData = async (req, res, next) => {
         const result = await DataModel.delete(req.params.id);
+    
         if (!result) {
             throw new HttpException(404, 'Data not found');
         }
