@@ -6,6 +6,10 @@ const upload = require('../utils/upload.utils');
 const Role = require('../utils/userRoles.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
 
+
+const formData = require('express-form-data');
+router.use(formData.parse());
+
 const { createDataSchema, updateDataSchema } = require('../middleware/validators/dataValidator.middleware');
 
 

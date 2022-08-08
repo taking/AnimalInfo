@@ -16,6 +16,7 @@ dotenv.config();
 // parse requests of content-type: application/json
 // parses incoming requests with JSON payloads
 app.use(express.json());
+
 // enabling cors for all requests by using cors middleware
 app.use(cors());
 // Enable pre-flight

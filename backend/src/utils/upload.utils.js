@@ -3,6 +3,7 @@ var multer = require('multer');
 var fs = require('fs');
 const DataModel = require('../models/data.model');
 const dotenv = require('dotenv');
+const dataController = require('../controllers/data.controller');
 dotenv.config();
 const rootPath = process.env.PWD;
 
@@ -46,29 +47,38 @@ const storage = multer.diskStorage({
     },
     async filename(req, file, cb) { // 파일명을 어떤 이름으로 올릴지
       var filename = "";
-      console.log("req body : ", req.body);
+  //     console.log("req body : ", req.body);
+  //     console.log("req files: ",req.files)
 
-      // for (let i = 0; i < listUp.data.length; i++) {
-      //   if (req.body[listUp.data[i]] != undefined) {
-      //     if (i>0) {
-      //       filename += "_";
-      //     }
-      //     filename += req.body[listUp.data[i]];
-      //   }
-      // }
+  //     // for (let i = 0; i < listUp.data.length; i++) {
+  //     //   if (req.body[listUp.data[i]] != undefined) {
+  //     //     if (i>0) {
+  //     //       filename += "_";
+  //     //     }
+  //     //     filename += req.body[listUp.data[i]];
+  //     //   }
+  //     // }
 
 
-      for (var key in req.body) {
-        filename += req.body[key] + "_";
-      }
-      // cb( null, `${req.body.data_type}_${req.body.species}_${file.originalname}` );
-      // console.log("file", file);
-      // cb( null, filename + `_${file.originalname}` );
+  //     for (var key in req.body) {
+  //       filename += req.body[key] + "_";
+  //     }
 
+  //     // console.log("~~~~~~~~~~~~~",req.files[listUp.file[0]][0].fieldname)
+
+  //     // for(var i=0; i<3; i++){
+  //     //   filename += req.files[listUp.file[0]][0].fieldname
+  //     //   }
+      
+  //     // cb( null, `${req.body.data_type}_${req.body.species}_${file.originalname}` );
+  //     // console.log("file", file);
+  //     // cb( null, filename + `_${file.originalname}` );
 
     const ext = path.extname(file.originalname);
-    // const basename = path.basename(file.originalname, ext);
-    filename += new Date().getTime() + ext;
+
+  //   // const basename = path.basename(file.originalname, ext);
+  //   // filename +=file.fieldname + ext;
+    filename += new Date().getTime()+ ext;
     cb(null, filename);
   } 
   });
@@ -82,14 +92,14 @@ upload = multer({ storage, limits })
     { name : "imgAllFront"},
     { name : "imgAllTop"},
     { name : "imgAllLeft"},
-    // { name : "imgAllRight"},
-    // { name : "imgAllBack"},
-    // { name : "imgHeadFront"},
-    // { name : "imgHeadTop"},
-    // { name : "imgHeadLeft"},
-    // { name : "imgHeadRight"},
-    // { name : "imgHeadBottom"},
-    // { name : "imgNoseFront"},
+    { name : "imgAllRight"},
+    { name : "imgAllBack"},
+    { name : "imgHeadFront"},
+    { name : "imgHeadTop"},
+    { name : "imgHeadLeft"},
+    { name : "imgHeadRight"},
+    { name : "imgHeadBottom"},
+    { name : "imgNoseFront"},
 ])
 
 
