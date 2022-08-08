@@ -100,6 +100,28 @@ class UserController {
         res.send('User Account Status Changed');
     };
 
+    getToken = async (req, res, next) => {
+        // console.log("id : ", req.params.id);
+        const result = await UserModel.getToken(req.params.id);
+
+        if (!result) {
+            throw new HttpException(404, 'Something went wrong');
+        }
+
+        res.send(result);
+    };
+
+    updateToken = async (req, res, next) => {
+        // console.log("rrr : ", req.body);
+        // console.log("rrr2 : ", req.params.id, req.body.token);
+        const result = await UserModel.updateToken(req.params.id, req.body.token);
+
+        if (!result) {
+            throw new HttpException(404, 'Something went wrong');
+        }
+
+        res.send('User Token Updated');
+    };
 
     deleteUser = async (req, res, next) => {
         const result = await UserModel.delete(req.params.id);
@@ -130,7 +152,7 @@ class UserController {
         // user matched!
         const secretKey = process.env.SECRET_JWT || "";
         const token = jwt.sign({ user_id: user.id.toString() }, secretKey, {
-            expiresIn: '24h'
+            expiresIn: '12h'
         });
 
         const { password, ...userWithoutPassword } = user;
@@ -151,6 +173,7 @@ class UserController {
             req.body.password = await bcrypt.hash(req.body.password, 8);
         }
     }
+
 }
 
 
