@@ -68,6 +68,26 @@ class UserModel {
 
         return affectedRows;
     }
+    
+    getToken = async (id) => {
+
+        const sql = `SELECT token FROM ${this.tableName}
+        WHERE id = ?`;
+
+        const result = await query(sql, [id]);
+
+        // return back the first row (user)
+        return result[0];
+    }
+
+    updateToken = async (id, token) => {
+        const sql = `UPDATE ${this.tableName} SET token = ? WHERE id = ?`;
+
+        const result = await query(sql, [token, id]);
+        const affectedRows = result ? result.affectedRows : 0;
+
+        return affectedRows;
+    }
 
 }
 

@@ -1,17 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from "../api/authService";
+import jwtDecode from "jwt-decode";
 
 function Header() {
   const navigate = useNavigate();
   const [top, setTop] = useState(true);
   const [role, setRole] = useState();
+  const [reRender, setReRender] = useState(false);
+
+
+  function checkJwtExpired() {
+    var currentDate = new Date();
+    const token = localStorage.getItem('token');
+    // console.log("token is ", token);
+    var decodedToken = jwtDecode(token);
+    // console.log("decodedToken is ", decodedToken);
+    // console.log("expired time : ", decodedToken.exp * 1000);
+    // console.log("current time : ", currentDate.getTime());
+
+    if(decodedToken.exp * 1000 < currentDate.getTime()) {
+      // console.log("토큰이 만료되었습니다.");
+      return true;
+    } else {
+      // console.log("토큰 인증 완료");
+      return false;
+    }
+
+  }
+
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
+    // const currentToken = localStorage.getItem('token');
+    
+    // const tokenCheck = AuthService.getToken(localStorage.getItem('userId')).then(res => {
+    //   // console.log("res is ; ", res);
+    //   setDbToken(`"` + res + `"`);
+    // })
+    
+  
     if (!user) {
-        console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
-        navigate("/signin");
+      console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
+      navigate("/signin");
     }
     if (user) {
       if (user.role) {
@@ -22,7 +53,63 @@ function Header() {
         // User
         setRole(false);
       }
+      if (checkJwtExpired()) {
+        AuthService.logout();
+        navigate("/signin");
+      }
     }
+    
+    // setTimeout(() => {
+    //   console.log("######### currentToken : ",currentToken);
+    //   console.log("######### DBtoken : ",DbToken);
+
+    //   if(currentToken != undefined && DbToken != undefined) {
+    //     if(DbToken != currentToken) {
+    //       console.log("중복 로그인으로 인해 재로그인이 필요합니다.");
+    //       AuthService.logout();
+    //       navigate("/signin");
+    //     }
+    //   }
+
+    //   }, 100);
+  },[]);   
+
+  // let interval;
+  // setTimeout(()=>{
+  
+  //   APiResponse(); // first time zero
+  
+  //  interval = setInterval(() => {
+  //   APiResponse(); // after 30 second
+  
+  //  } ,  30000);
+  // }, 0)
+
+  
+  useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    const currentToken = localStorage.getItem('token');
+    var dbToken = "";
+    
+    const tokenCheck = AuthService.getToken(localStorage.getItem('userId')).then(res => {
+      // console.log("res is ; ", res);
+      dbToken = `"` + res + `"`;
+    })
+    
+    
+    setTimeout(() => {
+      // console.log("######### currentToken : ",currentToken);
+      // console.log("######### DBtoken : ",dbToken);
+
+      if(currentToken != undefined && dbToken != undefined) {
+        if(dbToken != currentToken) {
+          // console.log("중복 로그인으로 인해 재로그인이 필요합니다.");
+          AuthService.logout();
+          navigate("/signin");
+        }
+      }
+
+      }, 1000);
   },[]);   
 
   // detect whether user has scrolled the page down by 10px 
