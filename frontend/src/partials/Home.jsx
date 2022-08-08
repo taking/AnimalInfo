@@ -181,12 +181,18 @@ function Home() {
     
     for (let i = 0; i < listUp.dataA.length; i++) {
       console.log("value is :", getValues(listUp.dataA[i]));
+      if (getValues(listUp.dataA[i]) == undefined) {
+        formData.append(listUp.dataA[i], null);
+      }
       formData.append(listUp.dataA[i], getValues(listUp.dataA[i]))
     }
 
     if(getValues('data_type') === 'B') {
       for (let i = 0; i < listUp.dataB.length; i++) {
         console.log("value is :", getValues(listUp.dataB[i]));
+        if (getValues(listUp.dataB[i]) == undefined) {
+          formData.append(listUp.dataB[i], null);
+        }
         formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
       }
     }
@@ -1072,6 +1078,7 @@ const handleChangeForm = (name, data) => {
                           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                           accept="image/*"
                           multiple
+                          required
                           >    
                         </input>
                       </label>
