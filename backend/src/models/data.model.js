@@ -68,11 +68,11 @@ class DataModel {
     update = async (params, id) => {
         
         const { columnSet, values } = multipleColumnSet(params)
-        console.log(columnSet)
+ 
         const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
 
         const result = await query(sql, [...values, id]);
-
+        console.log("##########",result)
         return result;
     }
 
@@ -86,8 +86,12 @@ class DataModel {
     }
 
     getMissionId = async (species) =>{
-        const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
+        // const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
+        const sql = ` SELECT SUBSTRING_INDEX(id,'_',-1) AS id FROM ${this.tableName} where species =? ORDER BY id DESC LIMIT 1`;
         const result = await query(sql,[species]);
+
+        
+        console.log("*********result",result);
 
         return result;
     }

@@ -9,6 +9,18 @@ dotenv.config();
 const rootPath = process.env.PWD;
 const backendDomain = process.env.ADDR;
 
+
+//날자 Fomat 변경(yyyymmdd)
+function getFormatDate(date){
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+}
+
+
 // 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
     Data : [
@@ -39,6 +51,8 @@ const list = {
 
 
 const copyGkes = (missionId, req) => {
+    
+
     console.log("copyGkes body is : ", req.body);
     console.log("copyGkes files is : ", req.files);
     console.log("missionId",missionId)
@@ -56,11 +70,14 @@ const copyGkes = (missionId, req) => {
   }
 //   filename += "_"+missionId;
 
+    var date = new Date();
+    date = getFormatDate(date);
 
-  console.log("### filename. : ", filename);
+    console.log("### filename. : ", filename);
+
     const _file = path.join(rootPath + '/file')
     // gkes 저장용 폴더 생성
-    const _gkes = path.join(rootPath + '/gkes')
+    const _gkes = path.join(rootPath + '/gkes/' + date)
     try {
       fs.accessSync(_gkes);
     } catch (error) {
@@ -174,13 +191,22 @@ class DataController {
 
        // mission id
        const speciesCnt = await DataModel.getMissionId(req.body.species);
-       var cnt = speciesCnt[0]['count'] +1;
+     
+
+       if (speciesCnt.length !==0){
+        var cnt = parseInt(speciesCnt[0]['id']) +1;
+       }else{
+        var cnt = 3;
+       }
+       
+       console.log("~~~~~~~~~",cnt)
+    //    var cnt = speciesCnt +1;
        var cntString = String(cnt);
        var num= cntString.padStart(6,'0');
        let missionId =0;
 
        if(req.body.species == "dog"){
-            missionId = '10_' + num; 
+            missionId = '10_' + num;
        }else if(req.body.species == "cat"){
             missionId = '20_' + num; 
        }
@@ -197,10 +223,6 @@ class DataController {
     };
 
     updateData = async (req, res, next) => {
-        console.log("req.field~~~~~~~~~~", req.field)
-        console.log("req.fields~~~~~~~~~~", req.fields)
-        console.log("req.body~~~~~~~~~~", req.body)
-        console.log("update id~~~~~~~~~~", req.params.id)
 
         const { ...restOfUpdates } = req.body;
 
