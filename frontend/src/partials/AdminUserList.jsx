@@ -86,6 +86,7 @@ function AdminUserList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
+    flex: 1,
 		// filter: true,
 		// floatingFilter: true,
 		// floatingFilterComponentParams: {
@@ -128,7 +129,7 @@ function AdminUserList() {
           <div className="text-center pb-12 md:pb-16">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">사용자 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">관리</span></h1>
             <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">사용자 관리 페이지입니다.</p>
+              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">전체 사용자 관리 페이지입니다.</p>
             </div>
           </div>
 
@@ -140,7 +141,7 @@ function AdminUserList() {
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
-                    <legend className="contents text-base font-bold text-gray-900">사용자 목록</legend>
+                    <legend className="contents text-base font-bold text-gray-900">User Management</legend>
                   </fieldset>                                   
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>

@@ -149,7 +149,7 @@ function Header() {
                 </li>
                 </>
               )}
-              { role == 1 && (
+              {/* { role == 1 && (
                 <li>
                   <Link to="/adm/users" className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3">
                     <span>관리자</span>
@@ -158,7 +158,7 @@ function Header() {
                     </svg>                  
                   </Link>
                 </li>
-              )}
+              )} */}
             </ul>
 
           </nav>

@@ -17,8 +17,8 @@ import ResetPassword from './pages/ResetPassword';
 import UserData from './pages/UserData';
 import Profile from './pages/Profile';
 import AdminUser from './pages/AdminUser';
-// import AdminData from './pages/AdminData';
 import AdminPrice from './pages/AdminPrice';
+import AdminData from './pages/AdminData';
 
 function App() {
 
@@ -49,7 +49,7 @@ function App() {
         <Route path="/list" element={<UserData />} />
         <Route path="/adm/users" element={<AdminUser />} />
         <Route path="/adm/price" element={<AdminPrice />} />
-        {/* <Route path="/adm/data" element={<AdminData />} /> */}
+        <Route path="/adm/data" element={<AdminData />} />
         {/* <Route path="/reset-password" element={<ResetPassword />} /> */}
       </Routes>
     </>
