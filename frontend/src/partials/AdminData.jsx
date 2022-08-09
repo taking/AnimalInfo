@@ -41,9 +41,10 @@ function AdminData() {
 
 	const defaultColumnDef = {
 		sortable: true,
-		resizable: true,
+		// resizable: true,
     editable: true,
     cellEditorPopup: true,
+    suppressSizeToFit: true,
     // flex: 1,
 		// filter: true,
 		// floatingFilter: true,
@@ -60,15 +61,35 @@ function AdminData() {
       cellClass: 'checkCell'
     },
 		{
+			headerName: '회원 정보',
+			children: [
+				{ headerName: '회원명', field: 'name', width: 100, selection: true },
+				{ headerName: '이메일', field: 'email', width: 170 },
+				{ headerName: '제공처', field: 'refer', width: 170 },
+			]
+		},
+		{
 			headerName: '데이터 정보',
 			children: [
-				{ headerName: 'id', field: 'id', width: 100 },
-				{ headerName: '사용자', field: 'userId', width: 100 },
-				{ headerName: '제공처', field: 'refer'},
-				{ headerName: '가격', field: 'price'},
-				{ headerName: '데이터 타입', field: 'data_type'},
-				{ headerName: '종 ', field: 'species'},
-			]
+				{ headerName: '데이터 번호', field: 'dataNum', width: 100 },
+				{ headerName: '단가', field: 'money', width: 110 },
+				{ headerName: '생성 시간', field: 'created_at', width: 140 },
+				{ headerName: '수정 시간', field: 'updated_at', width: 140 },
+        // {
+        //   headerName: "액션",
+        //   field: "button",
+        //   cellRendererFramework:(params)=>
+        //     <div>
+        //       {/* <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        //         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}}
+        //         aria-controls="EditModal">수정</a> */}
+        //       {/* <a> | </a> */}
+        //       <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        //         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true); }}
+        //         aria-controls="DeleteModal">삭제</a>
+        //     </div>
+        // , width: 100 },
+			],
 		}
 	];
 

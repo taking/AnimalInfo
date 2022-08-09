@@ -116,6 +116,7 @@ class DataController {
         if (!dataList.length) {
             throw new HttpException(404, 'Data not found');
         }
+
         res.send(dataList);
     };
 
