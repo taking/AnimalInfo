@@ -9,6 +9,11 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 // Service
 import UserService from "../api/userService";
 
+// Modal
+import Modal from '../utils/Modal';
+
+//css
+import "../css/style.css";
 
 function AdminUserList() {
 	const [rowData, setrowData] = useState();
@@ -82,7 +87,7 @@ function AdminUserList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
-    suppressSizeToFit: true,
+    // suppressSizeToFit: true,
     // flex: 1,
 		// filter: true,
 		// floatingFilter: true,

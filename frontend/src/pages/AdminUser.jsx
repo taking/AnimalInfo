@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Header from '../partials/Header';
-import AdminUserList from '../partials/AdminUserList';
+import AdminUserPage from '../partials/AdminUser';
 import Footer from '../partials/Footer';
 
 function AdminUser() {
@@ -16,7 +16,7 @@ function AdminUser() {
       <main className="flex-grow">
 
         {/*  Page sections */}
-        <AdminUserList />
+        <AdminUserPage />
 
       </main>
 
