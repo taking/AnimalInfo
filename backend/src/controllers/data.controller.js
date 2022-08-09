@@ -14,8 +14,7 @@ const list = {
     Data : [
         "data_type",  // 데이터타입
         "species",    // 종
-        "dogRace",    // 품종
-        "catRace",    // 품종
+        "race",       // 품종
         "sex",        // 성별
         "birth",      // 생년월일
         "refer",      // 제공처코드
@@ -129,6 +128,12 @@ class DataController {
     };
 
     createData = async (req, res) => {
+        const _file = path.join(rootPath + '/file')
+        try {
+          fs.accessSync(_file);
+        } catch (error) {
+          fs.mkdirSync(_file);
+        }
         
         var img = [];
         var img2 = [];
@@ -150,7 +155,6 @@ class DataController {
             var imgLink = "";
             // console.log(list.File[i] + "[" + fileListArr + "]");
             if (fileListArr === undefined) {
-
                     const _file = path.join(rootPath + '/file/');
                     var fileData = req.files[list.File[i]];
                     var ext = "";
@@ -163,18 +167,23 @@ class DataController {
                         case 'image/jpg':
                             ext = ".jpg";
                             break;
+                        case 'image/jpeg':
+                            ext = ".jpeg";
+                            break;
                     }
     
                     // console.log("file name is : ", fileData.name);
                     // console.log("file Extenstion is : ", ext);
                     // console.log("file md5 is : ", md5);
     
-                    var fileName = md5 + "_" + date + ext;
+                    const getRandom = (min, max) => Math.floor(Math.random() * (max - min) + min);
+                    var Random = getRandom(1,10000000);
+                    var fileName = md5 + "_" + date + "_" + Random + ext;
                     // console.log("fileName is ", fileName);
     
                     fileData.mv(_file + fileName, function(err) {
                         if (err)
-                            console.log("file mv error.")
+                            console.log("[create data] file mv error.")
                             return res.status(500).send(err);
                     });
     
@@ -209,12 +218,14 @@ class DataController {
                     // console.log("file Extenstion is : ", ext);
                     // console.log("file md5 is : ", md5);
     
-                    var fileName = md5 + "_" + date + ext;
+                    const getRandom = (min, max) => Math.floor(Math.random() * (max - min) + min);
+                    var Random = getRandom(1,10000000);
+                    var fileName = md5 + "_" + date + "_" + Random + ext;
                     // console.log("fileName is ", fileName);
     
                     fileData.mv(_file + fileName, function(err) {
                         if (err)
-                            console.log("file mv error.")
+                            console.log("[copy gkes] file mv error.")
                             return res.status(500).send(err);
                     });
     

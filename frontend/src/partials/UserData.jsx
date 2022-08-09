@@ -87,10 +87,7 @@ function UserDataList() {
 			headerName: '종', field: 'species', width:110
 		},
     {
-			headerName: '반려견 품종', field: 'dogRace', width:110
-		},
-    {
-			headerName: '반려묘 품종', field: 'catRace', width:110
+			headerName: '품종', field: 'race', width:110
 		},
     {
 			headerName: '생년월일', field: 'birth', width:110
@@ -222,7 +219,7 @@ function UserDataList() {
 		setGridApi(params.api);
 		setGridColumnApi(params.columnApi);
 		params.api.setDomLayout('autoHeight'); //set full height
-		params.api.autoSizeColumns(params.api);
+		// params.api.autoSizeColumns(params.api);
     // setRowData(rowData2);
 
     // fetch('http://local:8888/api/accounts')
@@ -241,6 +238,12 @@ function UserDataList() {
 	}, []);
 
 
+  const onBtnExport = () => {
+    var params = {
+        columnKeys: ['userId', 'refer', 'price', 'data_type', 'species']
+    };
+    gridApi.exportDataAsCsv(params);
+  };
 
   return (
     <section className="relative">
@@ -268,12 +271,16 @@ function UserDataList() {
                       <div className="frame">
                         <button className="data-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
                         </button>
+                        <button className="user-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBtnExport();}}>CSV Export
+                        </button>
                       </div>
                       <AgGridReact
                         rowData={rowData}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}
+                        paginationPageSize="10"
+                        pagination={true}
                         // rowSelection="multiple"
                         // localeText={{
                         //   filterOoo: 'Filter'

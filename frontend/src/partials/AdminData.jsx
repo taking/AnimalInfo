@@ -63,18 +63,23 @@ function AdminData() {
 		{
 			headerName: '회원 정보',
 			children: [
-				{ headerName: '회원명', field: 'name', width: 100, selection: true },
-				{ headerName: '이메일', field: 'email', width: 170 },
-				{ headerName: '제공처', field: 'refer', width: 170 },
+				{ headerName: 'userId', field: 'userId', width: 70 },
+				{ headerName: '제공처', field: 'refer', width: 120 },
 			]
 		},
 		{
 			headerName: '데이터 정보',
 			children: [
-				{ headerName: '데이터 번호', field: 'dataNum', width: 100 },
-				{ headerName: '단가', field: 'money', width: 110 },
+				{ headerName: '데이터 번호', field: 'id', width: 100 },
+				{ headerName: '단가', field: 'price', width: 80 },
+				{ headerName: '데이터 타입', field: 'data_type', width: 100 },
+				{ headerName: '종', field: 'species', width: 80 },
+				{ headerName: '품종', field: 'dogRace', width: 80 },
+				// { headerName: '강아지 품종', field: 'catRace', width: 80 },
+				// { headerName: '고양이 품종', field: 'catRace', width: 80 },
 				{ headerName: '생성 시간', field: 'created_at', width: 140 },
-				{ headerName: '수정 시간', field: 'updated_at', width: 140 },
+				{ headerName: 'imageAllFront', field: 'imgAllFront', flex: 1 },
+				{ headerName: 'imageAllTop', field: 'imgAllTop', flex: 1 },
         // {
         //   headerName: "액션",
         //   field: "button",
