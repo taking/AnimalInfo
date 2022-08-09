@@ -9,8 +9,6 @@ dotenv.config();
 const rootPath = process.env.PWD;
 const backendDomain = process.env.ADDR;
 
-var multiparty = require('multiparty');
-
 // 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
     Data : [
