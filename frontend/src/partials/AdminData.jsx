@@ -42,8 +42,9 @@ function AdminData() {
 	const defaultColumnDef = {
 		sortable: true,
 		resizable: true,
-    // editable: true,
+    editable: true,
     cellEditorPopup: true,
+    flex: 1,
 		// filter: true,
 		// floatingFilter: true,
 		// floatingFilterComponentParams: {
@@ -80,7 +81,10 @@ function AdminData() {
 	}, []);
 
   const onBtnExport = () => {
-    gridApi.exportDataAsCsv();
+    var params = {
+        columnKeys: ['userId', 'refer', 'price', 'data_type', 'species']
+    };
+    gridApi.exportDataAsCsv(params);
   };
 
   return (
