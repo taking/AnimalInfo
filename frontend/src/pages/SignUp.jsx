@@ -49,7 +49,7 @@ function SignUp() {
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="name">이름 <span className="text-red-600">*</span></label>
                       <input 
                         {...register("name", { required: true })}
-                        id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" required />
+                        id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" maxlength="2" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
@@ -65,7 +65,7 @@ function SignUp() {
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="password">비밀번호 <span className="text-red-600">*</span></label>
                       <input 
                         {...register("password", { required: true })}
-                        id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" required />
+                        id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" minlength="6" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
@@ -73,7 +73,7 @@ function SignUp() {
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="contact">연락처 <span className="text-red-600">*</span></label>
                       <input 
                         {...register("contact", { required: true })}
-                        id="contact" type="text" className="form-input w-full text-gray-800" placeholder="연락처를 입력해주세요" required />
+                        id="contact" type="text" className="form-input w-full text-gray-800" placeholder="연락처를 입력해주세요" maxlength="3" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">

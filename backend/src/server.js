@@ -8,6 +8,7 @@ const fileRouter = require('./routes/data.route');
 const historyRouter = require('./routes/history.route');
 const priceRouter = require('./routes/price.route');
 
+
 // Init express
 const app = express();
 // Init environment

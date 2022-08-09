@@ -116,6 +116,7 @@ class DataController {
         if (!dataList.length) {
             throw new HttpException(404, 'Data not found');
         }
+
         res.send(dataList);
     };
 
@@ -132,10 +133,15 @@ class DataController {
         var img = [];
         var img2 = [];
 
-        console.log("------data------",req.body)
+        // console.log("------data------", req.body)
+        // console.log("------req.files------", req.files[list.File[0]])
+
+        // console.log("############################");
 
         for (var i = 0; i < list.File.length; i++) {
             const fileListArr = (req.files[list.File[i]] || []).length;
+            // console.log("[#1] fileListARr : ", fileListArr);
+
             if (fileListArr == 0) {
                 break;
             }
@@ -143,25 +149,92 @@ class DataController {
             const field = [];
             var imgLink = "";
             // console.log(list.File[i] + "[" + fileListArr + "]");
-            for (var j = 0; j < fileListArr; j++) {
-                // console.log("field is : ", field);
-                // console.log(" - value###### is :", req.files[list.File[i]][j].filename);
+            if (fileListArr === undefined) {
 
-                // file hash
-                const hash = crypto.createHash('md5'); 
-                hash.update('secret' + j);
-                var imgInfo = {
-                    value: backendDomain + '/file/' + req.files[list.File[i]][j].filename,
-                    // hash: `${hash.digest('hex')}`
-                }
-                field.push(imgInfo);
+                    const _file = path.join(rootPath + '/file/');
+                    var fileData = req.files[list.File[i]];
+                    var ext = "";
+                    var date = new Date().getTime();
+                    var md5 = fileData.md5;
+                    switch(fileData.mimetype) {
+                        case 'image/png':
+                            ext = ".png";
+                            break;
+                        case 'image/jpg':
+                            ext = ".jpg";
+                            break;
+                    }
+    
+                    // console.log("file name is : ", fileData.name);
+                    // console.log("file Extenstion is : ", ext);
+                    // console.log("file md5 is : ", md5);
+    
+                    var fileName = md5 + "_" + date + ext;
+                    // console.log("fileName is ", fileName);
+    
+                    fileData.mv(_file + fileName, function(err) {
+                        if (err)
+                            console.log("file mv error.")
+                            return res.status(500).send(err);
+                    });
+    
+                    // file hash
+                    const hash = crypto.createHash('md5'); 
+                    hash.update('secret' + j);
+                    var imgInfo = {
+                        value: backendDomain + '/file/' + fileName,
+                        // hash: `${hash.digest('hex')}`
+                    }
+                    field.push(imgInfo);
+    
+                    imgLink += backendDomain + '/file/' + fileName;
 
-                // image.png,image2.png 합치기
-                if (j > 0 && j < fileListArr) {
-                    imgLink += ","
+            } else { 
+                for (var j = 0; j < fileListArr; j++) {
+                    const _file = path.join(rootPath + '/file/');
+                    var fileData = req.files[list.File[i]][j];
+                    var ext = "";
+                    var date = new Date().getTime();
+                    var md5 = fileData.md5;
+                    switch(fileData.mimetype) {
+                        case 'image/png':
+                            ext = ".png";
+                            break;
+                        case 'image/jpg':
+                            ext = ".jpg";
+                            break;
+                    }
+    
+                    // console.log("file name is : ", fileData.name);
+                    // console.log("file Extenstion is : ", ext);
+                    // console.log("file md5 is : ", md5);
+    
+                    var fileName = md5 + "_" + date + ext;
+                    // console.log("fileName is ", fileName);
+    
+                    fileData.mv(_file + fileName, function(err) {
+                        if (err)
+                            console.log("file mv error.")
+                            return res.status(500).send(err);
+                    });
+    
+                    // file hash
+                    const hash = crypto.createHash('md5'); 
+                    hash.update('secret' + j);
+                    var imgInfo = {
+                        value: backendDomain + '/file/' + fileName,
+                        // hash: `${hash.digest('hex')}`
+                    }
+                    field.push(imgInfo);
+    
+                    // image.png,image2.png 합치기
+                    if (j > 0 && j < fileListArr) {
+                        imgLink += ","
+                    }
+                    imgLink += backendDomain + '/file/' + fileName;
                 }
-                imgLink += backendDomain + '/file/' + req.files[list.File[i]][j].filename;
             }
+            
 
             var jsonData = {
                 "name" : list.File[i],
@@ -169,21 +242,30 @@ class DataController {
             }
 
             img.push(field);
-            img2.push(jsonData);
+
+            if (imgLink === '') {                
+            } else {
+                img2.push(jsonData);
+            }
         }
+
+        console.log("#### img2 : ", img2);
 
        // mission id
        const speciesCnt = await DataModel.getMissionId(req.body.species);
+
        var cnt = speciesCnt[0]['count'] +1;
        var cntString = String(cnt);
-       var num= cntString.padStart(6,'0');
-       let missionId =0;
+       var num = cntString.padStart(6,'0');
+       var missionId = 0;
 
-       if(req.body.species == "dog"){
+       if(req.body.species == "dog" || req.body.species == "10"){
             missionId = '10_' + num; 
-       }else if(req.body.species == "cat"){
+       }else if(req.body.species == "cat" || req.body.species == "20"){
             missionId = '20_' + num; 
        }
+
+       console.log("missionId is : ", missionId);
 
 
        const result = await DataModel.create(missionId, req.body, img2);

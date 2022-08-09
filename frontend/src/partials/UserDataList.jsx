@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+import { useForm } from "react-hook-form";
 
 // AgGrid
 import { AgGridReact } from 'ag-grid-react';
@@ -29,6 +30,12 @@ function UserDataList() {
       setRowData(res)
    })
   }
+  const onError = (errors, e) => console.log(errors, e);
+
+
+  // const onEditModalAlert = () => {
+  //   setOpenEditModal(!openEditModal);
+  // }
 
   useEffect(() => {
     importData();
@@ -53,6 +60,13 @@ function UserDataList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
+    suppressSizeToFit: true,
+    // flex: 1,
+		// filter: true,
+		// floatingFilter: true,
+		// floatingFilterComponentParams: {
+		// 	suppressFilterButton: true
+		// }
 	};
 
 	const columnDefs = [
