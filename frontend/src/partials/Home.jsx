@@ -30,6 +30,7 @@ function Home() {
 
   const listUp = {
     dataA : [
+      "userId",
       "refer",
       // "price",
       "data_type",
@@ -128,9 +129,9 @@ function Home() {
       { type: "number", en: "chestSize", ko: "흉곽둘레(cm)", subtitle: "text", place: "흉곽둘레를 입력하세요" },
     ],
     exercise: [
-      { id: "exercise_1", fullname:'저(1주일 1시간 이하)', name: 'low', unavailable: true },
-      { id: "exercise_2", fullname:'중(매일 30분 이하)', name: 'middle', unavailable: true },
-      { id: "exercise_3", fullname:'고(매일 1시간 이상)', name: 'high', unavailable: true },
+      { id: "exercise_1", fullname:'저(1주일 1시간 이하)', name: '1', unavailable: true },
+      { id: "exercise_2", fullname:'중(매일 30분 이하)', name: '2', unavailable: true },
+      { id: "exercise_3", fullname:'고(매일 1시간 이상)', name: '3', unavailable: true },
     ],
     foodCount: [
       { id: "foodcount_1", fullname:'1회', name: '1', unavailable: true },
@@ -139,17 +140,17 @@ function Home() {
       { id: "foodcount_free", fullname:'자율급식', name: 'free', unavailable: true },
     ],
     environment: [
-      { id: "environment_indoor", fullname:'실내', name: 'indoor', unavailable: true },
-      { id: "environment_outdoor", fullname:'실외', name: 'out-door', unavailable: true },
+      { id: "environment_indoor", fullname:'실내', name: '0', unavailable: true },
+      { id: "environment_outdoor", fullname:'실외', name: '1', unavailable: true },
     ],
     defecation: [
-      { id: "environment_normal", fullname:'정상', name: 'normal', unavailable: true },
-      { id: "environment_abnormal", fullname:'이상', name: 'abnormal', unavailable: true },
+      { id: "environment_normal", fullname:'정상', name: '0', unavailable: true },
+      { id: "environment_abnormal", fullname:'이상', name: '1', unavailable: true },
     ],
     foodKind: [
-      { id: "foodkind_1", fullname:'반려동물 전용 사료', name: 'feed', unavailable: true },
-      { id: "foodkind_2", fullname:'전용사료 + 사람 음식(혼용)', name: 'mix', unavailable: true },
-      { id: "foodkind_3", fullname:'사람 음식', name: 'human', unavailable: true },
+      { id: "foodkind_1", fullname:'반려동물 전용 사료', name: '0', unavailable: true },
+      { id: "foodkind_2", fullname:'전용사료 + 사람 음식(혼용)', name: '1', unavailable: true },
+      { id: "foodkind_3", fullname:'사람 음식', name: '2', unavailable: true },
     ],
     food: [
       { type: "number", en: "foodAmount", ko: "식사량", subtitle: "1회 식사량 (종이컵 기준)", place: "식사량을 입력하세요" },
@@ -173,34 +174,50 @@ function Home() {
       { en: "imgNoseFront", ko: "비문-전면" },
     ]
   }
+
+  var [files, setFiles] = useState([]);
   
   const onSubmit = (data) => {
-    const formData = new FormData();
+    var formData = new FormData();
     // data.preventDefault();
     console.log("data is :", data);
     
     for (let i = 0; i < listUp.dataA.length; i++) {
       console.log("value is :", getValues(listUp.dataA[i]));
-      if (getValues(listUp.dataA[i]) == undefined) {
-        formData.append(listUp.dataA[i], null);
-      }
       formData.append(listUp.dataA[i], getValues(listUp.dataA[i]))
     }
 
-    if(getValues('data_type') === 'B') {
-      for (let i = 0; i < listUp.dataB.length; i++) {
-        console.log("value is :", getValues(listUp.dataB[i]));
-        if (getValues(listUp.dataB[i]) == undefined) {
-          formData.append(listUp.dataB[i], null);
-        }
-        formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
-      }
+
+    for (let i = 0; i < listUp.dataB.length; i++) {
+      console.log("value is :", getValues(listUp.dataB[i]));
+      formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
     }
+
+    // if(getValues('data_type') === 'B') {
+    //   for (let i = 0; i < listUp.dataB.length; i++) {
+    //     console.log("value is :", getValues(listUp.dataB[i]));
+    //     formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
+    //   }
+    // }
+
+    // console.log("sdfsdfds : ", files);
+    // formData.append('file', files[0])
     
     for (let i = 0; i < listUp.file.length; i++) {
-      console.log("value is :", getValues(listUp.file[i]));
-      formData.append('file', getValues(listUp.file[i]))
+      console.log("file value is :", getValues(listUp.file[i]));
+      // formData.append('file', getValues(listUp.file[i]))
+      const fileListArr = (getValues(listUp.file[i]) || []).length;
+      for (var j = 0; j < fileListArr; j++) {
+        formData.append(listUp.file[i], getValues(listUp.file[i])[j])
+      }
     }
+
+    
+    // Display the key/value pairs
+    for(var pair of formData.entries()) {
+      console.log(JSON.stringify(pair[0])+ ', '+ JSON.stringify(pair[1])); 
+    }
+
     
     DataService.create(formData).then(
       () => {
@@ -208,6 +225,7 @@ function Home() {
         navigate("/");
       },
       error => {
+        console.log("response msg : ", error.response);
         const resMessage =
           (error.response &&
             error.response.data &&
@@ -219,6 +237,16 @@ function Home() {
     )}
 
 const handleChangeForm = (name, data) => {
+    console.log("name : ", name);
+    console.log("data : ", data);
+    setValue(name, data);
+  };
+
+const handleUpload = (name, data) => {
+    data.preventDefault();
+    const file = data.target.files[0];
+    console.log("### file is ", file);
+    setFiles([...files, { "name": file }]);
     console.log("name : ", name);
     console.log("data : ", data);
     setValue(name, data);
@@ -241,8 +269,8 @@ const handleChangeForm = (name, data) => {
 
           <div className="mt-10 sm:mt-0">
             <div className="mt-5 md:mt-0 md:col-span-2">
-              {/* <form onSubmit={handleSubmit(onSubmit, onError)} encType="multipart/form-data"> */}
-              <form onSubmit={handleSubmit(onSubmit, onError)}>
+              <form onSubmit={handleSubmit(onSubmit, onError)} encType="multipart/form-data">
+              {/* <form onSubmit={handleSubmit(onSubmit, onError)}> */}
                 <div className="shadow sm:rounded-md sm:overflow-hidden">
                   <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                     {/* <fieldset> */}
@@ -1046,8 +1074,7 @@ const handleChangeForm = (name, data) => {
                               </div>
                           ))}             
                       </div>
-                    </fieldset>                        
-
+                    </fieldset> 
 
                     {/* 파일 업로드 */}
                     {selectbox.file.map((item) => (
@@ -1060,8 +1087,8 @@ const handleChangeForm = (name, data) => {
                           id={item.en}
                           name={item.en}
                           type="file"
-                          // onChange={handleFileChange}
-                          className="form-control
+                          // onChange={(e) => handleUpload(item.en, e)}
+                          className="form-contro
                           block
                           w-full
                           px-3
@@ -1092,6 +1119,64 @@ const handleChangeForm = (name, data) => {
                         {...register("upload_at")}
                         type="hidden"
                         value={moment(new Date()).format("YYYYMMDD")}
+                        >    
+                      </input>
+                      <input
+                        {...register("userId")}
+                        type="hidden"
+                        value={localStorage.getItem('userId')}
+                        >    
+                      </input>
+                    </fieldset>
+                    
+                    {/* sfwsdf */}
+                    <fieldset>
+                      <input
+                        {...register("CPR")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("lgG")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("IL6")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("AFP")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("heartRate")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("breatingRate")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("bodyHeat")}
+                        type="hidden"
+                        value="3"
+                        >    
+                      </input>
+                      <input
+                        {...register("stress")}
+                        type="hidden"
+                        value="3"
                         >    
                       </input>
                     </fieldset>

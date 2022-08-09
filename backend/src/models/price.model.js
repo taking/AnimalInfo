@@ -8,7 +8,7 @@ class PriceModel {
 
     init = async ({ name, price }) => {
         const sql = `INSERT INTO ${this.tableName}
-        (name, price) VALUES (?,?)`;
+        (price) VALUES (?)`;
 
         const result = await query(sql, [name, price]);
         const affectedRows = result ? result.affectedRows : 0;

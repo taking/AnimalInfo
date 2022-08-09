@@ -46,9 +46,6 @@ class DataModel {
 
 
     create = async (missionId, params, img) => {
-
-        console.log(missionId)
-        console.log(params)
         const sql = `INSERT INTO ${this.tableName}
         (id, userId, refer, data_type, species, dogRace, catRace, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
         exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
@@ -89,9 +86,6 @@ class DataModel {
         // const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
         const sql = ` SELECT SUBSTRING_INDEX(id,'_',-1) AS id FROM ${this.tableName} where species =? ORDER BY id DESC LIMIT 1`;
         const result = await query(sql,[species]);
-
-        
-        console.log("*********result",result);
 
         return result;
     }

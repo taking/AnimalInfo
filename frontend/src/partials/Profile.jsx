@@ -32,7 +32,6 @@ function ProfilePage() {
     } else {
       console.log("Not Logined")
     }
-    console.log(UserService.userList());
   },[]);
 
   const [myProfile, setMyProfile] = useState({ name: "", email: "", contact: "", refer: "", created_at: "" }); 

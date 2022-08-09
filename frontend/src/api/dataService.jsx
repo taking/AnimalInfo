@@ -18,12 +18,12 @@ class DataService {
     console.log("data list : ", data);
     return axios
       .post(API_URL, data, {
-        headers: authHeader(),
-        'Content-Type': 'multipart/form-data'
+      headers: authHeader(),
+      mimeType: 'multipart/form-data'
       })
       .then(response => {
-          console.log("[dataService-create] response : ", response);
-        return response;
+          console.log("[dataService-create] response : ", response.data);
+        return response.data;
       });
   }
 
