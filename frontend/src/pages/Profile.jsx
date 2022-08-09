@@ -16,9 +16,6 @@ function Profile() {
 
         {/*  Page sections */}
         <ProfilePage />
-        
-      {/* TODO: Tab 기능 가져다쓰기 */}
-        {/* <FeaturesHome /> */}
 
       </main>
 

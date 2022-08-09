@@ -110,7 +110,7 @@ function AdminUserList() {
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
                     <div className="frame">
-                        <button className="user-btn btn" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); userenable();}}>활성화 / 비활성화
+                        <button className="user-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); userenable();}}>활성화 / 비활성화
                         </button>
                       </div>
                       <AgGridReact
