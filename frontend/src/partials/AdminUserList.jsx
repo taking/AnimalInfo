@@ -86,7 +86,7 @@ function AdminUserList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
-    flex: 1,
+    // flex: 1,
 		// filter: true,
 		// floatingFilter: true,
 		// floatingFilterComponentParams: {
