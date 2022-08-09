@@ -133,7 +133,7 @@ function AdminPrice() {
           <div className="text-center pb-12 md:pb-16">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">가격 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">관리</span></h1>
             <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">가격 변동 히스토리 및 수정 페이지입니다.</p>
+              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">가격 관리 페이지입니다.</p>
             </div>
           </div>
 
@@ -148,7 +148,7 @@ function AdminPrice() {
                     
                     {/* 가격 */}
                     <fieldset>
-                      <legend className="contents text-base font-bold text-gray-900">Price</legend>
+                      <legend className="contents text-base font-bold text-gray-900">Price Management</legend>
                         <p className="text-sm text-gray-500">수정 전 새로고침하여, 최신 데이터로 업데이트 후 진행하세요.</p>
                     </fieldset>  
                     <fieldset>
@@ -240,7 +240,7 @@ function AdminPrice() {
                   <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                     
                     <fieldset>
-                      <legend className="contents text-base font-bold text-gray-900">History</legend>
+                      <legend className="contents text-base font-bold text-gray-900">History View</legend>
                       <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
                         <div className="frame">
                         <button className="user-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBtnExport();}}>CSV Export</button>
