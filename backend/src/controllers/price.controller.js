@@ -9,22 +9,6 @@ dotenv.config();
  ******************************************************************************/
 class PriceController {
 
-    initPrice = async (req, res, next) => {
-
-        const jsonData = {
-            "name": "default",
-            "price": 0
-        }
-
-        const result = await PriceModel.init(jsonData);
-
-        if (!result) {
-            throw new HttpException(500, 'Something went wrong');
-        }
-
-        res.status(201).send('init Price was created!');
-    };
-
     getPrice = async (req, res, next) => {
         let priceList = await PriceModel.find();
         if (!priceList.length) {
@@ -34,8 +18,17 @@ class PriceController {
         res.send(priceList);
     };
 
+    lastPrice = async (req, res, next) => {
+        const price = await PriceModel.last();
+        if (!price) {
+            throw new HttpException(404, 'History not found');
+        }
+
+        res.send(price[0]);
+    };
+
     updatePrice = async (req, res, next) => {
-        const result = await PriceModel.update("default", req.params.price);
+        const result = await PriceModel.update(req.params.price);
 
         if (!result) {
             throw new HttpException(404, 'Something went wrong');

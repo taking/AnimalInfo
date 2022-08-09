@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { render } from "react-dom";
 import { useForm } from "react-hook-form";
 
 // AgGrid
@@ -29,7 +28,6 @@ function UserDataList() {
     console.log(data);
   }
   const onError = (errors, e) => console.log(errors, e);
-
 
 
   // const onEditModalAlert = () => {
@@ -212,7 +210,7 @@ function UserDataList() {
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
                       <div className="frame">
-                        <button className="data-btn databtn" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
+                        <button className="data-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
                         </button>
                       </div>
                       <AgGridReact
