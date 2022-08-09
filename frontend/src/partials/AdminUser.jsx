@@ -6,16 +6,17 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
 
-// Modal
-import Modal from '../utils/Modal';
-
 // Service
 import UserService from "../api/userService";
 
+// Modal
+import Modal from '../utils/Modal';
+
+//css
+import "../css/style.css";
 
 function AdminUserList() {
-	const [rowData, setRowData] = useState();
-	const [rowData2, setRowData2] = useState();
+	const [rowData, setrowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
   // const [openEnabledModal, setOpenEnabledModal] = useState(false)
@@ -28,7 +29,7 @@ function AdminUserList() {
 
   const importData = () => {
     UserService.userList().then(res => {
-      setRowData2(res)
+      setrowData(res)
    })
   }
 
@@ -86,7 +87,7 @@ function AdminUserList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
-    suppressSizeToFit: true,
+    // suppressSizeToFit: true,
     // flex: 1,
 		// filter: true,
 		// floatingFilter: true,
@@ -153,7 +154,7 @@ function AdminUserList() {
                         </button>
                       </div>
                       <AgGridReact
-                        rowData={rowData2}
+                        rowData={rowData}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}

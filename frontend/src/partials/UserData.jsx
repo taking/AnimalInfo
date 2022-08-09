@@ -1,10 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 
 // AgGrid
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
+
+// Service
+import DataService from "../api/dataService";
 
 // Modal
 import Modal from '../utils/Modal';
@@ -17,15 +20,15 @@ function UserDataList() {
 	const [rowData, setRowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
-  const [openModal, setOpenModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
   const [updateData, setupdateData] = useState();
+  const [reRender, setreRender] = useState(0);
 
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm();
-  const onSubmit = data => {
-    alert(JSON.stringify(data, undefined, 2));
-    console.log(data);
+  const importData = () => {
+    DataService.list().then(res => {
+      setRowData(res)
+   })
   }
   const onError = (errors, e) => console.log(errors, e);
 
@@ -34,6 +37,10 @@ function UserDataList() {
   //   setOpenEditModal(!openEditModal);
   // }
 
+  useEffect(() => {
+    importData();
+  // },[reRender]);
+  },[reRender]);
   
   const onEditModalAlert = () => {
     const selectedData = gridApi.getSelectedRows();
@@ -65,70 +72,117 @@ function UserDataList() {
 	const columnDefs = [
     {headerName: 'check', checkboxSelection: true, width: 70, cellClass: 'checkCell'},
 		{
-			headerName: '회원 정보',
-			children: [
-				{ headerName: '회원명', field: 'name', width: 100, selection: true },
-				{ headerName: '이메일', field: 'email', width: 170 },
-				{ headerName: '제공처', field: 'refer', width: 170 },
-			]
+			headerName: '데이터 번호', field: 'id', width:110
 		},
+    {
+			headerName: '수집 데이터 제공처', field: 'refer', width:110
+		},
+    {
+			headerName: '단가', field: 'price', width:110
+		},
+    {
+			headerName: '데이터 타입', field: 'data_type', width:110
+		},
+    {
+			headerName: '종', field: 'species', width:110
+		},
+    {
+			headerName: '반려견 품종', field: 'dogRace', width:110
+		},
+    {
+			headerName: '반려묘 품종', field: 'catRace', width:110
+		},
+    {
+			headerName: '생년월일', field: 'birth', width:110
+		},
+    {
+			headerName: '성별', field: 'sex', width:110
+		},
+    {
+			headerName: '체중', field: 'weight', width:110
+		},
+    {
+			headerName: '견갑부 높이', field: 'shoulderHeight', width:110
+		},
+    {
+			headerName: '목둘레', field: 'neckSize', width:110
+		},
+    {
+			headerName: '등허리 길이', field: 'backLength', width:110
+		},
+    {
+			headerName: '흉곽둘레', field: 'chestSize', width:110
+		},
+    {
+			headerName: '신체 충실 지수', field: 'BCS', width:110
+		},
+    {
+			headerName: '운동강도', field: 'exercise', width:110
+		},
+    {
+			headerName: '생활 환경', field: 'environment', width:110
+		},
+    {
+			headerName: '배변 상태', field: 'defecation', width:110
+		},
+    {
+			headerName: '식이 횟수', field: 'foodCount', width:110
+		},
+    {
+			headerName: '식사량', field: 'foodAmount', width:110
+		},
+    {
+			headerName: '식이간식량', field: 'snackAmount', width:110
+		},
+    {
+			headerName: '식사 종류', field: 'foodKind', width:110
+		},
+    {
+			headerName: '질병유무', field: 'disease', width:110
+		},
+    {
+			headerName: '질병명', field: 'diseaseName', width:110
+		},
+    {
+			headerName: 'C-반응성 단백질', field: 'CPR', width:110
+		},
+    {
+			headerName: '면역글로블린 G', field: 'lgG', width:110
+		},
+    {
+			headerName: '인터류킨-6', field: 'IL6', width:110
+		},
+    {
+			headerName: '알파 태아 단백질', field: 'AFP', width:110
+		},
+    {
+			headerName: '심박수', field: 'heartRate', width:110
+		},
+    {
+			headerName: '호흡수', field: 'breatingRate', width:110
+		},
+    {
+			headerName: '체온', field: 'bodyHeat', width:110
+		},
+    {
+			headerName: '스트레스 지수', field: 'stress', width:110
+		},
+    // {
+		// 	headerName: '', field: '', width:110
+		// },
+    // {
+		// 	headerName: '', field: '', width:110
+		// },
+    // {
+		// 	headerName: '', field: '', width:110
+		// },
+    // {
+		// 	headerName: '', field: '', width:110
+		// },
 		{
-			headerName: '데이터 정보',
-			children: [
-				{ headerName: '데이터 번호', field: 'dataNum', width: 100 },
-				{ headerName: '단가', field: 'money', width: 110 },
-				{ headerName: '생성 시간', field: 'created_at', width: 140 },
-				{ headerName: '수정 시간', field: 'updated_at', width: 140 },
-        {
-          headerName: "액션",
-          field: "button",
-          cellRendererFramework:(params)=>
-            <div>
-              {/* <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}}
-                aria-controls="EditModal">수정</a> */}
-              {/* <a> | </a> */}
-              <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true); }}
-                aria-controls="DeleteModal">삭제</a>
-            </div>
-        , width: 100 },
-			],
+			headerName: '생성 시간', field: 'created_at', width:110
 		}
 	];
-
-  const rowData2 = [
-    {
-      name: "박형탁",
-      refer: "건국대학교 동물병원",
-      email: "consine2c@innogrid.com",
-      dataNum: Math.floor(Math.random() * 30),
-      money: Math.floor(Math.random() * 3000) + " 원",
-      created_at: "2022-08-01 14:00",
-      updated_at: "2022-08-01 15:00",
-      button: true
-    },
-    {
-      name: "박형탁",
-      refer: "건국대학교 동물병원",
-      email: "consine2c@innogrid.com",
-      dataNum: Math.floor(Math.random() * 30),
-      money: Math.floor(Math.random() * 3000) + " 원",
-      created_at: "2022-08-01 15:00",
-      updated_at: "-",
-      button: true
-    },
-    {
-      name: "김승한",
-      refer: "건국대학교 동물병원",
-      email: "consine2c@innogrid.com",
-      dataNum: Math.floor(Math.random() * 30),
-      money: Math.floor(Math.random() * 3000) + " 원",
-      created_at: "2022-08-01 14:00",
-      updated_at: "2022-08-01 15:00",
-      button: true
-    },
-  ]
 
   // const handleSubmit = async (event) => {
   //   console.log("event is ", event)
@@ -168,8 +222,8 @@ function UserDataList() {
 		setGridApi(params.api);
 		setGridColumnApi(params.columnApi);
 		params.api.setDomLayout('autoHeight'); //set full height
-		params.api.sizeColumnsToFit();
-    setRowData(rowData2);
+		params.api.autoSizeColumns(params.api);
+    // setRowData(rowData2);
 
     // fetch('http://local:8888/api/accounts')
     // .then((result) => result.json())

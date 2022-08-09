@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Header from '../partials/Header';
-import UserDataList from '../partials/UserDataList';
+import UserDataPage from '../partials/UserData';
 import Footer from '../partials/Footer';
 
 function UserData() {
@@ -16,7 +16,7 @@ function UserData() {
       <main className="flex-grow">
 
         {/*  Page sections */}
-        <UserDataList />
+        <UserDataPage />
 
       </main>
 
