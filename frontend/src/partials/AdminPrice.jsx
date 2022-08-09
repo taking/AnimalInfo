@@ -84,6 +84,7 @@ function AdminPrice() {
 		resizable: true,
     // editable: true,
     cellEditorPopup: true,
+    suppressSizeToFit: true,
     // flex: 1,
 		// filter: true,
 		// floatingFilter: true,
