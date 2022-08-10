@@ -52,18 +52,21 @@ class UserModel {
     }
 
     delete = async (id) => {
-        const sql = `DELETE FROM ${this.tableName}
-        WHERE id = ?`;
-        const result = await query(sql, [id]);
+        // const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
+        const sql = `DELETE FROM ${this.tableName} WHERE id in (${id})`;
+        // const result = await query(sql, [id]);
+        const result = await query(sql);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;
     }
 
     status = async (id) => {
-        const sql = `UPDATE ${this.tableName} SET enabled = IF(enabled=1, 0, 1) WHERE id = ?`;
+        // const sql = `UPDATE ${this.tableName} SET enabled = IF(enabled=1, 0, 1) WHERE id = ?`;
+        const sql = `UPDATE ${this.tableName} SET enabled = IF(enabled=1, 0, 1) WHERE id in (${id})`;
 
-        const result = await query(sql, [id]);
+        // const result = await query(sql, [id]);
+        const result = await query(sql);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;

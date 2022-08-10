@@ -24,7 +24,7 @@ function Footer() {
 
   const logout = () => {
     AuthService.logout();
-    alert("logout Success!")
+    // alert("logout Success!")
     navigate("/signin");
   }
   const adminUser = () => {
