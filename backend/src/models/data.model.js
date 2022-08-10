@@ -1,5 +1,6 @@
 const query = require('../db/db-connection');
 const { multipleColumnSet } = require('../utils/common.utils');
+const PriceModel = require('./price.model');
 class DataModel {
     tableName = 'DATA';
 
@@ -46,18 +47,17 @@ class DataModel {
 
 
     create = async (missionId, params, img) => {
-
-        console.log(missionId)
-        console.log(params)
         const sql = `INSERT INTO ${this.tableName}
-        (id, userId, refer, data_type, species, race, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
+        (id, userId, refer, price, data_type, species, race, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
         exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
         heartRate, breatingRate, bodyHeat, stress, imgAllFront, imgAllTop, imgAllLeft, imgAllRight, imgAllBack, imgHeadFront, imgHeadTop, 
         imgHeadLeft, imgHeadRight, imgHeadBottom, imgNoseFront) 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        
+        const getPrice = await PriceModel.last();
+        const price = getPrice[0]['price']
 
-
-        const result = await query(sql, [missionId, params.userId, params.refer, params.data_type, params.species,params.race, params.birth, params.sex, params.weight, params.shoulderHeight, params.neckSize, params.backLength, params.chestSize, params.BCS, 
+        const result = await query(sql, [missionId, params.userId, params.refer, price, params.data_type, params.species,params.race, params.birth, params.sex, params.weight, params.shoulderHeight, params.neckSize, params.backLength, params.chestSize, params.BCS, 
             params.exercise, params.foodCount, params.environment, params.defecation, params.foodAmount, params.snackAmount, params.foodKind, params.disease, params.diseaseName, params.CPR, params.lgG, params.IL6, params.AFP, 
             params.heartRate, params.breatingRate, params.bodyHeat, params.stress,
             img[0].link, img[1].link, img[2].link, img[3].link, img[4].link, img[5].link, img[6].link, img[7].link, img[8].link,img[9].link,img[10].link]);
@@ -68,11 +68,11 @@ class DataModel {
     update = async (params, id) => {
         
         const { columnSet, values } = multipleColumnSet(params)
-        console.log(columnSet)
+ 
         const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
 
         const result = await query(sql, [...values, id]);
-
+        console.log("##########",result)
         return result;
     }
 
@@ -88,7 +88,8 @@ class DataModel {
     }
 
     getMissionId = async (species) =>{
-        const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
+        // const sql = `SELECT COUNT(*)  AS count FROM ${this.tableName} WHERE species =? `
+        const sql = ` SELECT SUBSTRING_INDEX(id,'_',-1) AS id FROM ${this.tableName} where species =? ORDER BY id DESC LIMIT 1`;
         const result = await query(sql,[species]);
 
         return result;

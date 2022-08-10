@@ -3,11 +3,35 @@ const HttpException = require('../utils/HttpException.utils');
 const { validationResult } = require('express-validator');
 var crypto = require('crypto');
 const dotenv = require('dotenv');
+dotenv.config();
 const path = require('path');
 var fs = require('fs');
-dotenv.config();
+const fsp = fs.promises;
 const rootPath = process.env.PWD;
 const backendDomain = process.env.ADDR;
+
+
+//날자 Fomat 변경(yyyymmdd)
+function getFormatDate(date){
+    var year = date.getFullYear();              //yyyy
+    var month = (1 + date.getMonth());          //M
+    month = month >= 10 ? month : '0' + month;  //month 두자리로 저장
+    var day = date.getDate();                   //d
+    day = day >= 10 ? day : '0' + day;          //day 두자리로 저장
+    return  year + '' + month + '' + day;       //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
+}
+
+function getRandomInt(min, max) { //min ~ max 사이의 임의의 정수 반환
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+var date = new Date();
+date = getFormatDate(date);
+
+// gkes 저장용 폴더 생성
+const _file = path.join(rootPath + '/file/')
+const _tmp = path.join(rootPath + '/tmp/')
+const _gkes = path.join(rootPath + '/gkes/' + date)
 
 // 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
@@ -36,74 +60,63 @@ const list = {
     ]
 }
 
-
-const copyGkes = (missionId, req) => {
-    console.log("copyGkes body is : ", req.body);
-    console.log("copyGkes files is : ", req.files);
-    console.log("missionId",missionId)
-
-    var filename = "";
-
-
-    for (var i = 0; i < list.Data.length; i++) {
-        if (req.body[list.Data[i]] != undefined) {
-          if (i>0) {
-            filename += "_";
-          }
-          filename += req.body[list.Data[i]];
-        }
-  }
-//   filename += "_"+missionId;
-
-
-  console.log("### filename. : ", filename);
-    const _file = path.join(rootPath + '/file')
-    // gkes 저장용 폴더 생성
-    const _gkes = path.join(rootPath + '/gkes')
+const copyGkes = (missionId, filePath, fileName, fieldname, ext, req, cnt) => {
+    // /backend/gkes/ folder check
     try {
-      fs.accessSync(_gkes);
+      fs.accessSync(_gkes, fs.constants.R_OK | fs.constants.W_OK);
     } catch (error) {
-      fs.mkdirSync(_gkes);
+      fs.mkdirSync(_gkes, { recursive: true });
     }
 
-    // for (var i = 0; i < 3; i++) {
-        for (var i = 0; i < list.File.length; i++) {
-        const fileListArr = (req.files[list.File[i]] || []).length;
-        var _source = [];
-        var _destination = _gkes;
+    console.log("gkes missionId : ",missionId)
+    console.log("gkes filePath : ",filePath)
+    console.log("gkes fileName : ",fileName)
+    console.log("gkes  fieldname: ",fieldname)
+    console.log("gkes  ext : ",ext)
 
-        if (fileListArr == 0) {
-            break;
-        }
-
-        for (var j = 0; j < fileListArr; j++) {
-            var fieldname = missionId + "_" + req.files[list.File[i]][j].fieldname + "_" + j;
-            var fileNameTxt = req.files[list.File[i]][j].filename;
-            var extentionTxt = "." + req.files[list.File[i]][j].filename.split('.').pop();
-            var sourceTxt = _file + "/" + fileNameTxt;
-
-            // switch(fieldname) {
-            //     case: "imgAllFront" {
-            //         var fieldnameTxt = "_" + "10";
-            //     }
-            // }
-            var fieldnameTxt = "_" + fieldname;
-            // var destinationTxt = _gkes + "/" + filename + extentionTxt;
-            var destinationTxt = _gkes + "/" + filename + fieldnameTxt + extentionTxt;
-  
-
-            console.log("file extention : ", extentionTxt);
-            console.log("source path : ", sourceTxt);
-            console.log("destination path : ", destinationTxt);
-
-            fs.copyFile(sourceTxt, destinationTxt, (err) => {
-                if (err) throw err;
-                console.log('sourceFile was copied to destinationFile');
-            });
-        }
+    let filename = "";
+    
+        for (var i = 0; i < list.Data.length; i++) {
+            if (req.body[list.Data[i]] != undefined) {
+            if (i>0) {
+                filename += "_";
+            }
+            filename += req.body[list.Data[i]];
+            }
     }
+
+    var sourceTxt = fileName;
+    var destinationTxt = filename + "_" + fieldname + "_" + missionId + "_" + cnt + ext;
+
+    console.log("_file : ", _file);
+    console.log("_gkes : ", _gkes);
+    console.log("source path : ", sourceTxt);
+    console.log("destination path : ", destinationTxt);
+
+    copyFile(_file, _gkes, fileName, destinationTxt);
 }
 
+
+async function copyFile(sourceDirPath, destDirPath, sourceName, destinationName) {
+    const sourceFilePath = path.join(sourceDirPath, sourceName);
+    const destFilePath = path.join(destDirPath, destinationName);
+    try {
+      await fsp.access(sourceFilePath, fs.constants.R_OK);
+      await fsp.access(destDirPath, fs.constants.W_OK);
+      await fsp.copyFile(sourceFilePath, destFilePath);
+  
+      console.log("File copied successfully.");
+    } catch (ex) {
+      if (ex.errno === -2)
+        console.error(`File "${sourceFilePath}" doesn't exist.`);
+      else if (ex.errno === -13)
+        console.error(`Could not access "${path.resolve(destDirPath)}"`);
+      else
+        console.error(`Could not copy "${sourceFilePath}" to "${destDirPath}"`);
+  
+      // console.log(ex);
+    }
+}
 
 /******************************************************************************
  *                              Data Controller
@@ -128,37 +141,61 @@ class DataController {
     };
 
     createData = async (req, res) => {
-        const _file = path.join(rootPath + '/file')
+        // /backend/file/ folder check
         try {
-          fs.accessSync(_file);
+          fs.accessSync(_file, fs.constants.R_OK | fs.constants.W_OK);
         } catch (error) {
-          fs.mkdirSync(_file);
+          fs.mkdirSync(_file, { recursive: true });
         }
+
+
+        console.log("rootPath is ", rootPath);
+        console.log("_file is ", _file);
+        console.log("_tmp is ", _tmp);
+        console.log("_gkes is ", _gkes);
+
+       // mission id
+       const speciesCnt = await DataModel.getMissionId(req.body.species);
+     
+       if (speciesCnt.length !==0){
+        var cnt = parseInt(speciesCnt[0]['id']) +1;
+       }else{
+        var cnt = 3;
+       }
+    
+       var cntString = String(cnt);
+       var num = cntString.padStart(6,'0');
+       var missionId = 0;
+
+       if(req.body.species == "dog" || req.body.species == "10"){
+            missionId = '10_' + num; 
+       }else if(req.body.species == "cat" || req.body.species == "20"){
+            missionId = '20_' + num; 
+       }
         
         var img = [];
         var img2 = [];
-
-        // console.log("------data------", req.body)
-        // console.log("------req.files------", req.files[list.File[0]])
-
-        // console.log("############################");
 
         for (var i = 0; i < list.File.length; i++) {
             const fileListArr = (req.files[list.File[i]] || []).length;
             // console.log("[#1] fileListARr : ", fileListArr);
 
+            const fieldname = list.File[i];
+
             if (fileListArr == 0) {
                 break;
             }
-
+            
             const field = [];
             var imgLink = "";
+            var randNum = getRandomInt(1, 1000000);
+
             // console.log(list.File[i] + "[" + fileListArr + "]");
             if (fileListArr === undefined) {
-                    const _file = path.join(rootPath + '/file/');
                     var fileData = req.files[list.File[i]];
                     var ext = "";
                     var date = new Date().getTime();
+                    var tmpName = fileData.tempFilePath;
                     var md5 = fileData.md5;
                     switch(fileData.mimetype) {
                         case 'image/png':
@@ -168,24 +205,20 @@ class DataController {
                             ext = ".jpg";
                             break;
                         case 'image/jpeg':
-                            ext = ".jpeg";
+                            ext = ".jpg";
                             break;
                     }
     
-                    // console.log("file name is : ", fileData.name);
-                    // console.log("file Extenstion is : ", ext);
-                    // console.log("file md5 is : ", md5);
-    
-                    const getRandom = (min, max) => Math.floor(Math.random() * (max - min) + min);
-                    var Random = getRandom(1,10000000);
-                    var fileName = md5 + "_" + date + "_" + Random + ext;
-                    // console.log("fileName is ", fileName);
-    
-                    fileData.mv(_file + fileName, function(err) {
-                        if (err)
-                            console.log("[create data] file mv error.")
-                            return res.status(500).send(err);
+                    var fileName = md5 + "_" + date + "_" + randNum + ext;
+
+                    var destinationTxt = _file + fileName;
+                    console.log("destinationTxt is ", destinationTxt);
+
+                    fs.rename(tmpName, destinationTxt, (err) => {
+                        if (err) {throw err};
+                        console.log('sourceFile was copied to destinationFile');
                     });
+                    // copyFile(_tmp, _file, tmpName, _file + fileName);
     
                     // file hash
                     const hash = crypto.createHash('md5'); 
@@ -198,12 +231,14 @@ class DataController {
     
                     imgLink += backendDomain + '/file/' + fileName;
 
+                    copyGkes(missionId, _file, fileName,fieldname, ext, req, j);
             } else { 
                 for (var j = 0; j < fileListArr; j++) {
-                    const _file = path.join(rootPath + '/file/');
                     var fileData = req.files[list.File[i]][j];
+                    console.log("################# : ", fileData);
                     var ext = "";
                     var date = new Date().getTime();
+                    var tmpName = fileData.tempFilePath;
                     var md5 = fileData.md5;
                     switch(fileData.mimetype) {
                         case 'image/png':
@@ -212,22 +247,21 @@ class DataController {
                         case 'image/jpg':
                             ext = ".jpg";
                             break;
+                        case 'image/jpeg':
+                            ext = ".jpg";
+                            break;
                     }
     
-                    // console.log("file name is : ", fileData.name);
-                    // console.log("file Extenstion is : ", ext);
-                    // console.log("file md5 is : ", md5);
-    
-                    const getRandom = (min, max) => Math.floor(Math.random() * (max - min) + min);
-                    var Random = getRandom(1,10000000);
-                    var fileName = md5 + "_" + date + "_" + Random + ext;
-                    // console.log("fileName is ", fileName);
-    
-                    fileData.mv(_file + fileName, function(err) {
-                        if (err)
-                            console.log("[copy gkes] file mv error.")
-                            return res.status(500).send(err);
+                    var fileName = md5 + "_" + date + "_" + randNum + ext;
+
+                    var destinationTxt = _file + fileName;
+                    console.log("destinationTxt is ", destinationTxt);
+
+                    fs.rename(tmpName, destinationTxt, (err) => {
+                        if (err) {throw err};
+                        console.log('sourceFile was copied to destinationFile');
                     });
+                    // copyFile(_tmp, _file, tmpName, _file + fileName);
     
                     // file hash
                     const hash = crypto.createHash('md5'); 
@@ -243,6 +277,8 @@ class DataController {
                         imgLink += ","
                     }
                     imgLink += backendDomain + '/file/' + fileName;
+
+                    copyGkes(missionId, _file, fileName,fieldname, ext, req, j);
                 }
             }
             
@@ -260,24 +296,7 @@ class DataController {
             }
         }
 
-        console.log("#### img2 : ", img2);
-
-       // mission id
-       const speciesCnt = await DataModel.getMissionId(req.body.species);
-
-       var cnt = speciesCnt[0]['count'] +1;
-       var cntString = String(cnt);
-       var num = cntString.padStart(6,'0');
-       var missionId = 0;
-
-       if(req.body.species == "dog" || req.body.species == "10"){
-            missionId = '10_' + num; 
-       }else if(req.body.species == "cat" || req.body.species == "20"){
-            missionId = '20_' + num; 
-       }
-
-       console.log("missionId is : ", missionId);
-
+        // console.log("#### img2 : ", img2);
 
        const result = await DataModel.create(missionId, req.body, img2);
         
@@ -285,15 +304,10 @@ class DataController {
             throw new HttpException(500, 'Something went wrong');
         }
 
-        copyGkes(missionId, req);
         res.status(201).send('Data was created!');
     };
 
     updateData = async (req, res, next) => {
-        console.log("req.field~~~~~~~~~~", req.field)
-        console.log("req.fields~~~~~~~~~~", req.fields)
-        console.log("req.body~~~~~~~~~~", req.body)
-        console.log("update id~~~~~~~~~~", req.params.id)
 
         const { ...restOfUpdates } = req.body;
 
