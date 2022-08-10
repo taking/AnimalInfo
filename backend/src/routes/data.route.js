@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const dataController = require('../controllers/data.controller');
 const auth = require('../middleware/auth.middleware');
-// const upload = require('../utils/upload.utils');s
 const Role = require('../utils/userRoles.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
 

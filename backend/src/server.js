@@ -7,6 +7,7 @@ const userRouter = require('./routes/user.route');
 const fileRouter = require('./routes/data.route');
 const historyRouter = require('./routes/history.route');
 const priceRouter = require('./routes/price.route');
+const rootPath = process.env.PWD;
 
 
 // Init express
@@ -28,6 +29,7 @@ app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/data`, fileRouter);
 app.use(`/api/v1/history`, historyRouter);
 app.use(`/api/v1/price`, priceRouter);
+app.use(`/file`,express.static(rootPath + '/file'));
 
 // 404 error
 app.all('*', (req, res, next) => {
