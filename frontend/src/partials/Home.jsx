@@ -35,8 +35,7 @@ function Home() {
       // "price",
       "data_type",
       "species",
-      "dogRace",
-      "catRace",
+      "race",
       "birth",
       "sex",
       "weight",
@@ -351,7 +350,7 @@ const handleUpload = (name, data) => {
                       <fieldset>
                           <legend className="contents text-base font-medium text-gray-900">반려견 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
-                            <RadioGroup value={watch('dogRace')} onChange={(e) => handleChangeForm('dogRace', e)} className="mt-4">
+                            <RadioGroup value={watch('race')} onChange={(e) => handleChangeForm('race', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-4 gap-4">
                                 {selectbox.dogs.map((breed) => (
@@ -413,7 +412,7 @@ const handleUpload = (name, data) => {
                           <legend className="contents text-base font-bold text-gray-900">반려묘 품종</legend>
                           {/* <p className="text-sm text-gray-500">Text</p> */}
 
-                            <RadioGroup value={watch('catRace')} onChange={(e) => handleChangeForm('catRace', e)} className="mt-4">
+                            <RadioGroup value={watch('race')} onChange={(e) => handleChangeForm('race', e)} className="mt-4">
                               {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
                               <div className="grid grid-cols-4 gap-4">
                                 {selectbox.cats.map((breed) => (

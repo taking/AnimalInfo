@@ -38,8 +38,7 @@ const list = {
     Data : [
         "data_type",  // 데이터타입
         "species",    // 종
-        "dogRace",    // 품종
-        "catRace",    // 품종
+        "race",       // 품종
         "sex",        // 성별
         "birth",      // 생년월일
         "refer",      // 제공처코드
@@ -129,6 +128,7 @@ class DataController {
         if (!dataList.length) {
             throw new HttpException(404, 'Data not found');
         }
+
         res.send(dataList);
     };
 

@@ -6,16 +6,17 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-balham.css";
 
-// Modal
-import Modal from '../utils/Modal';
-
 // Service
 import UserService from "../api/userService";
 
+// Modal
+import Modal from '../utils/Modal';
+
+//css
+import "../css/style.css";
 
 function AdminUserList() {
-	const [rowData, setRowData] = useState();
-	const [rowData2, setRowData2] = useState();
+	const [rowData, setrowData] = useState();
 	const [gridApi, setGridApi] = useState(null);
 	const [gridColumnApi, setGridColumnApi] = useState(null);
   // const [openEnabledModal, setOpenEnabledModal] = useState(false)
@@ -28,7 +29,7 @@ function AdminUserList() {
 
   const importData = () => {
     UserService.userList().then(res => {
-      setRowData2(res)
+      setrowData(res)
    })
   }
 
@@ -48,9 +49,23 @@ function AdminUserList() {
   
   const userenable = () => {
     const selectedData = gridApi.getSelectedRows();
-    console.log(selectedData)
+    var userId = "";
+    // console.log(selectedData)
+
+    const fileListArr = (selectedData || []).length;
+    // console.log("fileListArr is  : ", fileListArr);
+    for (let i = 0; i < fileListArr; i++) {
+      
+      if (i > 0 && i < fileListArr) {
+        userId += ","
+      }
+      userId += selectedData[i].id;
+    }
+
+    console.log("userid is ", userId);
     
-    UserService.enabled(selectedData[0].id)
+    // UserService.enabled(selectedData[0].id)
+    UserService.enabled(userId);
 
     setreRender(curr => curr + 1);
 
@@ -59,9 +74,23 @@ function AdminUserList() {
 
   const userDelete = () => {
     const selectedData = gridApi.getSelectedRows();
-    console.log(selectedData)
+    var userId = "";
+    // console.log(selectedData)
+
+    const fileListArr = (selectedData || []).length;
+    // console.log("fileListArr is  : ", fileListArr);
+    for (let i = 0; i < fileListArr; i++) {
+      
+      if (i > 0 && i < fileListArr) {
+        userId += ","
+      }
+      userId += selectedData[i].id;
+    }
+
+    console.log("userid is ", userId);
     
-    UserService.delete(selectedData[0].id)
+    // UserService.delete(selectedData[0].id)
+    UserService.delete(userId);
 
     setreRender(curr => curr + 1);
 
@@ -86,6 +115,8 @@ function AdminUserList() {
 		resizable: true,
     editable: true,
     cellEditorPopup: true,
+    // suppressSizeToFit: true,
+    // flex: 1,
 		// filter: true,
 		// floatingFilter: true,
 		// floatingFilterComponentParams: {
@@ -128,7 +159,7 @@ function AdminUserList() {
           <div className="text-center pb-12 md:pb-16">
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">사용자 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">관리</span></h1>
             <div className="max-w-3xl mx-auto">
-              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">사용자 관리 페이지입니다.</p>
+              <p className="text-xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150">전체 사용자 관리 페이지입니다.</p>
             </div>
           </div>
 
@@ -140,7 +171,7 @@ function AdminUserList() {
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
-                    <legend className="contents text-base font-bold text-gray-900">사용자 목록</legend>
+                    <legend className="contents text-base font-bold text-gray-900">User Management</legend>
                   </fieldset>                                   
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
@@ -151,13 +182,14 @@ function AdminUserList() {
                         </button>
                       </div>
                       <AgGridReact
-                        rowData={rowData2}
+                        rowData={rowData}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}
                         paginationPageSize="10"
                         pagination={true}
-                        // rowSelection="multiple"
+                        rowSelection="multiple"
+                        rowMultiSelectWithClick={true}
                         // localeText={{
                         //   filterOoo: 'Filter'
                         // }}

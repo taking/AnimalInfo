@@ -77,9 +77,11 @@ class DataModel {
     }
 
     delete = async (id) => {
-        const sql = `DELETE FROM ${this.tableName}
-        WHERE id = ?`;
-        const result = await query(sql, [id]);
+        console.log("id : ", id);
+        // const sql = `DELETE FROM ${this.tableName} WHERE id = ?`;
+        const sql = `DELETE FROM ${this.tableName} WHERE id in (${id})`;
+        // const result = await query(sql, [id]);
+        const result = await query(sql);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;

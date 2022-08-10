@@ -5,3 +5,5 @@ dist
 .env
 file
 gkes
+tmp
+yarn.lock

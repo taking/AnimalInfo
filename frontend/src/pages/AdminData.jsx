@@ -1,10 +1,10 @@
 import React from 'react';
 
 import Header from '../partials/Header';
-import UserDataPage from '../partials/UserData';
+import AdminDataPage from '../partials/AdminData';
 import Footer from '../partials/Footer';
 
-function UserData() {
+function AdminData() {
 
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
@@ -16,7 +16,7 @@ function UserData() {
       <main className="flex-grow">
 
         {/*  Page sections */}
-        <UserDataPage />
+        <AdminDataPage />
 
       </main>
 
@@ -27,4 +27,4 @@ function UserData() {
   );
 }
 
-export default UserData;
+export default AdminData;
