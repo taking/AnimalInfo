@@ -49,9 +49,23 @@ function AdminUserList() {
   
   const userenable = () => {
     const selectedData = gridApi.getSelectedRows();
-    console.log(selectedData)
+    var userId = "";
+    // console.log(selectedData)
+
+    const fileListArr = (selectedData || []).length;
+    // console.log("fileListArr is  : ", fileListArr);
+    for (let i = 0; i < fileListArr; i++) {
+      
+      if (i > 0 && i < fileListArr) {
+        userId += ","
+      }
+      userId += selectedData[i].id;
+    }
+
+    console.log("userid is ", userId);
     
-    UserService.enabled(selectedData[0].id)
+    // UserService.enabled(selectedData[0].id)
+    UserService.enabled(userId);
 
     setreRender(curr => curr + 1);
 
@@ -60,9 +74,23 @@ function AdminUserList() {
 
   const userDelete = () => {
     const selectedData = gridApi.getSelectedRows();
-    console.log(selectedData)
+    var userId = "";
+    // console.log(selectedData)
+
+    const fileListArr = (selectedData || []).length;
+    // console.log("fileListArr is  : ", fileListArr);
+    for (let i = 0; i < fileListArr; i++) {
+      
+      if (i > 0 && i < fileListArr) {
+        userId += ","
+      }
+      userId += selectedData[i].id;
+    }
+
+    console.log("userid is ", userId);
     
-    UserService.delete(selectedData[0].id)
+    // UserService.delete(selectedData[0].id)
+    UserService.delete(userId);
 
     setreRender(curr => curr + 1);
 
@@ -160,7 +188,8 @@ function AdminUserList() {
                         onGridReady={onGridReady}
                         paginationPageSize="10"
                         pagination={true}
-                        // rowSelection="multiple"
+                        rowSelection="multiple"
+                        rowMultiSelectWithClick={true}
                         // localeText={{
                         //   filterOoo: 'Filter'
                         // }}
