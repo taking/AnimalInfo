@@ -6,14 +6,21 @@ const auth = require('../middleware/auth.middleware');
 const Role = require('../utils/userRoles.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
 
+const path = require('path');
 const fileUpload = require('express-fileupload');
-router.use(fileUpload());
+router.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+  useTempFiles: true,
+ // dir for windows PC
+  tempFileDir: path.join(__dirname, '../../tmp'),
+  safeFileNames: true,
+  preserveExtension: true
+}));
 
 const { createDataSchema, updateDataSchema } = require('../middleware/validators/dataValidator.middleware');
 
 
 
-router.get('/', auth(),awaitHandlerFactory(dataController.getAllData)); // localhost:3000/api/v1/data
 router.get('/', auth(),awaitHandlerFactory(dataController.getAllData)); // localhost:3000/api/v1/data
 router.get('/id/:id', auth(), awaitHandlerFactory(dataController.getDataById)); // localhost:3000/api/v1/data/id/1
 router.post('/', auth(), createDataSchema, awaitHandlerFactory(dataController.createData)); // localhost:3000/api/v1/data

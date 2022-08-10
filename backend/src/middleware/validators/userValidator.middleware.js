@@ -7,7 +7,7 @@ exports.createUserSchema = [
     body('name')
         .exists()
         .withMessage('name is required')
-        .isLength({ min: 3 })
+        .isLength({ min: 2 })
         .withMessage('Must be at least 3 chars long'),
     body('password')
         .exists()
@@ -15,7 +15,7 @@ exports.createUserSchema = [
         .notEmpty()
         .isLength({ min: 6 })
         .withMessage('Password must contain at least 6 characters')
-        .isLength({ max: 10 })
+        .isLength({ max: 20 })
         .withMessage('Password can contain max 10 characters'),
     body('confirm_password')
         .exists()

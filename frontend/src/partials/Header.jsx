@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthService from "../api/authService";
 import jwtDecode from "jwt-decode";
+import authService from '../api/authService';
 
 function Header() {
   const navigate = useNavigate();
   const [top, setTop] = useState(true);
   const [role, setRole] = useState();
+  const [enable, setEnable] = useState();
   const [reRender, setReRender] = useState(false);
 
 
@@ -32,46 +34,33 @@ function Header() {
 
   useEffect(() => {
     const user = AuthService.getCurrentUser();
-    // const currentToken = localStorage.getItem('token');
-    
-    // const tokenCheck = AuthService.getToken(localStorage.getItem('userId')).then(res => {
-    //   // console.log("res is ; ", res);
-    //   setDbToken(`"` + res + `"`);
-    // })
-    
+    // const user = localStorage.getItem('user');
   
     if (!user) {
       console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
       navigate("/signin");
-    }
-    if (user) {
-      if (user.role) {
-        // Admin
-        setRole(true);
-        // setRole(true);
+    } else {
+      if (user.enable === 0) {
+      console.log("비활성 계정입니다. 관리자에게 문의하세요.");
+      authService.logout();
+      navigate("/signin");
       } else {
-        // User
-        setRole(false);
-      }
-      if (checkJwtExpired()) {
-        AuthService.logout();
-        navigate("/signin");
+        if (user.role) {
+          // Admin
+          setRole(user.role);
+          setEnable(user.enabled)
+          // setRole(true);
+        } else {
+          // User
+          setRole(user.role);
+          setEnable(user.enabled)
+        }
+        if (checkJwtExpired()) {
+          AuthService.logout();
+          navigate("/signin");
+        }
       }
     }
-    
-    // setTimeout(() => {
-    //   console.log("######### currentToken : ",currentToken);
-    //   console.log("######### DBtoken : ",DbToken);
-
-    //   if(currentToken != undefined && DbToken != undefined) {
-    //     if(DbToken != currentToken) {
-    //       console.log("중복 로그인으로 인해 재로그인이 필요합니다.");
-    //       AuthService.logout();
-    //       navigate("/signin");
-    //     }
-    //   }
-
-    //   }, 100);
   },[]);   
 
   // let interval;
@@ -87,7 +76,8 @@ function Header() {
 
   
   useEffect(() => {
-    const user = AuthService.getCurrentUser();
+    // const user = AuthService.getCurrentUser();
+    const user = localStorage.getItem('user');
     const currentToken = localStorage.getItem('token');
     var dbToken = "";
     
@@ -149,7 +139,7 @@ function Header() {
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               
               {/* TODO: 로그인한 경우 표시 */}
-              {role && (
+              {enable && (
                 <>
                 <li>
                   <Link to="/" className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out">업로드</Link>

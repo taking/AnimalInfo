@@ -15,6 +15,7 @@ function SignIn() {
       () => {
         if (AuthService.getCurrentUser().enabled === 0) {
           alert("비활성 계정입니다. 관리자에게 문의하세요.");
+          AuthService.logout();
         } else {
           alert("Login Success!");
           navigate("/");

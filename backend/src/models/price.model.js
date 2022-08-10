@@ -5,16 +5,6 @@ const Account = require('../utils/userEnable.utils');
 
 class PriceModel {
     tableName = 'PRICE';
-
-    init = async ({ name, price }) => {
-        const sql = `INSERT INTO ${this.tableName}
-        (price) VALUES (?)`;
-
-        const result = await query(sql, [name, price]);
-        const affectedRows = result ? result.affectedRows : 0;
-
-        return affectedRows;
-    }
     
     find = async (params = {}) => {
         let sql = `SELECT * FROM ${this.tableName}`;
@@ -29,15 +19,22 @@ class PriceModel {
         return await query(sql, [...values]);
     }
 
-    update = async (name, price) => {
-        const sql = `UPDATE ${this.tableName} SET price = ${price} WHERE name = ?`;
 
-        const result = await query(sql, [name]);
+    last = async (params = {}) => {
+        let sql = `SELECT price FROM ${this.tableName} ORDER BY id DESC LIMIT 1`;
+
+        return await query(sql, []);
+    }    
+
+    update = async (price) => {
+        const sql = `INSERT INTO ${this.tableName}
+        (price) VALUES (?)`;
+
+        const result = await query(sql, [price]);
         const affectedRows = result ? result.affectedRows : 0;
 
         return affectedRows;
     }
-
 }
 
 module.exports = new PriceModel;
