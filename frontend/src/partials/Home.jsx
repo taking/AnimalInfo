@@ -157,6 +157,16 @@ function Home() {
       { id: "disease_true", fullname:'Y', name: 'Y', unavailable: true },
       { id: "disease_false", fullname:'N', name: 'N', unavailable: true },
     ],
+    typeB: [
+      { type: "number", en: "CPR", ko: "C-반응성 단백질", subtitle: "text", place: "C-반응성 단백질를 입력하세요" },
+      { type: "number", en: "lgG", ko: "면역글로블린 G", subtitle: "text", place: "면역글로블린 G를 입력하세요" },
+      { type: "number", en: "IL6", ko: "인터류킨-6", subtitle: "text", place: "인터류킨-6를 입력하세요" },
+      { type: "number", en: "AFP", ko: "알파 태아 단백질", subtitle: "text", place: "알파 태아 단백질를 입력하세요" },
+      { type: "number", en: "heartRate", ko: "심박수", subtitle: "text", place: "심박수를 입력하세요" },
+      { type: "number", en: "breatingRate", ko: "호흡수", subtitle: "text", place: "호흡수를 입력하세요" },
+      { type: "number", en: "bodyHeat", ko: "체온", subtitle: "text", place: "체온을 입력하세요" },
+      { type: "number", en: "stress", ko: "스트레스 지수", subtitle: "text", place: "스트레스 지수를 입력하세요" },
+    ],
     file: [
       { en: "imgAllFront", ko: "전신-전면" },
       { en: "imgAllTop", ko: "전신-윗면" },
@@ -465,29 +475,6 @@ const handleChangeForm = (name, data) => {
                             </div> */}
                           </div>
                         </fieldset>
-                        
-                        {watch('data_type') == "B" && (
-                          <>
-                          <fieldset>
-                            <legend className="contents text-base font-bold text-gray-900">데이터타입이 'B'가 선택될 때 추가되는 메뉴</legend>
-                            {/* <p className="text-sm text-gray-500">Text</p> */}
-                            <div className="mt-4 space-y-4">
-                              <div className="flex items-start">
-                                <div className="flex items-center h-5">
-                                  <input
-                                    {...register("test", { required: true })}
-                                    id="cat"
-                                    value="cat"
-                                    name="test"
-                                    type="text"
-                                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </fieldset>
-                          </>
-                        )}
 
                         {/* 성별 */}                        
                         <fieldset>
@@ -1021,6 +1008,36 @@ const handleChangeForm = (name, data) => {
                           </>
                         )}
 
+                        {/* 데이터 타입이 B가 선택될 때 */}
+                        {watch('data_type') == "B" && (
+                          <>
+                          <fieldset>
+                            <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                                {selectbox.typeB.map((item) => (
+                              <div className="col-span-6 sm:col-span-6 lg:col-span-2">
+                                  <legend className="contents text-base font-bold text-gray-900">{item.ko}</legend>
+                                  {/* <p className="text-sm text-gray-500">{item.subtitle}</p> */}
+                                    <div className="mt-1">
+                                      <input
+                                        type={item.type}
+                                        {...register( item.en, { required: true })}
+                                        id={item.en}
+                                        name={item.en}
+                                        rows={1}
+                                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                        placeholder={item.place}
+                                        defaultValue={''}
+                                        min="1"
+                                        max="100"
+                                        required
+                                      />
+                                    </div>
+                              </div>
+                                ))}             
+                            </div>
+                          </fieldset> 
+                          </>
+                        )}
 
                     {/* 신체 치수 */}
                     <fieldset>
@@ -1100,59 +1117,6 @@ const handleChangeForm = (name, data) => {
                         >    
                       </input>
                     </fieldset>
-                    
-                    {/* sfwsdf */}
-                    <fieldset>
-                      <input
-                        {...register("CPR")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("lgG")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("IL6")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("AFP")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("heartRate")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("breatingRate")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("bodyHeat")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                      <input
-                        {...register("stress")}
-                        type="hidden"
-                        value="3"
-                        >    
-                      </input>
-                    </fieldset>
-
                   </div>
                   <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button
