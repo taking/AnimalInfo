@@ -32,14 +32,8 @@ function UserDataList() {
   }
   const onError = (errors, e) => console.log(errors, e);
 
-
-  // const onEditModalAlert = () => {
-  //   setOpenEditModal(!openEditModal);
-  // }
-
   useEffect(() => {
     importData();
-  // },[reRender]);
   },[reRender]);
   
   const onEditModalAlert = () => {
@@ -181,37 +175,31 @@ function UserDataList() {
 		}
 	];
 
-  // const handleSubmit = async (event) => {
-  //   console.log("event is ", event)
-  //   event.preventDefault();
-  //   // return fetch('http://localhost:8000/api/Data/', {
-  //   //   method: 'POST',
-  //   //   headers: {
-  //   //   'Accept': 'application/json',
-  //   //   'Content-Type': 'application/json'
-  //   //   },
-  //   await new Promise((r) => setTimeout(r, 1000));
-  //   body: JSON.stringify({
-  //       title: this.state.itemtitle,
-  //       tag:[
-  //         {name:this.state.tagtitle,
-  //         taglevel:this.state.taglevel}
-  //        ],
-  //       info:[]
-  //    })
-  //   console.log("event is ", event.state.refer)
-  //   alert(JSON.stringify(body, null, 2));
-  // };
-
   const getAllRows = (e) => {
     let rowData = [];
     gridApi.forEachNode(node => rowData.push(node.data));
     alert(JSON.stringify(rowData));
   }
 
-  const getSelectedRowData = (e) => {
+  const dataDelete = () => {
     const selectedData = gridApi.getSelectedRows();
-    alert(JSON.stringify(selectedData));
+    var dataId = "";
+    // console.log(selectedData)
+
+    const fileListArr = (selectedData || []).length;
+    // console.log("fileListArr is  : ", fileListArr);
+    for (let i = 0; i < fileListArr; i++) {
+      if (i > 0 && i < fileListArr) {
+        dataId += ","
+      }
+      dataId += '"' + selectedData[i].id + '"';
+    }
+
+    // console.log("dataid is ", dataId);
+    DataService.delete(dataId);
+
+    setreRender(curr => curr + 1);
+    window.location.reload();
   }
 
 	const onGridReady = useCallback((params) => {
@@ -219,24 +207,7 @@ function UserDataList() {
 		setGridApi(params.api);
 		setGridColumnApi(params.columnApi);
 		params.api.setDomLayout('autoHeight'); //set full height
-		// params.api.autoSizeColumns(params.api);
-    // setRowData(rowData2);
-
-    // fetch('http://local:8888/api/accounts')
-    // .then((result) => result.json())
-    // .then((data) => setRowData(data));
-
-		// Array.from(document.querySelectorAll('.ag-floating-filter-input input[type=text]')).forEach(
-		// 	(obj) => {
-		// 		if (obj.attributes['disabled']) {
-		// 			// skip columns with disabled filter
-		// 			return;
-		// 		}
-		// 		obj.setAttribute('placeholder', 'Search..');
-		// 	}
-		// );
 	}, []);
-
 
   const onBtnExport = () => {
     var params = {
@@ -265,23 +236,27 @@ function UserDataList() {
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <fieldset>
                     <legend className="contents text-base font-bold text-gray-900">데이터 목록</legend>
+                      <p className="text-sm text-gray-500">표 안 데이터를 더블클릭하여 값 변경이 가능하며 체크박스 체크 후 수정하실 수 있습니다.</p>
                   </fieldset>
                   <fieldset>
                     <div className="ag-theme-balham mt-4" style={{ height: '100%', width: '100%', paddingLeft: 20 }}>
                       <div className="frame">
                         <button className="data-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}} aria-controls="EditModal">수정
                         </button>
-                        <button className="user-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBtnExport();}}>CSV Export
+                        <button className="data-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true);}} aria-controls="DeleteModal">삭제
                         </button>
+                        {/* <button className="user-btn btn2" href="#" type="button"  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onBtnExport();}}>CSV Export
+                        </button> */}
                       </div>
                       <AgGridReact
                         rowData={rowData}
                         columnDefs={columnDefs}
                         defaultColDef={defaultColumnDef}
                         onGridReady={onGridReady}
-                        paginationPageSize="10"
+                        paginationPageSize="50"
                         pagination={true}
-                        // rowSelection="multiple"
+                        rowSelection="multiple"
+                        rowMultiSelectWithClick={true}
                         // localeText={{
                         //   filterOoo: 'Filter'
                         // }}
@@ -326,7 +301,7 @@ function UserDataList() {
                               <div className="p-6 text-center">
                                   <svg aria-hidden="true" className="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                   <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">정말 해당 데이터를 삭제하시겠습니까?</h3>
-                                  <button type="button" className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                                  <button type="button" onClick={dataDelete} className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                                       삭제
                                   </button>
                                   <button type="button" onClick={onDeleteModalAlert} className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">취소</button>

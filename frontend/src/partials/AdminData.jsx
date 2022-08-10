@@ -91,20 +91,6 @@ function AdminData() {
 				{ headerName: '생성 시간', field: 'created_at', width: 140 },
 				{ headerName: 'imageAllFront', field: 'imgAllFront', flex: 1 },
 				{ headerName: 'imageAllTop', field: 'imgAllTop', flex: 1 },
-        // {
-        //   headerName: "액션",
-        //   field: "button",
-        //   cellRendererFramework:(params)=>
-        //     <div>
-        //       {/* <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-        //         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenEditModal(true); onEditModalAlert();}}
-        //         aria-controls="EditModal">수정</a> */}
-        //       {/* <a> | </a> */}
-        //       <a href="#" type="button" className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-        //         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenDeleteModal(true); }}
-        //         aria-controls="DeleteModal">삭제</a>
-        //     </div>
-        // , width: 100 },
 			],
 		}
 	];
@@ -118,19 +104,16 @@ function AdminData() {
     const fileListArr = (selectedData || []).length;
     // console.log("fileListArr is  : ", fileListArr);
     for (let i = 0; i < fileListArr; i++) {
-      
       if (i > 0 && i < fileListArr) {
         dataId += ","
       }
       dataId += '"' + selectedData[i].id + '"';
     }
 
-    console.log("dataid is ", dataId);
-    
+    // console.log("dataid is ", dataId);
     DataService.delete(dataId);
 
     setreRender(curr => curr + 1);
-
     window.location.reload();
   }
 

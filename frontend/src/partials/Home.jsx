@@ -16,8 +16,6 @@ function Home() {
   const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm();
   const onError = (errors, e) => console.log(errors, e);
 
-  // const [refer, setRefer] = useState("");
-
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('user')) == null) {
       console.log("로그인 정보가 없어, signin 페이지로 이동합니다.");
@@ -178,7 +176,6 @@ function Home() {
   
   const onSubmit = (data) => {
     var formData = new FormData();
-    // data.preventDefault();
     console.log("data is :", data);
     
     for (let i = 0; i < listUp.dataA.length; i++) {
@@ -191,16 +188,6 @@ function Home() {
       console.log("value is :", getValues(listUp.dataB[i]));
       formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
     }
-
-    // if(getValues('data_type') === 'B') {
-    //   for (let i = 0; i < listUp.dataB.length; i++) {
-    //     console.log("value is :", getValues(listUp.dataB[i]));
-    //     formData.append(listUp.dataB[i], getValues(listUp.dataB[i]))
-    //   }
-    // }
-
-    // console.log("sdfsdfds : ", files);
-    // formData.append('file', files[0])
     
     for (let i = 0; i < listUp.file.length; i++) {
       console.log("file value is :", getValues(listUp.file[i]));
@@ -211,12 +198,10 @@ function Home() {
       }
     }
 
-    
     // Display the key/value pairs
     for(var pair of formData.entries()) {
       console.log(JSON.stringify(pair[0])+ ', '+ JSON.stringify(pair[1])); 
     }
-
     
     DataService.create(formData).then(
       () => {
@@ -240,17 +225,6 @@ const handleChangeForm = (name, data) => {
     console.log("data : ", data);
     setValue(name, data);
   };
-
-const handleUpload = (name, data) => {
-    data.preventDefault();
-    const file = data.target.files[0];
-    console.log("### file is ", file);
-    setFiles([...files, { "name": file }]);
-    console.log("name : ", name);
-    console.log("data : ", data);
-    setValue(name, data);
-  };
-
   
   return (
     <section className="relative">
@@ -1086,7 +1060,6 @@ const handleUpload = (name, data) => {
                           id={item.en}
                           name={item.en}
                           type="file"
-                          // onChange={(e) => handleUpload(item.en, e)}
                           className="form-contro
                           block
                           w-full
