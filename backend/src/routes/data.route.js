@@ -2,12 +2,19 @@ const express = require('express');
 const router = express.Router();
 const dataController = require('../controllers/data.controller');
 const auth = require('../middleware/auth.middleware');
-// const upload = require('../utils/upload.utils');s
 const Role = require('../utils/userRoles.utils');
 const awaitHandlerFactory = require('../middleware/awaitHandlerFactory.middleware');
 
+const path = require('path');
 const fileUpload = require('express-fileupload');
-router.use(fileUpload());
+router.use(fileUpload({
+  limits: { fileSize: 50 * 1024 * 1024 },
+  useTempFiles: true,
+ // dir for windows PC
+  tempFileDir: path.join(__dirname, '../../tmp'),
+  safeFileNames: true,
+  preserveExtension: true
+}));
 
 const { createDataSchema, updateDataSchema } = require('../middleware/validators/dataValidator.middleware');
 

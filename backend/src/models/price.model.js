@@ -35,7 +35,6 @@ class PriceModel {
 
         return affectedRows;
     }
-
 }
 
 module.exports = new PriceModel;
