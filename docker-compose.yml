@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  frontend:
+    image: animalinfo-frontend:latest
+    container_name: animalinfo-frontend
+    restart: unless-stopped
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+      args:
+        NODE_ENV: "production"
+    ports:
+      - "8080:8080"
+  backend:
+    image: animalinfo-backend:latest
+    container_name: animalinfo-backend
+    restart: unless-stopped
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+      args:
+        NODE_ENV: "production"
+    ports:
+      - "8081:8181"
+    depends_on:
+      - animalinfo-db
+  animalinfo-db:
+    image: 'linuxserver/mariadb:latest'
+    container_name: animalinfo-db
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+    volumes:
+      - ./mariadb_data:/config
+      - '/etc/localtime:/etc/localtime:ro'
+    ports:
+      - '3306:3306'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=yourp@ssw@rd
+      - MYSQL_DATABASE=animalinfo
+      - MYSQL_USER=animalinfo
+      - MYSQL_PASSWORD=yourp@ssw@rd
