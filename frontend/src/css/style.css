@@ -1,45 +1,46 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=fallback");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=fallback');
 
-@import "tailwindcss/base";
-@import "tailwindcss/components";
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
 
 /* Additional styles */
-@import "additional-styles/utility-patterns.css";
-@import "additional-styles/range-slider.css";
-@import "additional-styles/toggle-switch.css";
-@import "additional-styles/theme.css";
+@import 'additional-styles/utility-patterns.css';
+@import 'additional-styles/range-slider.css';
+@import 'additional-styles/toggle-switch.css';
+@import 'additional-styles/theme.css';
 
-@import "tailwindcss/utilities";
+@import 'tailwindcss/utilities';
 
 /* Additional Tailwind directives: https://tailwindcss.com/docs/functions-and-directives/#responsive */
 @layer utilities {
-  .rtl {
-    direction: rtl;
-  }
+    .rtl {
+        direction: rtl;
+    }
 }
 
 /* See Alpine.js: https://github.com/alpinejs/alpine#x-cloak */
 [x-cloak=""] {
-  display: none;
+    display: none;
 }
 
-.checkCell {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.checkCell{
+    justify-content:center;
+    align-items: center;
+    text-align: center;
 }
 
-.updateData {
-  color: rgb(104, 104, 104);
-  word-break: keep-all;
-  word-wrap: break-word;
-  text-align: center;
+.updateData{
+    color: rgb(104, 104, 104);
+    word-break: keep-all;
+    word-wrap: break-word;
+    text-align: center;
 }
 
-.frame button {
-  margin-bottom: 5px;
-  outline: none;
-}
+.frame
+  button {
+    margin-bottom: 5px;
+    outline: none;
+  }
 
 .user-btn {
   width: 150px;
@@ -48,7 +49,7 @@
   border-radius: 5px;
   padding: 10px 25px;
   border: 2px solid rgb(255, 255, 255);
-  font-family: "Lato", sans-serif;
+  font-family: 'Lato', sans-serif;
   font-weight: 500;
   background: transparent;
   cursor: pointer;
@@ -57,7 +58,7 @@
   display: inline-block;
   outline: none;
 }
-
+  
 .data-btn {
   width: 80px;
   height: 40px;
@@ -65,7 +66,7 @@
   border-radius: 5px;
   padding: 10px 25px;
   border: 2px solid rgb(255, 255, 255);
-  font-family: "Lato", sans-serif;
+  font-family: 'Lato', sans-serif;
   font-weight: 500;
   background: transparent;
   cursor: pointer;
@@ -75,19 +76,12 @@
   outline: none;
 }
 
-.datatime-input {
-  width: 100px;
-  height: 40px;
-  float: right;
-}
-
-.btn2 {
+.btn2{
   z-index: 2;
   transition: all 0.3s ease;
   overflow: hidden;
 }
-
-.btn2:after {
+.btn2:after{
   position: absolute;
   content: " ";
   z-index: -1;
@@ -101,13 +95,17 @@
 }
 .btn2:hover {
   background: transparent;
-  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5), -4px -4px 6px 0 rgba(116, 125, 136, 0.2), inset -4px -4px 6px 0 rgba(255, 255, 255, 0.5),
-    inset 4px 4px 6px 0 rgba(116, 125, 136, 0.3);
+  box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);
   color: #fff;
 }
 .btn2:hover:after {
   -webkit-transform: scale(2) rotate(180deg);
   transform: scale(2) rotate(180deg);
-  box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5), -4px -4px 6px 0 rgba(116, 125, 136, 0.2), inset -4px -4px 6px 0 rgba(255, 255, 255, 0.5),
-    inset 4px 4px 6px 0 rgba(116, 125, 136, 0.3);
+  box-shadow:  4px 4px 6px 0 rgba(255,255,255,.5),
+              -4px -4px 6px 0 rgba(116, 125, 136, .2), 
+    inset -4px -4px 6px 0 rgba(255,255,255,.5),
+    inset 4px 4px 6px 0 rgba(116, 125, 136, .3);
 }
