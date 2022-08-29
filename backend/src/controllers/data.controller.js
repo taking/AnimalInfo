@@ -45,17 +45,26 @@ const list = {
     "upload_at", // 촬영날짜
   ],
   File: [
-    "imgAllFront",
-    "imgAllTop",
-    "imgAllLeft",
-    "imgAllRight",
-    "imgAllBack",
-    "imgHeadFront",
-    "imgHeadTop",
-    "imgHeadLeft",
-    "imgHeadRight",
-    "imgHeadBottom",
-    "imgNoseFront",
+    "01", // 전면
+    "02", // 후면
+    "03", // 좌측면중앙
+    "04", // 좌측면좌45도
+    "05", // 좌측면우45도
+    "06", // 좌측면상45도
+    "07", // 좌측면하45도
+    "08", // 우측면중앙
+    "09", // 우측면좌45도
+    "10", // 우측면우45도
+    "11", // 우측면상45도
+    "12", // 우측면하45도
+    "13", // 상측면
+    "14", // 두상전면중앙
+    "15", // 두상전면좌45도
+    "16", // 두상전면우45도
+    "17", // 두상전면상45도
+    "18", // 두상전면하45도
+    "19", // 두상상측면
+    "20", // 비문전면
   ],
 };
 
@@ -188,7 +197,10 @@ class DataController {
     var img = [];
     var img2 = [];
 
+    console.log("list.File.length is ", list.File.length);
     for (var i = 0; i < list.File.length; i++) {
+      console.log("list.File[i] : ", list.File[i]);
+      console.log("######### : ", req.files[list.File[i]]);
       const fileListArr = (req.files[list.File[i]] || []).length;
       // console.log("[#1] fileListARr : ", fileListArr);
 
@@ -236,7 +248,7 @@ class DataController {
 
         // file hash
         const hash = crypto.createHash("md5");
-        hash.update("secret" + j);
+        hash.update("secret" + 0);
         var imgInfo = {
           value: backendDomain + "/file/" + fileName,
           // hash: `${hash.digest('hex')}`
@@ -245,57 +257,7 @@ class DataController {
 
         imgLink += backendDomain + "/file/" + fileName;
 
-        copyGkes(missionId, _file, fileName, fieldname, ext, req, j);
-      } else {
-        for (var j = 0; j < fileListArr; j++) {
-          var fileData = req.files[list.File[i]][j];
-          console.log("################# : ", fileData);
-          var ext = "";
-          var date = new Date().getTime();
-          var tmpName = fileData.tempFilePath;
-          var md5 = fileData.md5;
-          switch (fileData.mimetype) {
-            case "image/png":
-              ext = ".png";
-              break;
-            case "image/jpg":
-              ext = ".jpg";
-              break;
-            case "image/jpeg":
-              ext = ".jpg";
-              break;
-          }
-
-          var fileName = md5 + "_" + date + "_" + randNum + ext;
-
-          var destinationTxt = _file + fileName;
-          console.log("destinationTxt is ", destinationTxt);
-
-          fs.rename(tmpName, destinationTxt, err => {
-            if (err) {
-              throw err;
-            }
-            console.log("sourceFile was copied to destinationFile");
-          });
-          // copyFile(_tmp, _file, tmpName, _file + fileName);
-
-          // file hash
-          const hash = crypto.createHash("md5");
-          hash.update("secret" + j);
-          var imgInfo = {
-            value: backendDomain + "/file/" + fileName,
-            // hash: `${hash.digest('hex')}`
-          };
-          field.push(imgInfo);
-
-          // image.png,image2.png 합치기
-          if (j > 0 && j < fileListArr) {
-            imgLink += ",";
-          }
-          imgLink += backendDomain + "/file/" + fileName;
-
-          copyGkes(missionId, _file, fileName, fieldname, ext, req, j);
-        }
+        copyGkes(missionId, _file, fileName, fieldname, ext, req, 0);
       }
 
       var jsonData = {
@@ -310,6 +272,127 @@ class DataController {
         img2.push(jsonData);
       }
     }
+
+    /////////// multi
+    // for (var i = 0; i < list.File.length; i++) {
+    //   const fileListArr = (req.files[list.File[i]] || []).length;
+    //   // console.log("[#1] fileListARr : ", fileListArr);
+
+    //   const fieldname = list.File[i];
+
+    //   if (fileListArr == 0) {
+    //     break;
+    //   }
+
+    //   const field = [];
+    //   var imgLink = "";
+    //   var randNum = getRandomInt(1, 1000000);
+
+    //   // console.log(list.File[i] + "[" + fileListArr + "]");
+    //   if (fileListArr === undefined) {
+    //     var fileData = req.files[list.File[i]];
+    //     var ext = "";
+    //     var date = new Date().getTime();
+    //     var tmpName = fileData.tempFilePath;
+    //     var md5 = fileData.md5;
+    //     switch (fileData.mimetype) {
+    //       case "image/png":
+    //         ext = ".png";
+    //         break;
+    //       case "image/jpg":
+    //         ext = ".jpg";
+    //         break;
+    //       case "image/jpeg":
+    //         ext = ".jpg";
+    //         break;
+    //     }
+
+    //     var fileName = md5 + "_" + date + "_" + randNum + ext;
+
+    //     var destinationTxt = _file + fileName;
+    //     console.log("destinationTxt is ", destinationTxt);
+
+    //     fs.rename(tmpName, destinationTxt, err => {
+    //       if (err) {
+    //         throw err;
+    //       }
+    //       console.log("sourceFile was copied to destinationFile");
+    //     });
+    //     // copyFile(_tmp, _file, tmpName, _file + fileName);
+
+    //     // file hash
+    //     const hash = crypto.createHash("md5");
+    //     hash.update("secret" + j);
+    //     var imgInfo = {
+    //       value: backendDomain + "/file/" + fileName,
+    //       // hash: `${hash.digest('hex')}`
+    //     };
+    //     field.push(imgInfo);
+
+    //     imgLink += backendDomain + "/file/" + fileName;
+
+    //     copyGkes(missionId, _file, fileName, fieldname, ext, req, j);
+    //   } else {
+    //     for (var j = 0; j < fileListArr; j++) {
+    //       var fileData = req.files[list.File[i]][j];
+    //       console.log("################# : ", fileData);
+    //       var ext = "";
+    //       var date = new Date().getTime();
+    //       var tmpName = fileData.tempFilePath;
+    //       var md5 = fileData.md5;
+    //       switch (fileData.mimetype) {
+    //         case "image/jpg":
+    //           ext = ".jpg";
+    //           break;
+    //         case "image/jpeg":
+    //           ext = ".jpg";
+    //           break;
+    //       }
+
+    //       var fileName = md5 + "_" + date + "_" + randNum + ext;
+
+    //       var destinationTxt = _file + fileName;
+    //       console.log("destinationTxt is ", destinationTxt);
+
+    //       fs.rename(tmpName, destinationTxt, err => {
+    //         if (err) {
+    //           throw err;
+    //         }
+    //         console.log("sourceFile was copied to destinationFile");
+    //       });
+    //       // copyFile(_tmp, _file, tmpName, _file + fileName);
+
+    //       // file hash
+    //       const hash = crypto.createHash("md5");
+    //       hash.update("secret" + j);
+    //       var imgInfo = {
+    //         value: backendDomain + "/file/" + fileName,
+    //         // hash: `${hash.digest('hex')}`
+    //       };
+    //       field.push(imgInfo);
+
+    //       // image.png,image2.png 합치기
+    //       if (j > 0 && j < fileListArr) {
+    //         imgLink += ",";
+    //       }
+    //       imgLink += backendDomain + "/file/" + fileName;
+
+    //       copyGkes(missionId, _file, fileName, fieldname, ext, req, j);
+    //     }
+    //   }
+
+    //   var jsonData = {
+    //     name: list.File[i],
+    //     link: imgLink,
+    //   };
+
+    //   img.push(field);
+
+    //   if (imgLink === "") {
+    //   } else {
+    //     img2.push(jsonData);
+    //   }
+    // }
 
     // console.log("#### img2 : ", img2);
 

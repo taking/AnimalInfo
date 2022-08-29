@@ -394,7 +394,7 @@ function UserDataList() {
                                 // id="filter-text-box"
                                 id="time"
                                 name="time"
-                                defaultValue={currentTime}
+                                defaultValue={initTime}
                                 values={currentTime}
                                 // onInput={() => onFilterTextBoxChanged()}
                                 rows={1}

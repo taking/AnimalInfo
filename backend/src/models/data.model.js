@@ -93,9 +93,9 @@ class DataModel {
     const sql = `INSERT INTO ${this.tableName}
         (id, userId, refer, price, data_type, species, race, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
         exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
-        heartRate, breatingRate, bodyHeat, stress, imgAllFront, imgAllTop, imgAllLeft, imgAllRight, imgAllBack, imgHeadFront, imgHeadTop, 
-        imgHeadLeft, imgHeadRight, imgHeadBottom, imgNoseFront) 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        heartRate, breatingRate, bodyHeat, stress, 01, 02, 03, 04, 05, 06, 
+        07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ,20) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     const getPrice = await PriceModel.last();
     const price = getPrice[0]["price"];
@@ -144,6 +144,16 @@ class DataModel {
       img[8].link,
       img[9].link,
       img[10].link,
+      img[11].link,
+      img[12].link,
+      img[13].link,
+      img[14].link,
+      img[15].link,
+      img[16].link,
+      img[17].link,
+      img[18].link,
+      img[19].link,
+      img[20].link,
     ]);
     const affectedRows = result ? result.affectedRows : 0;
     return affectedRows;
