@@ -39,8 +39,8 @@ const list = {
     "data_type", // 데이터타입
     "species", // 종
     "race", // 품종
-    "sex", // 성별
     "birth", // 생년월일
+    "sex", // 성별
     "refer", // 제공처코드
     "upload_at", // 촬영날짜
   ],
@@ -68,7 +68,7 @@ const list = {
   ],
 };
 
-const copyGkes = (missionId, filePath, fileName, fieldname, ext, req, cnt) => {
+const copyGkes = (missionId, filePath, fileName, fieldname, ext, req) => {
   // /backend/gkes/ folder check
   try {
     fs.accessSync(_gkes, fs.constants.R_OK | fs.constants.W_OK);
@@ -94,14 +94,15 @@ const copyGkes = (missionId, filePath, fileName, fieldname, ext, req, cnt) => {
   }
 
   var sourceTxt = fileName;
-  var destinationTxt = filename + "_" + fieldname + "_" + missionId + "_" + cnt + ext;
+  var destinationTxt = filename + "_" + missionId + "_" + fieldname + ext;
+  // var gkesFile = filename + "_" + missionId + "_" + fieldname +  ".json" ;
+  // const content = "";
 
-  console.log("_file : ", _file);
-  console.log("_gkes : ", _gkes);
-  console.log("source path : ", sourceTxt);
-  console.log("destination path : ", destinationTxt);
+ // .josn 파일 생성
+  // fs.writeFileSync(_gkes + "/" + gkesFile,content);
 
   copyFile(_file, _gkes, fileName, destinationTxt);
+
 };
 
 async function copyFile(sourceDirPath, destDirPath, sourceName, destinationName) {
@@ -197,10 +198,7 @@ class DataController {
     var img = [];
     var img2 = [];
 
-    console.log("list.File.length is ", list.File.length);
     for (var i = 0; i < list.File.length; i++) {
-      console.log("list.File[i] : ", list.File[i]);
-      console.log("######### : ", req.files[list.File[i]]);
       const fileListArr = (req.files[list.File[i]] || []).length;
       // console.log("[#1] fileListARr : ", fileListArr);
 
@@ -257,7 +255,7 @@ class DataController {
 
         imgLink += backendDomain + "/file/" + fileName;
 
-        copyGkes(missionId, _file, fileName, fieldname, ext, req, 0);
+        copyGkes(missionId, _file, fileName, fieldname, ext, req);
       }
 
       var jsonData = {

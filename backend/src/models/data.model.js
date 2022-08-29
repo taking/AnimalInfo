@@ -90,16 +90,18 @@ class DataModel {
   };
 
   create = async (missionId, params, img) => {
+
     const sql = `INSERT INTO ${this.tableName}
         (id, userId, refer, price, data_type, species, race, birth, sex, weight, shoulderHeight, neckSize, backLength, chestSize, BCS, 
         exercise, foodCount, environment, defecation, foodAmount, snackAmount, foodKind, disease, diseaseName, CPR, lgG, IL6, AFP, 
-        heartRate, breatingRate, bodyHeat, stress, 01, 02, 03, 04, 05, 06, 
-        07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 ,20) 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+        heartRate, breatingRate, bodyHeat, stress, a01, a02, a03, a04, a05, a06, 
+        a07, a08, a09, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19 ,a20) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
 
     const getPrice = await PriceModel.last();
     const price = getPrice[0]["price"];
 
+    
     const result = await query(sql, [
       missionId,
       params.userId,
@@ -153,8 +155,10 @@ class DataModel {
       img[17].link,
       img[18].link,
       img[19].link,
-      img[20].link,
     ]);
+
+    
+
     const affectedRows = result ? result.affectedRows : 0;
     return affectedRows;
   };
