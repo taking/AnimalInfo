@@ -21,6 +21,7 @@ router.use(
 const { createDataSchema, updateDataSchema } = require("../middleware/validators/dataValidator.middleware");
 
 router.get("/", auth(), awaitHandlerFactory(dataController.getAllData)); // localhost:3000/api/v1/data
+router.get("/dataId", auth(), awaitHandlerFactory(dataController.getDataId));
 router.get("/id/:id/:yymm", auth(), awaitHandlerFactory(dataController.getAllDataSelectDatetime)); // localhost:3000/api/v1/data/id/1/2022-08
 router.get("/price/:id/:yymm", auth(), awaitHandlerFactory(dataController.getTotalPrice)); // localhost:3000/api/v1/data/price/1/2022-08
 router.post("/", auth(), createDataSchema, awaitHandlerFactory(dataController.createData)); // localhost:3000/api/v1/data
