@@ -355,11 +355,6 @@ function UserDataList() {
     // window.location.reload();
   };
 
-
-  const missionIdAelrt = () => {
-    
-  }
-
   const onGridReady = useCallback(params => {
     console.log(params);
     setGridApi(params.api);

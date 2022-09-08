@@ -218,6 +218,11 @@ function Home() {
 
     for (let i = 0; i < listUp.dataB.length; i++) {
       console.log("value is :", getValues(listUp.dataB[i]));
+
+      if(getValues(listUp.dataB[i]) === undefined) {
+        setValue(listUp.dataB[i], 0)
+      }
+
       formData.append(listUp.dataB[i], getValues(listUp.dataB[i]));
     }
 
@@ -252,21 +257,12 @@ function Home() {
         alert(resMessage);
       },
     );
-
-    
-  
-
+  };
   const handleChangeForm = (name, data) => {
     console.log("name : ", name);
     console.log("data : ", data);
     setValue(name, data);
   };
-
-
-  // DataService.getDataId().then(data =>{
-  //   alert("데이터 번호를 확인해주세요. B Tpye 입력 시 필요합니다.\n데이터 ID : "+data)
-  // })
-};
 
   return (
     <section className="relative">

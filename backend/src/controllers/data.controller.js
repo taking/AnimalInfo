@@ -31,7 +31,8 @@ date = getFormatDate(date);
 // gkes 저장용 폴더 생성
 const _file = path.join(rootPath + "/file/");
 const _tmp = path.join(rootPath + "/tmp/");
-const _gkes = path.join(rootPath + "/gkes/" + date);
+// const _gkes = path.join(rootPath + "/gkes/" + date);
+const _gkes = path.join("/home/gkes/file/" + date);
 
 // 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
