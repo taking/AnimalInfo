@@ -20,14 +20,16 @@ class DataService {
   }
 
   checkPrice(userId, date) {
-    return axios.get(API_URL + "/price/" + userId + "/" + date, { headers: authHeader() }).then(response => {
+    return axios
+    .get(API_URL + "/price/" + userId + "/" + date, { headers: authHeader() })
+    .then(response => {
       console.log("[dataService] checkPrice : ", response.data);
       return response.data;
     });
   }
 
+
   create(data) {
-    console.log("data list : ", data);
     return axios
       .post(API_URL, data, {
         headers: authHeader(),
@@ -48,6 +50,28 @@ class DataService {
         console.log("[dataService-delete] response : ", response);
         return response;
       });
+  }
+
+  update(dataId, data) {
+    return axios
+      .patch(API_URL + "/id/" + dataId, data, {
+        headers: authHeader(),
+      })
+      .then(response => {
+        console.log("[dataService-update] response : ", response);
+        return response;
+      });
+  }
+  
+  getDataId(){
+    return axios
+    .get(API_URL + "/dataId/", {
+      headers: authHeader(),
+    })
+    .then(response => {
+      console.log("[dataService-delete] response : ", response.data);
+      return response.data;
+    });
   }
 }
 export default new DataService();

@@ -6,6 +6,7 @@ import moment from "moment";
 
 import AuthService from "../api/authService";
 import DataService from "../api/dataService";
+import dataService from "../api/dataService";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -223,14 +224,13 @@ function Home() {
     for (let i = 0; i < listUp.file.length; i++) {
       console.log("file value is :", getValues(listUp.file[i]));
       // formData.append('file', getValues(listUp.file[i]))
-      formData.append(listUp.file[i], getValues(listUp.file[i]));
+      // formData.append(listUp.file[i], getValues(listUp.file[i]));
 
       // [ multi ]
-
-      // const fileListArr = (getValues(listUp.file[i]) || []).length;
-      // for (var j = 0; j < fileListArr; j++) {
-      //   formData.append(listUp.file[i], getValues(listUp.file[i])[j]);
-      // }
+      const fileListArr = (getValues(listUp.file[i]) || []).length;
+      for (var j = 0; j < fileListArr; j++) {
+        formData.append(listUp.file[i], getValues(listUp.file[i])[j]);
+      }
     }
 
     // Display the key/value pairs
@@ -242,6 +242,9 @@ function Home() {
       () => {
         alert("Upload Success!");
         navigate("/");
+        DataService.getDataId().then(data =>{
+          alert("데이터 번호를 확인해주세요. B Tpye 입력 시 필요합니다.\n데이터 ID : "+data)
+        });
       },
       error => {
         console.log("response msg : ", error.response);
@@ -249,13 +252,21 @@ function Home() {
         alert(resMessage);
       },
     );
-  };
+
+    
+  
 
   const handleChangeForm = (name, data) => {
     console.log("name : ", name);
     console.log("data : ", data);
     setValue(name, data);
   };
+
+
+  // DataService.getDataId().then(data =>{
+  //   alert("데이터 번호를 확인해주세요. B Tpye 입력 시 필요합니다.\n데이터 ID : "+data)
+  // })
+};
 
   return (
     <section className="relative">
@@ -1112,7 +1123,7 @@ function Home() {
                           ease-in-out
                           m-0
                           focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                                accept="image/*"
+                                accept="image/jpg,image/jpeg"
                                 required
                               ></input>
                             </label>

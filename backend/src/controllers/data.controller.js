@@ -76,11 +76,6 @@ const copyGkes = (missionId, filePath, fileName, fieldname, ext, req) => {
     fs.mkdirSync(_gkes, { recursive: true });
   }
 
-  console.log("gkes missionId : ", missionId);
-  console.log("gkes filePath : ", filePath);
-  console.log("gkes fileName : ", fileName);
-  console.log("gkes  fieldname: ", fieldname);
-  console.log("gkes  ext : ", ext);
 
   let filename = "";
 
@@ -170,11 +165,6 @@ class DataController {
     } catch (error) {
       fs.mkdirSync(_file, { recursive: true });
     }
-
-    console.log("rootPath is ", rootPath);
-    console.log("_file is ", _file);
-    console.log("_tmp is ", _tmp);
-    console.log("_gkes is ", _gkes);
 
     // mission id
     const speciesCnt = await DataModel.getMissionId(req.body.species);
@@ -403,6 +393,15 @@ class DataController {
     res.status(201).send("Data was created!");
   };
 
+  getDataId = async (req,res,nex) => {
+    const result = await DataModel.getDataId();
+
+    if (!result) {
+      throw new HttpException(404, "Data not found");
+    }
+    res.send(result[0]["id"]);
+
+  }
   updateData = async (req, res, next) => {
     const { ...restOfUpdates } = req.body;
 
