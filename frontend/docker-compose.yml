@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+  frontend:
+    image: animalinfo-front:220908
+    container_name: animalinfo-front
+    # command: npm start
+    restart: unless-stopped
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"

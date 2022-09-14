@@ -1,14 +1,46 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
-import Header from '../partials/Header';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import UserService from "../api/userService";
 
 function SignUp() {
+  const navigate = useNavigate();
+  const { register, handleSubmit, watch, setValue, getValues } = useForm();  
+  const onSubmit = (e) => {
+    // alert(JSON.stringify(e, undefined, 2));
+    // console.log("[Form Value]: ", e);
+    UserService.register(e.name, e.email, e.password, e.confirm_password, e.contact, e.refer).then(
+      () => {
+        alert("Register Success!");
+        navigate("/signin");
+      },
+      error => {
+        const resMessage =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+          console.log("error.response.data : ", error.response);
+
+          switch (error.response.data.status) {
+            case 409:
+              setValue("errMsg", "이미 회원가입된 이메일입니다.");
+              break;
+          }
+          setValue("errStatus", error.response.data.status);
+
+          if (e.password != e.confirm_password) {
+            setValue("errMsg", "비밀번호를 다시 입력해주세요.");
+            setValue("errStatus", 400);
+          }
+        // alert(resMessage);
+      }
+    )}
+  const onError = (errors, e) => console.log(errors, e);
+
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
-
-      {/*  Site header */}
-      <Header />
 
       {/*  Page content */}
       <main className="flex-grow">
@@ -24,23 +56,53 @@ function SignUp() {
 
               {/* Form */}
               <div className="max-w-sm mx-auto">
-                <form>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="name">이름 <span className="text-red-600">*</span></label>
-                      <input id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" required />
+                      <input 
+                        {...register("name", { required: true })}
+                        id="name" type="text" className="form-input w-full text-gray-800" placeholder="이름을 입력해주세요" minLength="2" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="email">이메일 <span className="text-red-600">*</span></label>
-                      <input id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력해주세요" required />
+                      <input 
+                        {...register("email", { required: true })}
+                        id="email" type="email" className="form-input w-full text-gray-800" placeholder="이메일을 입력해주세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-4">
                     <div className="w-full px-3">
                       <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="password">비밀번호 <span className="text-red-600">*</span></label>
-                      <input id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" required />
+                      <input 
+                        {...register("password", { required: true })}
+                        id="password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" minLength="6" required />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                      <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="password">비밀번호 확인<span className="text-red-600">*</span></label>
+                      <input 
+                        {...register("confirm_password", { required: true })}
+                        id="confirm_password" type="password" className="form-input w-full text-gray-800" placeholder="비밀번호를 입력해주세요" minLength="6" required />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                      <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="contact">연락처 <span className="text-red-600">*</span></label>
+                      <input 
+                        {...register("contact", { required: true })}
+                        id="contact" type="text" className="form-input w-full text-gray-800" placeholder="연락처를 입력해주세요" minLength="3" required />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                      <label className="block text-gray-800 text-sm font-medium mb-1" htmlFor="refer">데이터 제공처<span className="text-red-600">*</span></label>
+                      <input 
+                        {...register("refer", { required: true })}
+                        id="refer" type="text" className="form-input w-full text-gray-800" placeholder="제공처를 입력해주세요" required />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mt-6">
@@ -48,37 +110,27 @@ function SignUp() {
                       <button className="btn text-white bg-blue-600 hover:bg-blue-700 w-full">회원가입</button>
                     </div>
                   </div>
-                  {/* <div className="text-sm text-gray-500 text-center mt-3">
-                    By creating an account, you agree to the <a className="underline" href="#0">terms & conditions</a>, and our <a className="underline" href="#0">privacy policy</a>.
-                                </div> */}
                 </form>
+
+                {watch("errMsg") && (
+                <>
+                {/* 에러 메시지 */}
+                <br />
+                <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong className="font-bold">{getValues("errStatus")}</strong>
+                    <span className="block sm:inline"> {getValues("errMsg")}</span>
+                    {/* <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+                      <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </span> */}
+                  </div>
+                </div>
+                </>
+                )}
+
                 <div className="flex items-center my-6">
                   <div className="border-t border-gray-300 flex-grow mr-3" aria-hidden="true"></div>
-                  {/* <div className="text-gray-600 italic">Or</div>
-                  <div className="border-t border-gray-300 flex-grow ml-3" aria-hidden="true"></div> */}
                 </div>
-                {/* <form>
-                  <div className="flex flex-wrap -mx-3 mb-3">
-                    <div className="w-full px-3">
-                      <button className="btn px-0 text-white bg-gray-900 hover:bg-gray-800 w-full relative flex items-center">
-                        <svg className="w-4 h-4 fill-current text-white opacity-75 flex-shrink-0 mx-4" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.95 0C3.578 0 0 3.578 0 7.95c0 3.479 2.286 6.46 5.466 7.553.397.1.497-.199.497-.397v-1.392c-2.187.497-2.683-.993-2.683-.993-.398-.895-.895-1.193-.895-1.193-.696-.497.1-.497.1-.497.795.1 1.192.795 1.192.795.696 1.292 1.888.895 2.286.696.1-.497.298-.895.497-1.093-1.79-.2-3.578-.895-3.578-3.975 0-.895.298-1.59.795-2.087-.1-.2-.397-.994.1-2.087 0 0 .695-.2 2.186.795a6.408 6.408 0 011.987-.299c.696 0 1.392.1 1.988.299 1.49-.994 2.186-.795 2.186-.795.398 1.093.199 1.888.1 2.087.496.596.795 1.291.795 2.087 0 3.08-1.889 3.677-3.677 3.875.298.398.596.895.596 1.59v2.187c0 .198.1.497.596.397C13.714 14.41 16 11.43 16 7.95 15.9 3.578 12.323 0 7.95 0z" />
-                        </svg>
-                        <span className="flex-auto pl-16 pr-8 -ml-16">Continue with GitHub</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap -mx-3">
-                    <div className="w-full px-3">
-                      <button className="btn px-0 text-white bg-red-600 hover:bg-red-700 w-full relative flex items-center">
-                        <svg className="w-4 h-4 fill-current text-white opacity-75 flex-shrink-0 mx-4" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M7.9 7v2.4H12c-.2 1-1.2 3-4 3-2.4 0-4.3-2-4.3-4.4 0-2.4 2-4.4 4.3-4.4 1.4 0 2.3.6 2.8 1.1l1.9-1.8C11.5 1.7 9.9 1 8 1 4.1 1 1 4.1 1 8s3.1 7 7 7c4 0 6.7-2.8 6.7-6.8 0-.5 0-.8-.1-1.2H7.9z" />
-                        </svg>
-                        <span className="flex-auto pl-16 pr-8 -ml-16">Continue with Google</span>
-                      </button>
-                    </div>
-                  </div>
-                </form> */}
                 <div className="text-gray-600 text-center mt-6">
                   회원이신가요? <Link to="/signin" className="text-blue-600 hover:underline transition duration-150 ease-in-out">로그인</Link>
                 </div>

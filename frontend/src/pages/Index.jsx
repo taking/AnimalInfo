@@ -2,7 +2,6 @@ import React from 'react';
 
 import Header from '../partials/Header';
 import Home from '../partials/Home';
-import FeaturesHome from '../partials/Features';
 import Footer from '../partials/Footer';
 
 function Index() {
@@ -17,9 +16,6 @@ function Index() {
 
         {/*  Page sections */}
         <Home />
-        
-      {/* TODO: Tab 기능 가져다쓰기 */}
-        {/* <FeaturesHome /> */}
 
       </main>
 

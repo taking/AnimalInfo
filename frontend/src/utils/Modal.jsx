@@ -24,13 +24,13 @@ function Modal({
 
   // close the modal if the esc key is pressed
   useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
-      if (keyCode !== 27) return;
-      handleClose();
-    };
-    document.addEventListener('keydown', keyHandler);
+    // const keyHandler = ({ keyCode }) => {
+    //   if (keyCode !== 27) return;
+    //   handleClose();
+    // };
+    // document.addEventListener('keydown', keyHandler);
 
-    return () => document.removeEventListener('keydown', keyHandler);
+    // return () => document.removeEventListener('keydown', keyHandler);
   });  
 
   return (
