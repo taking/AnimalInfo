@@ -167,11 +167,11 @@ class DataModel {
     const { columnSet, values } = multipleColumnSet(params);
 
     const sql = `UPDATE ${this.tableName} SET ${columnSet} WHERE id = ?`;
-
     const result = await query(sql, [...values, id]);
-    console.log("##########", result);
+
     return result;
   };
+
 
   delete = async id => {
     console.log("id : ", id);
@@ -189,6 +189,12 @@ class DataModel {
     const sql = ` SELECT SUBSTRING_INDEX(id,'_',-1) AS id FROM ${this.tableName} where species =? ORDER BY id DESC LIMIT 1`;
     const result = await query(sql, [species]);
 
+    return result;
+  };
+
+  getDataId =  async () => {
+    const sql = `SELECT id FROM ${this.tableName} ORDER BY id DESC LIMIT 1`;
+    const result = await query(sql);
     return result;
   };
 

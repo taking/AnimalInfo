@@ -103,15 +103,33 @@ function UserDataList() {
     }
   }, [reRender]);
 
-  const onEditModalAlert = () => {
+  const updateClick = () => {
     const selectedData = gridApi.getSelectedRows();
     console.log("[#Update Data] is " + JSON.stringify(selectedData));
     const jsonselectedData = JSON.stringify(selectedData);
-    setupdateData(jsonselectedData);
+
+    console.log("selectedData id ", selectedData[0].id)
+    console.log("selectedData data ", selectedData[0])
+
+    DataService.update(selectedData[0].id, selectedData[0]).then(
+        () => {
+          alert("업데이트 완료");
+          setupdateData(jsonselectedData);
+          setOpenEditModal(false);
+          // window.location.reload();
+        },
+        error => {
+          console.log("response msg : ", error.response);
+          const resMessage = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+          alert(resMessage);
+        },
+      );
   };
+
   const closeEditModalAlert = () => {
     setOpenEditModal(!openEditModal);
   };
+
   const onDeleteModalAlert = () => {
     setOpenDeleteModal(!openDeleteModal);
   };
@@ -155,6 +173,7 @@ function UserDataList() {
       headerName: "단가",
       field: "price",
       width: 110,
+      editable: false,
     },
     {
       headerName: "데이터 타입",
@@ -300,6 +319,7 @@ function UserDataList() {
       headerName: "생성 시간",
       field: "created_at",
       width: 110,
+      editable: false,
     },
   ];
 
@@ -313,6 +333,7 @@ function UserDataList() {
     gridApi.redrawRows();
   };
 
+  
   const dataDelete = () => {
     const selectedData = gridApi.getSelectedRows();
     var dataId = "";
@@ -331,7 +352,7 @@ function UserDataList() {
     DataService.delete(dataId);
 
     setreRender(curr => curr + 1);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const onGridReady = useCallback(params => {
@@ -462,7 +483,8 @@ function UserDataList() {
                   <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                     <fieldset>
                       <legend className="contents text-base font-bold text-gray-900">데이터 목록</legend>
-                      <p className="text-sm text-gray-500">표 안 데이터를 더블클릭하여 값 변경이 가능하며 체크박스 체크 후 수정하실 수 있습니다.</p>
+                      <p className="text-sm text-gray-500">표 안 데이터를 더블클릭하여 값 변경이 가능하며 체크박스 체크 후 수정하실 수 있습니다. ※단가는 수정할 수 없습니다.
+                       </p>
                     </fieldset>
 
                     {watch("totalCount") != "0" && (
@@ -478,7 +500,6 @@ function UserDataList() {
                                   e.preventDefault();
                                   e.stopPropagation();
                                   setOpenEditModal(true);
-                                  onEditModalAlert();
                                 }}
                                 aria-controls="EditModal"
                               >
@@ -529,14 +550,14 @@ function UserDataList() {
                     )}
 
                     <Modal id="EditModal" ariaLabel="modal-headline" show={openEditModal} handleClose={() => onEditModalAlert(false)}>
-                      <div className="fade h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-70 text-center w-full h-full outline-none overflow-x-hidden overflow-y-auto">
-                        <div className="modal-content bg-white rounded w-10/12 md:w-1/3">
-                          <div className="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md">
-                            <h5 className="text-xl font-medium leading-normal text-gray-800">수정된 데이터를 확인하세요</h5>
+                      <div className="fade h-screen w-full fixed left-0 top-0 flex justify-center items-center bg-black bg-opacity-70 text-center w-full h-full outline-none overflow-x-hidden overflow-y-auto inline-block align-middle">
+                        <div className="relative p-4 w-full max-w-md h-full md:h-auto">
+                          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
                             <button
                               type="button"
                               onClick={closeEditModalAlert}
-                              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                              // className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                              className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                             >
                               <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -547,12 +568,28 @@ function UserDataList() {
                               </svg>
                               <span className="sr-only">Close modal</span>
                             </button>
-                          </div>
-                          <div className="updateData">{updateData}</div>
-                          <div className="modal-footer flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+                          <div className="p-6 text-center">
+                          <svg
+                                aria-hidden="true"
+                                className="mx-auto mb-4 w-14 h-14 text-gray-400 dark:text-gray-200"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                ></path>
+                              </svg>
+                          <h5 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">선택된 데이터를 수정하시겠습니까?</h5>
+                          {/* <div className="updateData">{updateData}</div> */}
+                          {/* <div className="modal-footer flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600"> */}
                             <button
                               type="submit"
-                              onClick={onEditModalAlert}
+                              onClick={updateClick}
                               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                             >
                               수정
@@ -565,6 +602,7 @@ function UserDataList() {
                               취소
                             </button>
                           </div>
+                         </div>
                         </div>
                       </div>
                     </Modal>
@@ -607,7 +645,7 @@ function UserDataList() {
                               <button
                                 type="button"
                                 onClick={dataDelete}
-                                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-6 py-2.5 text-center mr-2"
                               >
                                 삭제
                               </button>

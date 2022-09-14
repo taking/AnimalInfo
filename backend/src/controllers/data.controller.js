@@ -31,7 +31,8 @@ date = getFormatDate(date);
 // gkes 저장용 폴더 생성
 const _file = path.join(rootPath + "/file/");
 const _tmp = path.join(rootPath + "/tmp/");
-const _gkes = path.join(rootPath + "/gkes/" + date);
+// const _gkes = path.join(rootPath + "/gkes/" + date);
+const _gkes = path.join("/home/gkes/file/" + date);
 
 // 데이터타입_종_품종_성별_생년월일별_제공처코드_촬영날짜_일련번호_사진부위코드.json
 const list = {
@@ -76,11 +77,6 @@ const copyGkes = (missionId, filePath, fileName, fieldname, ext, req) => {
     fs.mkdirSync(_gkes, { recursive: true });
   }
 
-  console.log("gkes missionId : ", missionId);
-  console.log("gkes filePath : ", filePath);
-  console.log("gkes fileName : ", fileName);
-  console.log("gkes  fieldname: ", fieldname);
-  console.log("gkes  ext : ", ext);
 
   let filename = "";
 
@@ -170,11 +166,6 @@ class DataController {
     } catch (error) {
       fs.mkdirSync(_file, { recursive: true });
     }
-
-    console.log("rootPath is ", rootPath);
-    console.log("_file is ", _file);
-    console.log("_tmp is ", _tmp);
-    console.log("_gkes is ", _gkes);
 
     // mission id
     const speciesCnt = await DataModel.getMissionId(req.body.species);
@@ -403,6 +394,15 @@ class DataController {
     res.status(201).send("Data was created!");
   };
 
+  getDataId = async (req,res,nex) => {
+    const result = await DataModel.getDataId();
+
+    if (!result) {
+      throw new HttpException(404, "Data not found");
+    }
+    res.send(result[0]["id"]);
+
+  }
   updateData = async (req, res, next) => {
     const { ...restOfUpdates } = req.body;
 
