@@ -171,19 +171,19 @@ function Home() {
       { id: "disease_false", fullname: "N", name: "N", unavailable: true },
     ],
     diseaseName: [
-      { id: "diseaseName_1", name: "DER",  unavailable: true },
-      { id: "diseaseName_2", name: "MUS",  unavailable: true },
-      { id: "diseaseName_3", name: "NEU",  unavailable: true },
-      { id: "diseaseName_4", name: "OCU",  unavailable: true },
-      { id: "diseaseName_5", name: "RES",  unavailable: true },
-      { id: "diseaseName_6", name: "CAR",  unavailable: true },
-      { id: "diseaseName_7", name: "HEM",  unavailable: true },
-      { id: "diseaseName_8", name: "GAS",  unavailable: true },
-      { id: "diseaseName_9", name: "URI",  unavailable: true },
-      { id: "diseaseName_10", name: "REP",  unavailable: true },
-      { id: "diseaseName_11", name: "END",  unavailable: true },
-      { id: "diseaseName_12", name: "INF",  unavailable: true },
-      { id: "diseaseName_13`", name: "ETC", unavailable: true },
+      { id: "diseaseName_1", name: "DER", value: "01", unavailable: true },
+      { id: "diseaseName_2", name: "MUS", value: "02", unavailable: true },
+      { id: "diseaseName_3", name: "NEU", value: "03", unavailable: true },
+      { id: "diseaseName_4", name: "OCU", value: "04", unavailable: true },
+      { id: "diseaseName_5", name: "RES", value: "05", unavailable: true },
+      { id: "diseaseName_6", name: "CAR", value: "06", unavailable: true },
+      { id: "diseaseName_7", name: "HEM", value: "07", unavailable: true },
+      { id: "diseaseName_8", name: "GAS", value: "08", unavailable: true },
+      { id: "diseaseName_9", name: "URI", value: "09", unavailable: true },
+      { id: "diseaseName_10", name: "REP", value: "10",  unavailable: true },
+      { id: "diseaseName_11", name: "END", value: "11", unavailable: true },
+      { id: "diseaseName_12", name: "INF", value: "12", unavailable: true },
+      { id: "diseaseName_13`", name: "ETC", value: "13",unavailable: true },
     ],
     typeB: [
       { type: "number", en: "CPR", ko: "C-반응성 단백질", subtitle: "text", place: "C-반응성 단백질를 입력하세요" },
@@ -253,8 +253,10 @@ function Home() {
     }
     
     diseaseList = diseaseList.slice(0, -1)
+
     formData.append("diseaseName", diseaseList);
                      
+
 
     for (let i = 0; i < listUp.dataA.length; i++) {
       console.log("value is :", getValues(listUp.dataA[i]));
@@ -309,6 +311,7 @@ function Home() {
     console.log("data : ", data);
     setValue(name, data);
   };
+
 
   return (
     <section className="relative">
