@@ -171,6 +171,21 @@ function Home() {
       { id: "disease_true", fullname: "Y", name: "Y", unavailable: true },
       { id: "disease_false", fullname: "N", name: "N", unavailable: true },
     ],
+    diseaseName: [
+      { id: "diseaseName_1", name: "DER", value: "01", unavailable: true },
+      { id: "diseaseName_2", name: "MUS", value: "02", unavailable: true },
+      { id: "diseaseName_3", name: "NEU", value: "03", unavailable: true },
+      { id: "diseaseName_4", name: "OCU", value: "04", unavailable: true },
+      { id: "diseaseName_5", name: "RES", value: "05", unavailable: true },
+      { id: "diseaseName_6", name: "CAR", value: "06", unavailable: true },
+      { id: "diseaseName_7", name: "HEM", value: "07", unavailable: true },
+      { id: "diseaseName_8", name: "GAS", value: "08", unavailable: true },
+      { id: "diseaseName_9", name: "URI", value: "09", unavailable: true },
+      { id: "diseaseName_10", name: "REP", value: "10", unavailable: true },
+      { id: "diseaseName_11", name: "END", value: "11", unavailable: true },
+      { id: "diseaseName_12", name: "INF", value: "12", unavailable: true },
+      { id: "diseaseName_13`", name: "ETC", value: "13", unavailable: true },
+    ],
     typeB: [
       { type: "number", en: "CPR", ko: "C-반응성 단백질", subtitle: "text", place: "C-반응성 단백질를 입력하세요" },
       { type: "number", en: "lgG", ko: "면역글로블린 G", subtitle: "text", place: "면역글로블린 G를 입력하세요" },
@@ -210,6 +225,37 @@ function Home() {
   const onSubmit = data => {
     var formData = new FormData();
     console.log("data is :", data);
+
+  // const [checkedItems, setCheckedItems] = useState(new Set());
+
+  // const checkedItemHandler = (id, isChecked) => {
+  //   if (isChecked) {
+  //     checkedItems.add(id);
+  //     setCheckedItems(checkedItems);
+  //   } else if (!isChecked && checkedItems.has(id)) {
+  //     checkedItems.delete(id);
+  //     setCheckedItems(checkedItems);
+  //   }
+  // };
+
+  const [bChecked, setChecked] = useState(false);
+
+  const checkHandler = ({ target }) => {
+    setChecked(!bChecked);
+    checkedItemHandler(issue.id, target.checked);
+  };
+
+    var diseaseList = "";
+    for (let i = 0; i < selectbox.diseaseName.length; i++) {
+      // diseaseList 가 "" 가 아닐 때 "/" 추가
+      if (getValues(selectbox.diseaseName[i].name) != undefined) {
+        diseaseList += selectbox.diseaseName[i].name + "/";
+      }
+    }
+    
+    diseaseList = diseaseList.slice(0, -1)
+    formData.append("diseaseName", diseaseList);
+
 
     for (let i = 0; i < listUp.dataA.length; i++) {
       console.log("value is :", getValues(listUp.dataA[i]));
@@ -258,11 +304,19 @@ function Home() {
       },
     );
   };
+
   const handleChangeForm = (name, data) => {
     console.log("name : ", name);
     console.log("data : ", data);
     setValue(name, data);
   };
+
+  const radioForm = (name, data) => {
+    console.log("name : ", name);
+    console.log("data : ", data);
+    setValue(name, data);
+  };
+
 
   return (
     <section className="relative">
@@ -1017,8 +1071,63 @@ function Home() {
                           <>
                             <fieldset>
                               <legend className="contents text-base font-bold text-gray-900">질병코드</legend>
+                              <div className="grid grid-cols-4 gap-4">
+                              {selectbox.diseaseName.map(disease => (
+                              <RadioGroup value={watch(disease.name)} onClick={e => checkHandler(e)} className="mt-4">
+                                <RadioGroup.Option 
+                                  key={disease.id}
+                                  value={disease.value}
+                                  disabled={!disease.unavailable}
+                                  className={({ active }) =>
+                                   classNames(
+                                      disease.unavailable
+                                        ? "bg-white shadow-sm text-gray-900 cursor-pointer"
+                                        : "bg-gray-50 text-gray-200 cursor-not-allowed",
+                                      active ? "ring-2 ring-indigo-500" : "",
+                                      "group relative border rounded-md py-3 px-4 flex items-center justify-center text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1",
+                                    )
+                                  }
+                                >
+                                  {({ active, checked }) => (
+                                    <>
+                                      <RadioGroup.Label as="span">{disease.name}</RadioGroup.Label>
+                                      {disease.unavailable ? (
+                                        <span
+                                          className={classNames(
+                                            active ? "border" : "border-2",
+                                            checked ? "border-indigo-500" : "border-transparent",
+                                            "absolute -inset-px rounded-md pointer-events-none",
+                                          )}
+                                          aria-hidden="true"
+                                        />
+                                      ) : (
+                                        <span
+                                          aria-hidden="true"
+                                          className="absolute -inset-px rounded-md border-2 border-gray-200 pointer-events-none"
+                                        >
+                                          <svg
+                                            className="absolute inset-0 w-full h-full text-gray-200 stroke-2"
+                                            viewBox="0 0 100 100"
+                                            preserveAspectRatio="none"
+                                            stroke="currentColor"
+                                          >
+                                            <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                          </svg>
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </RadioGroup.Option>
+                                </RadioGroup>
+                              ))}
+                            </div>
+                          {/* <p className="text-sm text-gray-500">Text</p> */}
+                         
+                            {/* <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label> */}
+
+                          
                               {/* <div className="mt-1" onChange={handleChange}> */}
-                              <div className="mt-1">
+                              {/* <div className="mt-1">
                                 <textarea
                                   {...register("diseaseName", { required: true })}
                                   id="diseaseName"
@@ -1030,7 +1139,7 @@ function Home() {
                                   defaultValue={""}
                                   required
                                 />
-                              </div>
+                              </div> */}
                             </fieldset>
                           </>
                         )}
