@@ -238,12 +238,12 @@ function Home() {
   //   }
   // };
 
-  const [bChecked, setChecked] = useState(false);
+  // const [bChecked, setChecked] = useState(false);
 
-  const checkHandler = ({ target }) => {
-    setChecked(!bChecked);
-    checkedItemHandler(issue.id, target.checked);
-  };
+  // const checkHandler = ({ target }) => {
+  //   setChecked(!bChecked);
+  //   checkedItemHandler(issue.id, target.checked);
+  // };
 
     var diseaseList = "";
     for (let i = 0; i < selectbox.diseaseName.length; i++) {
@@ -1073,7 +1073,7 @@ function Home() {
                               <legend className="contents text-base font-bold text-gray-900">질병코드</legend>
                               <div className="grid grid-cols-4 gap-4">
                               {selectbox.diseaseName.map(disease => (
-                              <RadioGroup value={watch(disease.name)} onClick={e => checkHandler(e)} className="mt-4">
+                              <RadioGroup value={watch(disease.name)} onChange={e => handleChangeForm(disease.name, e)}  className="mt-4">
                                 <RadioGroup.Option 
                                   key={disease.id}
                                   value={disease.value}
