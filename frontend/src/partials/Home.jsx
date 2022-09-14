@@ -58,7 +58,6 @@ function Home() {
       "snackAmount",
       "foodKind",
       "disease",
-      "diseaseName",
       "upload_at",
     ],
     dataB: ["CPR", "lgG", "IL6", "AFP", "heartRate", "breatingRate", "bodyHeat", "stress"],
@@ -181,10 +180,10 @@ function Home() {
       { id: "diseaseName_7", name: "HEM", value: "07", unavailable: true },
       { id: "diseaseName_8", name: "GAS", value: "08", unavailable: true },
       { id: "diseaseName_9", name: "URI", value: "09", unavailable: true },
-      { id: "diseaseName_10", name: "REP", value: "10", unavailable: true },
+      { id: "diseaseName_10", name: "REP", value: "10",  unavailable: true },
       { id: "diseaseName_11", name: "END", value: "11", unavailable: true },
       { id: "diseaseName_12", name: "INF", value: "12", unavailable: true },
-      { id: "diseaseName_13`", name: "ETC", value: "13", unavailable: true },
+      { id: "diseaseName_13`", name: "ETC", value: "13",unavailable: true },
     ],
     typeB: [
       { type: "number", en: "CPR", ko: "C-반응성 단백질", subtitle: "text", place: "C-반응성 단백질를 입력하세요" },
@@ -231,7 +230,7 @@ function Home() {
   // const checkedItemHandler = (id, isChecked) => {
   //   if (isChecked) {
   //     checkedItems.add(id);
-  //     setCheckedItems(checkedItems);
+  //     scheckedItemHandleretCheckedItems(checkedItems);
   //   } else if (!isChecked && checkedItems.has(id)) {
   //     checkedItems.delete(id);
   //     setCheckedItems(checkedItems);
@@ -242,7 +241,7 @@ function Home() {
 
   // const checkHandler = ({ target }) => {
   //   setChecked(!bChecked);
-  //   checkedItemHandler(issue.id, target.checked);
+  //   (issue.id, target.checked);
   // };
 
     var diseaseList = "";
@@ -254,7 +253,9 @@ function Home() {
     }
     
     diseaseList = diseaseList.slice(0, -1)
+
     formData.append("diseaseName", diseaseList);
+                     
 
 
     for (let i = 0; i < listUp.dataA.length; i++) {
@@ -306,12 +307,6 @@ function Home() {
   };
 
   const handleChangeForm = (name, data) => {
-    console.log("name : ", name);
-    console.log("data : ", data);
-    setValue(name, data);
-  };
-
-  const radioForm = (name, data) => {
     console.log("name : ", name);
     console.log("data : ", data);
     setValue(name, data);
