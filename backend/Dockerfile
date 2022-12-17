@@ -1,4 +1,4 @@
-FROM node:16.16.0
+FROM node:16.19
 
 # set working directory
 WORKDIR /usr/src/app
